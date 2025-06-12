@@ -1,16 +1,13 @@
 #!/bin/sh
-
-echo "🔵 Iniciando aplicação HTML com FastAPI..."
+echo "🟡 [start.sh] PROJECT=${PROJECT}"
 echo "📁 Diretório atual: $(pwd)"
 
-# Verifica se o main.py existe na raiz
-if [ -f /app/main.py ]; then
-  echo "✅ main.py encontrado!"
+if [ "$PROJECT" = "html" ]; then
+  echo "🌐 Servindo arquivos HTML estáticos..."
+  pip install --upgrade pip
+  pip install fastapi uvicorn jinja2
+  cd html_app
+  uvicorn index:app --host 0.0.0.0 --port 8000
 else
-  echo "❌ ERRO: main.py não encontrado!"
-  exit 1
+  echo "❌ PROJECT não reconhecido: $PROJECT"
 fi
-
-# Inicia o servidor FastAPI
-cd /app
-uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
