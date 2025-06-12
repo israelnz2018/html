@@ -12,7 +12,7 @@ RUN pip install --upgrade pip \
 COPY html_app/ /app/html_app/
 
 # 4) Dá permissão de execução ao script de inicialização
-COPY html_app/start.sh /app/start.sh
+COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
 # 5) Define variáveis padrão (PORT etc.)
