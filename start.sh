@@ -10,3 +10,4 @@ if [ "$PROJECT" = "html" ]; then
 else
   echo "❌ PROJECT não reconhecido: $PROJECT"
 fi
+
