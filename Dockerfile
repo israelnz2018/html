@@ -14,6 +14,6 @@ ENV PORT=8000
 
 EXPOSE 8000
 
-ENTRYPOINT ["/app/start.sh"]
+ENTRYPOINT ["/app/start.sh"] 
 
 
