@@ -7,9 +7,6 @@ from fastapi import Request
 
 app = FastAPI()
 
-# Monta os arquivos estáticos
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 # Define os templates
 templates = Jinja2Templates(directory="templates")
 
