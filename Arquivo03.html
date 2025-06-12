@@ -50,7 +50,7 @@
 
     try {
       const resposta = await fetch(
-        'https://educacaopelotrabalho-production.up.railway.app/analise',
+        'https://analises-production.up.railway.app/analise',
         { method: 'POST', body: formData }
       );
       const respostaTexto = await resposta.text();
