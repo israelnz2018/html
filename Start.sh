@@ -10,4 +10,4 @@ if [ "$PROJECT" = "html" ]; then
   uvicorn index:app --host 0.0.0.0 --port 8000
 else
   echo "❌ PROJECT não reconhecido: $PROJECT"
-fi
+fi 
