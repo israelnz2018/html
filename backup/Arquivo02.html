@@ -1,38 +1,18 @@
 
 <div class="container">
-  <form id="formulario" onsubmit="enviarFormulario(event)" novalidate>
+
+
+  <!-- 🔧 FORMULÁRIO PRINCIPAL (ESCONDIDO ATÉ LOGIN) -->
+  <form id="formulario" onsubmit="enviarFormulario(event)" novalidate style="display: none;">
     <!-- 🔝 Cabeçalho -->
     <div class="topo">
       <img src="https://i.postimg.cc/bwxxn1sN/logo.png" alt="Logo" /> 
       <h2>Learning by Working - Educação pelo Trabalho</h2>
     </div>
 
-    <!-- 🔐 Chave de acesso -->
-    <label for="chave">Chave de Acesso</label>
-    <div class="linha-chave">
-      <input type="password" id="chave" name="senha" required />
-      <button id="validar" type="button" onclick="validarChave()">Validar</button>
-    </div>
-    <div id="mensagem-chave"></div>
-
-    <!-- 🔓 Botão sair -->
-    <button
-      id="sair"
-      type="button"
-      onclick="deslogar()"
-      style="display: none; background-color: #f44336; color: white; padding: 10px 16px; border: none; border-radius: 6px; margin-bottom: 20px;"
-    >
-      Sair
-    </button>
-
     <!-- 🧠 Prompt -->
     <label for="prompt">Prompt</label>
-    <input
-      type="text"
-      id="prompt"
-      name="prompt"
-      style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px;"
-    />
+    <input type="text" id="prompt" name="prompt" />
 
     <!-- 🕽️ Dropdowns -->
     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
@@ -150,7 +130,7 @@
       </div>
     </div>
 
-    <!-- 📌 Upload -->
+   <!-- 📌 Upload -->
     <label for="arquivo">Anexar Arquivo (.xlsx do Excel)</label>
     <input type="file" id="arquivo" name="arquivo" accept=".xlsx" onchange="verificarArquivo()" />
     <div id="erro-arquivo"></div>
