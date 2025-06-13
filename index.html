@@ -22,19 +22,19 @@
 
   <!-- LOGIN CENTRALIZADO -->
   <div id="login-container" class="fixed inset-0 flex items-center justify-center bg-gray-100 z-50">
-    <div class="bg-white p-6 rounded shadow max-w-sm w-full text-center">
-      <h2 class="text-lg font-bold mb-4">🔐 Acesso do Aluno</h2>
-      <div class="text-left mb-2">
-        <label class="font-semibold">E-mail</label>
-        <input type="email" id="email-login" class="w-full border rounded p-2 mt-1 mb-3" placeholder="Digite seu e-mail" />
-        <label class="font-semibold">Senha</label>
-        <input type="password" id="senha-login" class="w-full border rounded p-2 mt-1 mb-3" placeholder="Digite sua senha" />
-      </div>
-      <button onclick="fazerLogin()" class="bg-green-600 text-white w-full rounded p-2">Entrar</button>
-      <p class="text-sm text-blue-600 mt-2 cursor-pointer" onclick="recuperarSenha()">Esqueci minha senha</p>
-      <p id="mensagem-login" class="mt-2 text-sm"></p>
+  <div class="bg-white p-6 rounded shadow max-w-sm w-full text-center">
+    <h2 class="text-lg font-bold mb-4">🔐 Acesso do Aluno</h2>
+    <div class="text-left mb-2">
+      <label class="font-semibold">E-mail</label>
+      <input type="email" id="email-login" class="w-full border rounded p-2 mt-1 mb-3" placeholder="Digite seu e-mail" />
+      <label class="font-semibold">Senha</label>
+      <input type="password" id="senha-login" class="w-full border rounded p-2 mt-1 mb-3" placeholder="Digite sua senha" />
     </div>
+    <button onclick="fazerLogin()" class="bg-green-600 text-white w-full rounded p-2">Entrar</button>
+    <p class="text-sm text-blue-600 mt-2 cursor-pointer" onclick="recuperarSenha()">Esqueci minha senha</p>
+    <p id="mensagem-login" class="mt-2 text-sm"></p>
   </div>
+</div>
 
   <script>
     const arquivos = [
