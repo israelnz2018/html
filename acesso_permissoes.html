@@ -1,0 +1,68 @@
+<div class="p-4 border rounded bg-white">
+  <h2 class="font-bold text-lg mb-2">Acesso e Permissões</h2>
+
+  <div class="flex items-center gap-2 mb-2">
+    <input type="password" id="senhaAluno" placeholder="Digite sua senha" class="border rounded p-1 w-1/2" />
+    <button id="btnLogin" class="bg-blue-600 text-white rounded px-3 py-1">Entrar</button>
+    <button id="btnLogout" class="bg-gray-600 text-white rounded px-3 py-1 hidden">Sair</button>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button id="btnSalvar" class="bg-green-600 text-white rounded px-3 py-1">Salvar Projeto</button>
+    <input type="file" id="abrirProjeto" accept=".estatux" class="hidden" />
+    <button id="btnAbrir" class="bg-yellow-600 text-white rounded px-3 py-1">Abrir Projeto</button>
+  </div>
+</div>
+
+<script>
+document.getElementById('btnLogin').addEventListener('click', function() {
+  const senha = document.getElementById('senhaAluno').value;
+  if (senha === '12345') { // Exemplo de senha fixa (substitua por sua lógica real)
+    alert('Acesso liberado!');
+    document.getElementById('btnLogin').classList.add('hidden');
+    document.getElementById('btnLogout').classList.remove('hidden');
+  } else {
+    alert('Senha incorreta.');
+  }
+});
+
+document.getElementById('btnLogout').addEventListener('click', function() {
+  alert('Sessão encerrada.');
+  document.getElementById('btnLogin').classList.remove('hidden');
+  document.getElementById('btnLogout').classList.add('hidden');
+});
+
+document.getElementById('btnSalvar').addEventListener('click', function() {
+  const dados = {
+    prompt: document.getElementById('promptAluno').innerText,
+    analise: document.getElementById('conteudoAnalise').innerText,
+    agente: document.getElementById('conteudoAgente').innerText
+    // você pode incluir mais dados aqui
+  };
+  const blob = new Blob([JSON.stringify(dados)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'projeto.estatux';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('btnAbrir').addEventListener('click', function() {
+  document.getElementById('abrirProjeto').click();
+});
+
+document.getElementById('abrirProjeto').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dados = JSON.parse(e.target.result);
+    document.getElementById('promptAluno').innerText = dados.prompt || '';
+    document.getElementById('conteudoAnalise').innerText = dados.analise || '';
+    document.getElementById('conteudoAgente').innerText = dados.agente || '';
+  };
+  reader.readAsText(file);
+});
+</script>
