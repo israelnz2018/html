@@ -1,24 +1,5 @@
 <div class="container">
 
-  <!-- 🔐 BLOCO DE LOGIN -->
-  <div id="login-box" style="max-width: 400px; margin: 40px auto; padding: 30px; background-color: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-    <h2 style="text-align: center;">🔐 Acesso do Aluno</h2>
-
-    <label>Email</label>
-    <input type="email" id="login-email" placeholder="seu@email.com" required />
-
-    <label>Senha</label>
-    <input type="password" id="login-senha" placeholder="Digite sua senha" required />
-
-    <button onclick="validarLogin()" style="width: 100%; margin-top: 15px;">Entrar</button>
-
-    <div style="margin-top: 15px; text-align: center;">
-      <a href="#" onclick="alert('🔒 Recuperação de senha em breve');">Esqueci a senha</a><br />
-      <a href="#" onclick="logout()">Sair</a>
-    </div>
-
-    <div id="mensagem-login" style="margin-top: 10px; text-align: center;"></div>
-  </div>
 
   <!-- 🔧 FORMULÁRIO PRINCIPAL (ESCONDIDO ATÉ LOGIN) -->
   <form id="formulario" onsubmit="enviarFormulario(event)" novalidate style="display: none;">
