@@ -66,15 +66,13 @@
         msg.style.color = "green";
         msg.textContent = `✅ Acesso permitido. Bem-vindo, ${result.nome || ''}!`;
 
-        // Libera todos os campos e botões do formulário
-        document.querySelectorAll("input, select, button, textarea").forEach(el => {
-          el.disabled = false;
-          el.style.opacity = "1";
-        });
-
-        // Esconde tela de login
+        // Esconde a tela de login
         const loginBox = document.getElementById("login-box");
         if (loginBox) loginBox.style.display = "none";
+
+        // Mostra todos os elementos ocultos e ativa campos desativados
+        document.querySelectorAll("#formulario, .formulario-bloco").forEach(el => el.style.display = "block");
+        document.querySelectorAll("input, select, textarea, button").forEach(el => el.disabled = false);
 
         // Ativa sessão
         sessaoAtiva = true;
@@ -97,6 +95,7 @@
     alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
   }
 </script>
+
 
 
 
