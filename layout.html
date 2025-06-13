@@ -95,6 +95,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
       abaSelect.appendChild(opt);
     });
 
+    // Seleciona a primeira aba e mostra preview automaticamente
     if (workbookGlobal.SheetNames.length > 0) {
       abaSelect.value = workbookGlobal.SheetNames[0];
       mostrarPreview(workbookGlobal.SheetNames[0]);
@@ -116,6 +117,7 @@ function mostrarPreview(aba) {
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
+  // Preencher dropdowns
   const ySelect = document.getElementById('coluna_y');
   const xSelect = document.getElementById('colunas_x');
   ySelect.innerHTML = '';
@@ -132,6 +134,7 @@ function mostrarPreview(aba) {
     xSelect.appendChild(optX);
   });
 
+  // Mostrar preview visual
   const previewDiv = document.getElementById('previewColunas');
   previewDiv.innerHTML = '';
   const table = document.createElement('table');
@@ -147,10 +150,10 @@ function mostrarPreview(aba) {
   table.appendChild(trHeader);
 
   const trData = document.createElement('tr');
-  primeiraLinha.forEach(d => {
+  colunas.forEach((_, i) => {
     const td = document.createElement('td');
     td.className = 'border px-2 py-1';
-    td.textContent = d !== undefined ? d : '';
+    td.textContent = primeiraLinha[i] !== undefined ? primeiraLinha[i] : '';
     trData.appendChild(td);
   });
   table.appendChild(trData);
@@ -159,6 +162,7 @@ function mostrarPreview(aba) {
   previewDiv.classList.remove('hidden');
 }
 </script>
+
 
 
 
