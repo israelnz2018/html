@@ -1,68 +1,118 @@
-<div class="p-4 border rounded bg-white">
-  <h2 class="font-bold text-lg mb-2">Acesso e Permissões</h2>
+<div id="login-box" style="
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  text-align: center;
+">
+  <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
 
-  <div class="flex items-center gap-2 mb-2">
-    <input type="password" id="senhaAluno" placeholder="Digite sua senha" class="border rounded p-1 w-1/2" />
-    <button id="btnLogin" class="bg-blue-600 text-white rounded px-3 py-1">Entrar</button>
-    <button id="btnLogout" class="bg-gray-600 text-white rounded px-3 py-1 hidden">Sair</button>
+  <div style="text-align: left;">
+    <label for="email-login" style="font-weight: bold;">E-mail</label>
+    <input type="email" id="email-login" placeholder="Digite seu e-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
+
+    <label for="senha-login" style="font-weight: bold;">Senha</label>
+    <input type="password" id="senha-login" placeholder="Digite sua senha" required
+      style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px;" />
   </div>
 
-  <div class="flex items-center gap-2">
-    <button id="btnSalvar" class="bg-green-600 text-white rounded px-3 py-1">Salvar Projeto</button>
-    <input type="file" id="abrirProjeto" accept=".estatux" class="hidden" />
-    <button id="btnAbrir" class="bg-yellow-600 text-white rounded px-3 py-1">Abrir Projeto</button>
+  <button id="botao-login" onclick="fazerLogin()"
+    style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+    Entrar
+  </button>
+
+  <div style="margin-top: 16px;">
+    <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+      Esqueci minha senha
+    </a>
   </div>
+
+  <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
 </div>
 
 <script>
-document.getElementById('btnLogin').addEventListener('click', function() {
-  const senha = document.getElementById('senhaAluno').value;
-  if (senha === '12345') { // Exemplo de senha fixa (substitua por sua lógica real)
-    alert('Acesso liberado!');
-    document.getElementById('btnLogin').classList.add('hidden');
-    document.getElementById('btnLogout').classList.remove('hidden');
-  } else {
-    alert('Senha incorreta.');
+  async function fazerLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
+
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
+
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("senha", senha);
+
+      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/login", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await resposta.json();
+
+      if (result && result.autorizado) {
+        msg.style.color = "green";
+        msg.textContent = `✅ Acesso permitido. Bem-vindo, ${result.nome || ''}!`;
+
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("app").style.display = "block";
+
+        // Atualiza avatar no topo
+        const nomeAluno = result.nome || email;
+        const inicial = nomeAluno.charAt(0).toUpperCase();
+        document.getElementById("usuario-info").innerHTML = `
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold">
+              ${inicial}
+            </div>
+            <span class="text-sm font-medium">${nomeAluno}</span>
+            <button onclick="deslogarAluno()" class="text-blue-600 text-xs underline">Deslogar</button>
+          </div>
+        `;
+
+        // SlimSelect + sessão ativa
+        if (typeof SlimSelect !== "undefined") {
+          if (typeof slimSelectInstance !== "undefined" && slimSelectInstance) slimSelectInstance.destroy();
+          slimSelectInstance = new SlimSelect({
+            select: '#colunas_x',
+            settings: { closeOnSelect: false }
+          });
+        }
+        sessaoAtiva = true;
+        resetarTimer();
+
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "❌ Login inválido ou conta inativa.";
+      }
+    } catch (error) {
+      console.error("Erro no login:", error);
+      msg.style.color = "red";
+      msg.textContent = "❌ Erro ao verificar login.";
+    }
   }
-});
 
-document.getElementById('btnLogout').addEventListener('click', function() {
-  alert('Sessão encerrada.');
-  document.getElementById('btnLogin').classList.remove('hidden');
-  document.getElementById('btnLogout').classList.add('hidden');
-});
+  function deslogarAluno() {
+    document.getElementById("app").style.display = "none";
+    document.getElementById("login-box").style.display = "block";
+    document.getElementById("usuario-info").innerHTML = "";
+  }
 
-document.getElementById('btnSalvar').addEventListener('click', function() {
-  const dados = {
-    prompt: document.getElementById('promptAluno').innerText,
-    analise: document.getElementById('conteudoAnalise').innerText,
-    agente: document.getElementById('conteudoAgente').innerText
-    // você pode incluir mais dados aqui
-  };
-  const blob = new Blob([JSON.stringify(dados)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'projeto.estatux';
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-document.getElementById('btnAbrir').addEventListener('click', function() {
-  document.getElementById('abrirProjeto').click();
-});
-
-document.getElementById('abrirProjeto').addEventListener('change', function(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const dados = JSON.parse(e.target.result);
-    document.getElementById('promptAluno').innerText = dados.prompt || '';
-    document.getElementById('conteudoAnalise').innerText = dados.analise || '';
-    document.getElementById('conteudoAgente').innerText = dados.agente || '';
-  };
-  reader.readAsText(file);
-});
+  function recuperarSenha() {
+    const email = prompt("Digite seu e-mail para recuperar a senha:");
+    if (!email) return;
+    alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+  }
 </script>
+
