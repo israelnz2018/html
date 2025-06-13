@@ -1,7 +1,6 @@
-
 <script>
   function deslogar() {
-    if (!confirm("Tem certeza que deseja sair?\nTudo será apagado.")) return; 
+    if (!confirm("Tem certeza que deseja sair?\nTudo será apagado.")) return;
 
     sessaoAtiva = false;
     clearTimeout(inatividadeTimer);
@@ -23,19 +22,13 @@
     document.getElementById('grafico').innerHTML = '';
     document.getElementById('erro-arquivo').textContent = '';
 
-    const msg = document.getElementById('mensagem-chave');
+    const msg = document.getElementById('mensagem-login');
     msg.textContent = '👋 Até a próxima!';
     msg.style.color = 'gray';
     setTimeout(() => { msg.textContent = ''; }, 2000);
 
-    const campoSenha = document.getElementById('chave');
-    const btnValidar = document.getElementById('validar');
-    campoSenha.required = true;
-    campoSenha.disabled = false;
-    campoSenha.value = '';
-    btnValidar.disabled = false;
-    btnValidar.textContent = 'Validar';
-
+    document.getElementById('email-login').value = '';
+    document.getElementById('senha-login').value = '';
     document.getElementById('sair').style.display = 'none';
   }
 
@@ -43,7 +36,7 @@
     const mensagensErro = document.querySelectorAll(".erro-aviso, .alerta, .mensagem-erro, .falha");
     mensagensErro.forEach(msg => msg.remove());
 
-    const msgErroFetch = document.getElementById("mensagem-erro-fetch"); 
+    const msgErroFetch = document.getElementById("mensagem-erro-fetch");
     if (msgErroFetch) msgErroFetch.remove();
   }
 
@@ -100,3 +93,4 @@
     if (modal) modal.style.display = "none";
   }
 </script>
+
