@@ -14,61 +14,45 @@
     } else {
       erro.textContent = '';
     }
-  } 
+  }
 
-  // 🛡️ Valida a chave de acesso
-  async function validarChave() {
-    const senha = document.getElementById('chave').value.trim();
-    const msg = document.getElementById('mensagem-chave');
+  async function validarLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
     const spinner = document.getElementById('spinner');
 
-    if (!senha) {
-      msg.textContent = "❌ Digite a chave.";
+    if (!email || !senha) {
+      msg.textContent = "❌ Preencha e-mail e senha.";
       msg.style.color = "red";
       return;
     }
 
     spinner.style.display = "inline-block";
 
-    const formData = new FormData();
-    formData.append("senha", senha);
-
     try {
-      const resposta = await fetch(
-        'https://primary-production-1d53.up.railway.app/webhook/senha',
-        { method: "POST", body: formData }
-      );
+      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      });
 
-      const texto = await resposta.text();
-      console.log("🔍 Resposta bruta da API:", texto);
+      const dados = await resposta.json();
+      console.log("🔍 Resposta do login:", dados);
 
-      const raw = JSON.parse(texto);
-      const data = Array.isArray(raw) ? raw : [raw];
-      const itemComNome = data.find(item => item?.nome?.trim());
-
-      if (itemComNome) {
-        msg.textContent = `✅ Acesso aprovado! Bem-vindo, ${itemComNome.nome}!`;
+      if (dados?.autorizado) {
+        msg.textContent = `✅ Bem-vindo, ${dados.nome}!`;
         msg.style.color = "green";
 
-        // Habilita campos
         ['prompt', 'arquivo','enviar', 'remover', 'ferramenta', 'grafico_tipo', 'coluna_y', 'colunas_x'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.disabled = false;
         });
 
-        const botaoEnviar = document.getElementById('enviar');
-        if (botaoEnviar) botaoEnviar.disabled = false;
-
         document.getElementById('sair').style.display = 'inline-block';
-
-        const campoSenha = document.getElementById('chave');
-        campoSenha.value = '';
-        campoSenha.required = false;
-        campoSenha.disabled = true;
 
         if (slimSelectInstance) slimSelectInstance.destroy();
 
-        // ⏱ Aguarda DOM liberar antes de inicializar SlimSelect
         setTimeout(() => {
           slimSelectInstance = new SlimSelect({
             select: '#colunas_x',
@@ -84,13 +68,13 @@
         sessaoAtiva = true;
         resetarTimer();
       } else {
-        msg.textContent = "❌ Chave incorreta ou sem autorização.";
+        msg.textContent = "❌ Acesso negado.";
         msg.style.color = "red";
       }
     } catch (err) {
-      msg.textContent = "❌ Erro na verificação.";
+      msg.textContent = "❌ Erro ao conectar.";
       msg.style.color = "red";
-      console.error("❌ Erro ao validar chave:", err);
+      console.error("❌ Erro:", err);
     } finally {
       spinner.style.display = "none";
     }
@@ -103,3 +87,4 @@
     if (erro) erro.textContent = '';
   }
 </script>
+
