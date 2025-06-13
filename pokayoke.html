@@ -1,0 +1,32 @@
+<div class="p-4 border rounded bg-white mt-4">
+  <button id="btnEnviar" class="bg-blue-600 text-white rounded px-3 py-1">Enviar Análise</button>
+</div>
+
+<script>
+document.getElementById('btnEnviar').addEventListener('click', function() {
+  const ferramenta = document.getElementById('ferramenta').value;
+  const grafico = document.getElementById('grafico').value;
+  const colunaY = document.getElementById('coluna_y').value;
+  const colunasX = Array.from(document.getElementById('colunas_x').selectedOptions).map(opt => opt.value);
+  const fileInput = document.getElementById('fileInput').files[0];
+
+  if (!fileInput) {
+    alert('⚠️ Por favor, envie um arquivo antes de continuar.');
+    return;
+  }
+
+  if (!ferramenta && !grafico) {
+    alert('⚠️ Você deve escolher pelo menos uma ferramenta estatística ou um gráfico.');
+    return;
+  }
+
+  if (!colunaY && colunasX.length === 0) {
+    alert('⚠️ Selecione pelo menos uma coluna Y ou colunas X.');
+    return;
+  }
+
+  // Aqui você dispara o envio (exemplo simples)
+  alert('✅ Validação ok! Agora você pode processar a análise.');
+  // Você pode acionar o backend aqui
+});
+</script>
