@@ -1,0 +1,38 @@
+<div class="p-4">
+  <label class="block mb-2 text-sm font-medium text-gray-700">Escolha seu arquivo (.xlsx):</label>
+  <input type="file" id="fileInput" accept=".xlsx" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
+
+  <div id="colunasContainer" class="mt-4 hidden">
+    <p class="font-semibold mb-2">Títulos das colunas:</p>
+    <ul id="colunasList" class="list-disc ml-5"></ul>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+document.getElementById('fileInput').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    const colunas = jsonData[0] || [];
+    const colunasList = document.getElementById('colunasList');
+    colunasList.innerHTML = '';
+    colunas.forEach(titulo => {
+      const li = document.createElement('li');
+      li.textContent = titulo;
+      colunasList.appendChild(li);
+    });
+
+    document.getElementById('colunasContainer').classList.remove('hidden');
+  };
+  reader.readAsArrayBuffer(file);
+});
+</script>
