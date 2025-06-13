@@ -1,19 +1,38 @@
-<div style="max-width: 400px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-  <h2 style="text-align: center;">Login do Aluno</h2>
-  
-  <label for="email-login">E-mail</label>
-  <input type="email" id="email-login" placeholder="Digite seu e-mail" required style="width: 100%; margin-bottom: 10px;" />
+<div style="
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  text-align: center;
+">
 
-  <label for="senha-login">Senha</label>
-  <input type="password" id="senha-login" placeholder="Digite sua senha" required style="width: 100%; margin-bottom: 10px;" />
+  <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
 
-  <button id="botao-login" onclick="fazerLogin()" style="width: 100%; padding: 10px;">Entrar</button>
+  <div style="text-align: left;">
+    <label for="email-login" style="font-weight: bold;">E-mail</label>
+    <input type="email" id="email-login" placeholder="Digite seu e-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
 
-  <p style="text-align: center; margin-top: 10px;">
-    <a href="#" onclick="recuperarSenha()">Esqueci minha senha</a>
-  </p>
+    <label for="senha-login" style="font-weight: bold;">Senha</label>
+    <input type="password" id="senha-login" placeholder="Digite sua senha" required
+      style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px;" />
+  </div>
 
-  <p id="mensagem-login" style="text-align: center; color: red; margin-top: 10px;"></p>
+  <button id="botao-login" onclick="fazerLogin()"
+    style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+    Entrar
+  </button>
+
+  <div style="margin-top: 16px;">
+    <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+      Esqueci minha senha
+    </a>
+  </div>
+
+  <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
 </div>
 
 <script>
@@ -23,10 +42,12 @@
     const msg = document.getElementById('mensagem-login');
 
     if (!email || !senha) {
+      msg.style.color = "red";
       msg.textContent = "❌ Preencha todos os campos.";
       return;
     }
 
+    msg.style.color = "#444";
     msg.textContent = "🔄 Verificando...";
 
     try {
@@ -41,14 +62,25 @@
 
       const result = await resposta.json();
 
-      if (result && result.status === "autorizado") {
+      if (result && result.autorizado) {
         msg.style.color = "green";
-        msg.textContent = "✅ Acesso permitido. Bem-vindo!";
-        // Aqui você pode ativar os campos como já faz na chave
-        // ou redirecionar para a parte principal do formulário.
+        msg.textContent = `✅ Acesso permitido. Bem-vindo, ${result.nome || ''}!`;
+
+        // Mostra o formulário principal
+        document.getElementById("formulario").style.display = "block";
+        document.getElementById("botao-perguntar").style.display = "inline-block";
+
+        // Esconde a tela de login
+        const loginBox = document.getElementById("login-box");
+        if (loginBox) loginBox.style.display = "none";
+
+        // Ativa sessão
+        sessaoAtiva = true;
+        resetarTimer();
+
       } else {
         msg.style.color = "red";
-        msg.textContent = "❌ Login inválido ou não autorizado.";
+        msg.textContent = "❌ Login inválido ou conta inativa.";
       }
     } catch (error) {
       console.error("Erro no login:", error);
@@ -61,9 +93,9 @@
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
 
-    alert("📧 Se este e-mail estiver cadastrado, você receberá instruções para redefinir a senha.");
-    // Aqui você pode integrar com o webhook de envio de e-mail no n8n
+    alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
   }
 </script>
+
 
 
