@@ -1,34 +1,34 @@
 <div class="space-y-4">
 
-  <!-- Botão Enviar Análise -->
-  <div>
-    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">
+  <!-- Botão Enviar Análise no topo, centralizado -->
+  <div class="text-center">
+    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">
       Enviar Análise
     </button>
   </div>
 
   <!-- Pergunta do aluno + botão Perguntar -->
-  <div class="flex items-center space-x-2">
+  <div class="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
     <label class="font-semibold">Pergunta do aluno:</label>
     <input id="perguntaAluno" type="text" class="flex-1 border rounded p-2" placeholder="Digite sua pergunta..." />
-    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-3 py-2 hover:bg-green-700">
+    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">
       Perguntar
     </button>
   </div>
 
-  <!-- Blocos lado a lado com altura inicial maior -->
+  <!-- Blocos lado a lado bonitos e alinhados -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <!-- Bloco Análise Estatística -->
-    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px]">
-      <h2 class="font-bold text-lg mb-2">Análise Estatística</h2>
-      <div id="conteudoAnalise" class="p-2 border rounded bg-gray-50 text-sm h-full overflow-y-auto"></div>
+    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
+      <h2 class="font-bold text-lg mb-2 text-center">Análise Estatística</h2>
+      <div id="conteudoAnalise" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
     </div>
 
     <!-- Bloco Gráfico Isolado -->
-    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px]">
-      <h2 class="font-bold text-lg mb-2">Gráfico Isolado</h2>
-      <div id="conteudoGrafico" class="p-2 border rounded bg-gray-50 text-sm h-full overflow-y-auto"></div>
+    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
+      <h2 class="font-bold text-lg mb-2 text-center">Gráfico Isolado</h2>
+      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
     </div>
 
   </div>
