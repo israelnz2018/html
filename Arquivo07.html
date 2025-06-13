@@ -8,7 +8,6 @@
   font-family: Arial, sans-serif;
   text-align: center;
 ">
-
   <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
 
   <div style="text-align: left;">
@@ -70,9 +69,28 @@
         const loginBox = document.getElementById("login-box");
         if (loginBox) loginBox.style.display = "none";
 
-        // Mostra todos os elementos ocultos e ativa campos desativados
+        // Mostra todos os blocos ocultos e ativa os campos
         document.querySelectorAll("#formulario, .formulario-bloco").forEach(el => el.style.display = "block");
-        document.querySelectorAll("input, select, textarea, button").forEach(el => el.disabled = false);
+        document.querySelectorAll("input, select, textarea, button").forEach(el => {
+          el.disabled = false;
+          el.style.opacity = "1";
+        });
+
+        // Recria dropdown múltiplo com SlimSelect
+        setTimeout(() => {
+          if (typeof SlimSelect !== "undefined") {
+            if (typeof slimSelectInstance !== "undefined" && slimSelectInstance) slimSelectInstance.destroy();
+            slimSelectInstance = new SlimSelect({
+              select: '#colunas_x',
+              settings: { closeOnSelect: false },
+              events: {
+                afterChange: info => {
+                  slimSelectInstance.ordemSelecionada = info.map(item => item.value);
+                }
+              }
+            });
+          }
+        }, 100);
 
         // Ativa sessão
         sessaoAtiva = true;
