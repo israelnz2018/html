@@ -68,7 +68,6 @@
         document.getElementById("login-box").style.display = "none";
         document.getElementById("app").style.display = "block";
 
-        // Atualiza avatar no topo
         const nomeAluno = result.nome || email;
         const inicial = nomeAluno.charAt(0).toUpperCase();
         document.getElementById("usuario-info").innerHTML = `
@@ -81,7 +80,6 @@
           </div>
         `;
 
-        // SlimSelect + sessão ativa
         if (typeof SlimSelect !== "undefined") {
           if (typeof slimSelectInstance !== "undefined" && slimSelectInstance) slimSelectInstance.destroy();
           slimSelectInstance = new SlimSelect({
@@ -89,6 +87,7 @@
             settings: { closeOnSelect: false }
           });
         }
+
         sessaoAtiva = true;
         resetarTimer();
 
@@ -115,4 +114,5 @@
     alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
   }
 </script>
+
 
