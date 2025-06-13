@@ -1,24 +1,56 @@
-<div id="tela-login" style="max-width: 400px; margin: auto; padding: 40px; background-color: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-  <h2 style="text-align: center;">🔐 Acesso do Aluno</h2>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login do Aluno</title>
+</head>
+<body>
+  <div id="tela-login" style="max-width: 400px; margin: auto; padding: 40px; background-color: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center;">🔐 Acesso do Aluno</h2>
 
-  <!-- Email -->
-  <label for="login-email">Email</label>
-  <input type="email" id="login-email" placeholder="seu@email.com" required style="width: 100%;" />
+    <label for="login-email">Email</label>
+    <input type="email" id="login-email" placeholder="seu@email.com" required style="width: 100%;" />
 
-  <!-- Senha -->
-  <label for="login-senha">Senha</label>
-  <input type="password" id="login-senha" placeholder="Digite sua senha" required style="width: 100%;" />
+    <label for="login-senha">Senha</label>
+    <input type="password" id="login-senha" placeholder="Digite sua senha" required style="width: 100%;" />
 
-  <!-- Botão Entrar -->
-  <button onclick="validarLogin()" style="width: 100%; margin-top: 15px;">Entrar</button>
+    <button onclick="validarLogin()" style="width: 100%; margin-top: 15px;">Entrar</button>
 
-  <!-- Links -->
-  <div style="margin-top: 15px; text-align: center;">
-    <a href="#" onclick="mostrarRecuperacaoSenha()">Esqueci a senha</a>
-    <br />
-    <a href="#" onclick="mostrarCadastro()">Ainda não tem conta?</a>
+    <div style="margin-top: 15px; text-align: center;">
+      <a href="#" onclick="esqueciSenha()">Esqueci a senha</a> <br>
+      <a href="#" onclick="logout()">Sair</a>
+    </div>
+
+    <div id="mensagem-login" style="margin-top: 15px; text-align: center;"></div>
   </div>
 
-  <!-- Mensagem -->
-  <div id="mensagem-login" style="margin-top: 15px; text-align: center;"></div>
-</div>
+  <script>
+    function validarLogin() {
+      const email = document.getElementById("login-email").value;
+      const senha = document.getElementById("login-senha").value;
+
+      fetch("https://primary-production-1d53.up.railway.app/webhook/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("mensagem-login").innerText = "🔓 " + (data.status || "Erro desconhecido");
+      })
+      .catch(() => {
+        document.getElementById("mensagem-login").innerText = "❌ Erro ao conectar com o servidor.";
+      });
+    }
+
+    function esqueciSenha() {
+      alert("🔒 Em breve: recuperação de senha");
+    }
+
+    function logout() {
+      alert("🚪 Em breve: função de logout");
+    }
+  </script>
+</body>
+</html>
+
