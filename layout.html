@@ -23,11 +23,15 @@
 </nav>
 
 <div class="max-w-6xl mx-auto p-4">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
     <div>
       <label class="block mb-1 font-medium text-gray-700">Escolha seu arquivo (.xlsx):</label>
       <input type="file" id="fileInput" accept=".xlsx"
         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium text-gray-700">Aba da Planilha</label>
+      <select id="aba_planilha" class="w-full border rounded p-2"></select>
     </div>
     <div>
       <label class="block mb-1 font-medium text-gray-700">Coluna Y</label>
@@ -38,6 +42,8 @@
       <select id="colunas_x" class="w-full border rounded p-2" multiple></select>
     </div>
   </div>
+
+  <div id="previewColunas" class="mt-4 border rounded bg-gray-100 p-2 text-sm overflow-x-auto hidden"></div>
 
   <div class="text-center mt-4">
     <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">
@@ -69,6 +75,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+let workbookGlobal = null;
+
 document.getElementById('fileInput').addEventListener('change', function(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -76,43 +84,82 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
   const reader = new FileReader();
   reader.onload = function(e) {
     const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    workbookGlobal = XLSX.read(data, { type: 'array' });
 
-    const colunas = jsonData[0] || [];
-
-    const colunasList = document.getElementById('colunasList');
-    if (colunasList) {
-      colunasList.innerHTML = '';
-      colunas.forEach(titulo => {
-        const li = document.createElement('li');
-        li.textContent = titulo;
-        colunasList.appendChild(li);
-      });
-      document.getElementById('colunasContainer').classList.remove('hidden');
-    }
-
-    const ySelect = document.getElementById('coluna_y');
-    const xSelect = document.getElementById('colunas_x');
-    ySelect.innerHTML = '';
-    xSelect.innerHTML = '';
-    colunas.forEach(titulo => {
-      const optY = document.createElement('option');
-      optY.value = titulo;
-      optY.textContent = titulo;
-      ySelect.appendChild(optY);
-
-      const optX = document.createElement('option');
-      optX.value = titulo;
-      optX.textContent = titulo;
-      xSelect.appendChild(optX);
+    const abaSelect = document.getElementById('aba_planilha');
+    abaSelect.innerHTML = '';
+    workbookGlobal.SheetNames.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      abaSelect.appendChild(opt);
     });
+
+    if (workbookGlobal.SheetNames.length > 0) {
+      abaSelect.value = workbookGlobal.SheetNames[0];
+      mostrarPreview(workbookGlobal.SheetNames[0]);
+    }
   };
   reader.readAsArrayBuffer(file);
 });
+
+document.getElementById('aba_planilha').addEventListener('change', function() {
+  const aba = this.value;
+  mostrarPreview(aba);
+});
+
+function mostrarPreview(aba) {
+  if (!workbookGlobal) return;
+  const worksheet = workbookGlobal.Sheets[aba];
+  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+  const colunas = jsonData[0] || [];
+  const primeiraLinha = jsonData[1] || [];
+
+  const ySelect = document.getElementById('coluna_y');
+  const xSelect = document.getElementById('colunas_x');
+  ySelect.innerHTML = '';
+  xSelect.innerHTML = '';
+  colunas.forEach(titulo => {
+    const optY = document.createElement('option');
+    optY.value = titulo;
+    optY.textContent = titulo;
+    ySelect.appendChild(optY);
+
+    const optX = document.createElement('option');
+    optX.value = titulo;
+    optX.textContent = titulo;
+    xSelect.appendChild(optX);
+  });
+
+  const previewDiv = document.getElementById('previewColunas');
+  previewDiv.innerHTML = '';
+  const table = document.createElement('table');
+  table.className = 'min-w-full border';
+
+  const trHeader = document.createElement('tr');
+  colunas.forEach(t => {
+    const th = document.createElement('th');
+    th.className = 'border px-2 py-1 bg-gray-200';
+    th.textContent = t;
+    trHeader.appendChild(th);
+  });
+  table.appendChild(trHeader);
+
+  const trData = document.createElement('tr');
+  primeiraLinha.forEach(d => {
+    const td = document.createElement('td');
+    td.className = 'border px-2 py-1';
+    td.textContent = d !== undefined ? d : '';
+    trData.appendChild(td);
+  });
+  table.appendChild(trData);
+
+  previewDiv.appendChild(table);
+  previewDiv.classList.remove('hidden');
+}
 </script>
+
 
 
 
