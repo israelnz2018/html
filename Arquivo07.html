@@ -1,0 +1,69 @@
+<div style="max-width: 400px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+  <h2 style="text-align: center;">Login do Aluno</h2>
+  
+  <label for="email-login">E-mail</label>
+  <input type="email" id="email-login" placeholder="Digite seu e-mail" required style="width: 100%; margin-bottom: 10px;" />
+
+  <label for="senha-login">Senha</label>
+  <input type="password" id="senha-login" placeholder="Digite sua senha" required style="width: 100%; margin-bottom: 10px;" />
+
+  <button id="botao-login" onclick="fazerLogin()" style="width: 100%; padding: 10px;">Entrar</button>
+
+  <p style="text-align: center; margin-top: 10px;">
+    <a href="#" onclick="recuperarSenha()">Esqueci minha senha</a>
+  </p>
+
+  <p id="mensagem-login" style="text-align: center; color: red; margin-top: 10px;"></p>
+</div>
+
+<script>
+  async function fazerLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
+
+    if (!email || !senha) {
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
+
+    msg.textContent = "🔄 Verificando...";
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("senha", senha);
+
+      const resposta = await fetch("https://SEU_WEBHOOK_DO_N8N", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await resposta.json();
+
+      if (result && result.status === "autorizado") {
+        msg.style.color = "green";
+        msg.textContent = "✅ Acesso permitido. Bem-vindo!";
+        // Aqui você pode ativar os campos como já faz na chave
+        // ou redirecionar para a parte principal do formulário.
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "❌ Login inválido ou não autorizado.";
+      }
+    } catch (error) {
+      console.error("Erro no login:", error);
+      msg.style.color = "red";
+      msg.textContent = "❌ Erro ao verificar login.";
+    }
+  }
+
+  function recuperarSenha() {
+    const email = prompt("Digite seu e-mail para recuperar a senha:");
+    if (!email) return;
+
+    alert("📧 Se este e-mail estiver cadastrado, você receberá instruções para redefinir a senha.");
+    // Aqui você pode integrar com o webhook de envio de e-mail no n8n
+  }
+</script>
+
+
