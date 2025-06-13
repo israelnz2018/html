@@ -4,28 +4,40 @@
   <meta charset="UTF-8" />
   <title>Learning by Working</title> 
 
-  <!-- Tailwind CSS (para layout limpo e responsivo) -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- SlimSelect (Dropdown estilizado) -->
+  <!-- SlimSelect -->
   <link href="https://cdn.jsdelivr.net/npm/slim-select@2.6.0/dist/slimselect.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/slim-select@2.6.0/dist/slimselect.min.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
-  <div class="max-w-6xl mx-auto p-4 space-y-4">
-    <div id="app" class="space-y-4"></div>
+
+  <!-- APP BLOQUEADO NO INÍCIO -->
+  <div id="app-wrapper" class="opacity-50 pointer-events-none">
+    <div class="max-w-6xl mx-auto p-4 space-y-4">
+      <div id="app" class="space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN CENTRALIZADO -->
+  <div id="login-container" class="fixed inset-0 flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-6 rounded shadow max-w-sm w-full text-center">
+      <h2 class="text-lg font-bold mb-4">🔐 Acesso do Aluno</h2>
+      <div class="text-left mb-2">
+        <label class="font-semibold">E-mail</label>
+        <input type="email" id="email-login" class="w-full border rounded p-2 mt-1 mb-3" placeholder="Digite seu e-mail" />
+        <label class="font-semibold">Senha</label>
+        <input type="password" id="senha-login" class="w-full border rounded p-2 mt-1 mb-3" placeholder="Digite sua senha" />
+      </div>
+      <button onclick="fazerLogin()" class="bg-green-600 text-white w-full rounded p-2">Entrar</button>
+      <p class="text-sm text-blue-600 mt-2 cursor-pointer" onclick="recuperarSenha()">Esqueci minha senha</p>
+      <p id="mensagem-login" class="mt-2 text-sm"></p>
+    </div>
   </div>
 
   <script>
-    // Caminho dos arquivos na raiz
     const arquivos = [
-      // "Arquivo01.html",
-      // "Arquivo02.html",
-      // "Arquivo03.html",
-      // "Arquivo04.html",
-      // "Arquivo05.html",
-      // "Arquivo06.html",
-      // "Arquivo07.html",
       "layout.html",
       "upload_botoes.html",
       "formulario_opcoes.html",
@@ -57,9 +69,57 @@
     }
 
     carregarArquivos();
+
+    async function fazerLogin() {
+      const email = document.getElementById('email-login').value.trim();
+      const senha = document.getElementById('senha-login').value.trim();
+      const msg = document.getElementById('mensagem-login');
+
+      if (!email || !senha) {
+        msg.textContent = "❌ Preencha todos os campos.";
+        msg.style.color = "red";
+        return;
+      }
+
+      msg.textContent = "🔄 Verificando...";
+      msg.style.color = "#333";
+
+      try {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("senha", senha);
+
+        const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/login", {
+          method: "POST",
+          body: formData
+        });
+
+        const result = await resposta.json();
+
+        if (result && result.autorizado) {
+          msg.textContent = "✅ Acesso permitido. Bem-vindo!";
+          msg.style.color = "green";
+          document.getElementById('login-container').style.display = 'none';
+          document.getElementById('app-wrapper').classList.remove('opacity-50', 'pointer-events-none');
+        } else {
+          msg.textContent = "❌ Login inválido ou conta inativa.";
+          msg.style.color = "red";
+        }
+
+      } catch (error) {
+        console.error(error);
+        msg.textContent = "❌ Erro ao verificar login.";
+        msg.style.color = "red";
+      }
+    }
+
+    function recuperarSenha() {
+      alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+    }
   </script>
 </body>
 </html>
+
 
 
 
