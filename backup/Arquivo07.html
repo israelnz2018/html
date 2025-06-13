@@ -1,0 +1,115 @@
+<div id="login-box" style="
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  text-align: center;
+">
+  <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
+
+  <div style="text-align: left;">
+    <label for="email-login" style="font-weight: bold;">E-mail</label>
+    <input type="email" id="email-login" placeholder="Digite seu e-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
+
+    <label for="senha-login" style="font-weight: bold;">Senha</label>
+    <input type="password" id="senha-login" placeholder="Digite sua senha" required
+      style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px;" />
+  </div>
+
+  <button id="botao-login" onclick="fazerLogin()"
+    style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+    Entrar
+  </button>
+
+  <div style="margin-top: 16px;">
+    <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+      Esqueci minha senha
+    </a>
+  </div>
+
+  <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
+</div>
+
+<script>
+  async function fazerLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
+
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
+
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
+
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("senha", senha);
+
+      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/login", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await resposta.json();
+
+      if (result && result.autorizado) {
+        msg.style.color = "green";
+        msg.textContent = `✅ Acesso permitido. Bem-vindo, ${result.nome || ''}!`;
+
+        // Esconde a tela de login
+        const loginBox = document.getElementById("login-box");
+        if (loginBox) loginBox.style.display = "none";
+
+        // Mostra todos os blocos ocultos e ativa os campos
+        document.querySelectorAll("#formulario, .formulario-bloco").forEach(el => el.style.display = "block");
+        document.querySelectorAll("input, select, textarea, button").forEach(el => {
+          el.disabled = false;
+          el.style.opacity = "1";
+        });
+
+        // Recria dropdown múltiplo com SlimSelect
+        setTimeout(() => {
+          if (typeof SlimSelect !== "undefined") {
+            if (typeof slimSelectInstance !== "undefined" && slimSelectInstance) slimSelectInstance.destroy();
+            slimSelectInstance = new SlimSelect({
+              select: '#colunas_x',
+              settings: { closeOnSelect: false },
+              events: {
+                afterChange: info => {
+                  slimSelectInstance.ordemSelecionada = info.map(item => item.value);
+                }
+              }
+            });
+          }
+        }, 100);
+
+        // Ativa sessão
+        sessaoAtiva = true;
+        resetarTimer();
+
+      } else {
+        msg.style.color = "red";
+        msg.textContent = "❌ Login inválido ou conta inativa.";
+      }
+    } catch (error) {
+      console.error("Erro no login:", error);
+      msg.style.color = "red";
+      msg.textContent = "❌ Erro ao verificar login.";
+    }
+  }
+
+  function recuperarSenha() {
+    const email = prompt("Digite seu e-mail para recuperar a senha:");
+    if (!email) return;
+    alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+  }
+</script>
