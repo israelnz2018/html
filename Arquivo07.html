@@ -1,4 +1,4 @@
-<div style="
+<div id="login-box" style="
   max-width: 400px;
   margin: 60px auto;
   padding: 30px;
@@ -66,13 +66,12 @@
         msg.style.color = "green";
         msg.textContent = `✅ Acesso permitido. Bem-vindo, ${result.nome || ''}!`;
 
-        // Mostra o formulário principal
+        // Ativa o formulário
         document.getElementById("formulario").style.display = "block";
         document.getElementById("botao-perguntar").style.display = "inline-block";
 
-        // Esconde a tela de login
-        const loginBox = document.getElementById("login-box");
-        if (loginBox) loginBox.style.display = "none";
+        // Esconde tela de login
+        document.getElementById("login-box").style.display = "none";
 
         // Ativa sessão
         sessaoAtiva = true;
@@ -92,10 +91,10 @@
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
-
     alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
   }
 </script>
+
 
 
 
