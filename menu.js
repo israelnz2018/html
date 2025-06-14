@@ -37,8 +37,12 @@ const configuracoesAnalises = {
       subitens: ["Intervalo de Confianca", "F/Levene Test", "Bartlett"]
     },
     {
-      nome: "1 Proporcao",
-      subitens: ["2 Proporcoes", "Qui- quadrado"]
+      nome: "Proporção",
+      subitens: ["1 Proporção", "2 Proporções"]
+    }
+    {
+      nome: "Associação",
+      subitens: ["Qui- quadrado"]
     }
   ],
   "Análise Qualitativa (Investigativa)": [
@@ -50,23 +54,24 @@ const configuracoesAnalises = {
     { nome: "Matriz de priorização" }
   ],
   "Análise Preditiva": [
-    { nome: "Analise de correlacao" },
-    { nome: "Grafico de disperao" },
+    { nome: "Analise de correlação" },
+    { nome: "Grafico de dispersão" },
     { nome: "Grafico de tendencias" },
     { nome: "Regressão linear simples" },
     { nome: "Regressão linear múltipla" },
-    { nome: "Regressão logística binária, ordinal, nominal)" },
-    { nome: "Gráfico de linha com tendência" }
+    { nome: "Regressão logística binária)" },
+    { nome: "Regressão logística ordinal)" },
+    { nome: "Regressão logística nominal)" },
   ],
   "Análise Prescritiva": [
     { nome: "Analise inteligente" }
   ],
   "Análises Diversas": [
-    { nome: "Analise de capabilidade" },
-    { nome: "Analise de sistema de medicao" },
+    { nome: "Análise de capabilidade" },
+    { nome: "Análise de sistema de medição" },
     { nome: "Delineamento de experimentos" },
-    { nome: "Calculo de probabilidade" },
-    { nome: "Analise de agrupamento" }
+    { nome: "Cálculo de probabilidade" },
+    { nome: "Análise de agrupamento" }
   ]
 };
 
