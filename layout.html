@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Learning by Working</title>
+
+  <!-- Carrega primeiro a biblioteca XLSX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -43,15 +45,16 @@
       </thead>
       <tbody>
         <tr>
-          <td class="border px-2 py-1">vazio 1</td>
-          <td class="border px-2 py-1">vazio 2</td>
-          <td class="border px-2 py-1">vazio 3</td>
+          <td class="border px-2 py-1">Exemplo 1</td>
+          <td class="border px-2 py-1">Exemplo 2</td>
+          <td class="border px-2 py-1">Exemplo 3</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
 
+<!-- O SCRIPT FINAL DO BODY: garante que tudo foi carregado -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   let workbookGlobal = null;
@@ -64,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     reader.onload = function(e) {
       const data = new Uint8Array(e.target.result);
       workbookGlobal = XLSX.read(data, { type: 'array' });
+      console.log("Arquivo lido com sucesso", workbookGlobal);
 
       const abaSelect = document.getElementById('aba_planilha');
       abaSelect.innerHTML = '';
@@ -140,4 +144,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </body>
 </html>
+
 
