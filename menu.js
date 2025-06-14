@@ -151,8 +151,23 @@ function gerarMenus() {
     liGrupo.appendChild(ulSub);
     navUl.appendChild(liGrupo);
   });
+
+  // Fecha menus ao clicar fora
+  document.addEventListener("click", function(event) {
+    document.querySelectorAll("nav ul li.show").forEach(li => {
+      if (!li.contains(event.target)) {
+        li.classList.remove("show");
+      }
+    });
+    document.querySelectorAll("nav ul li ul li.show").forEach(li => {
+      if (!li.contains(event.target)) {
+        li.classList.remove("show");
+      }
+    });
+  });
 }
 
 gerarMenus();
+
 
 
