@@ -1,119 +1,167 @@
-<div id="login-box" style="
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 30px;
-  border-radius: 12px;
-  background-color: #fdfdfd;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
-  text-align: center;
-">
-  <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
+<nav class="bg-gray-800 text-white p-2 flex justify-between items-center">
+  <div class="text-lg font-semibold">Learning by Working</div>
+  <ul class="flex space-x-4 items-center">
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-3 py-1 rounded">Ferramentas</button>
+      <ul class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
+        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Regressão</a></li>
+        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">ANOVA</a></li>
+      </ul>
+    </li>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-3 py-1 rounded">Gráficos</button>
+      <ul class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
+        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Boxplot</a></li>
+        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Dispersão</a></li>
+      </ul>
+    </li>
+    <li>
+      <button class="hover:bg-gray-700 px-3 py-1 rounded">Ajuda</button>
+    </li>
+  </ul>
+  <div id="usuario-info" class="flex items-center space-x-2"></div>
+</nav>
 
-  <div style="text-align: left;">
-    <label for="email-login" style="font-weight: bold;">E-mail</label>
-    <input type="email" id="email-login" placeholder="Digite seu e-mail" required
-      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
-
-    <label for="senha-login" style="font-weight: bold;">Senha</label>
-    <input type="password" id="senha-login" placeholder="Digite sua senha" required
-      style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px;" />
+<div class="max-w-6xl mx-auto p-4">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+    <div>
+      <label class="block mb-1 font-medium text-gray-700">Escolha seu arquivo (.xlsx):</label>
+      <input type="file" id="fileInput" accept=".xlsx"
+        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium text-gray-700">Aba da Planilha</label>
+      <select id="aba_planilha" class="w-full border rounded p-2"></select>
+    </div>
+    <div>
+      <label class="block mb-1 font-medium text-gray-700">Coluna Y</label>
+      <select id="coluna_y" class="w-full border rounded p-2"></select>
+    </div>
+    <div>
+      <label class="block mb-1 font-medium text-gray-700">Colunas X</label>
+      <select id="colunas_x" class="w-full border rounded p-2" multiple></select>
+    </div>
   </div>
 
-  <button id="botao-login" onclick="fazerLogin()"
-    style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
-    Entrar
-  </button>
+  <div id="previewColunas" class="mt-4 border rounded bg-gray-100 p-2 text-sm overflow-x-auto hidden"></div>
 
-  <div style="margin-top: 16px;">
-    <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
-      Esqueci minha senha
-    </a>
+  <div class="text-center mt-4">
+    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">
+      Enviar Análise
+    </button>
   </div>
-
-  <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
 </div>
 
+<div class="space-y-4 max-w-6xl mx-auto p-4">
+  <div class="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
+    <label class="font-semibold">Pergunta do aluno:</label>
+    <input id="perguntaAluno" type="text" class="flex-1 border rounded p-2" placeholder="Digite sua pergunta..." />
+    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">
+      Perguntar
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
+      <h2 class="font-bold text-lg mb-2 text-center">Análise Estatística</h2>
+      <div id="conteudoAnalise" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
+    </div>
+    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
+      <h2 class="font-bold text-lg mb-2 text-center">Gráfico Isolado</h2>
+      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-  async function fazerLogin() {
-    const email = document.getElementById('email-login').value.trim();
-    const senha = document.getElementById('senha-login').value.trim();
-    const msg = document.getElementById('mensagem-login');
+let workbookGlobal = null;
 
-    if (!email || !senha) {
-      msg.style.color = "red";
-      msg.textContent = "❌ Preencha todos os campos.";
-      return;
+document.getElementById('fileInput').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = new Uint8Array(e.target.result);
+    workbookGlobal = XLSX.read(data, { type: 'array' });
+
+    const abaSelect = document.getElementById('aba_planilha');
+    abaSelect.innerHTML = '';
+    workbookGlobal.SheetNames.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      abaSelect.appendChild(opt);
+    });
+
+    // Seleciona a primeira aba e mostra preview automaticamente
+    if (workbookGlobal.SheetNames.length > 0) {
+      abaSelect.value = workbookGlobal.SheetNames[0];
+      mostrarPreview(workbookGlobal.SheetNames[0]);
     }
+  };
+  reader.readAsArrayBuffer(file);
+});
 
-    msg.style.color = "#444";
-    msg.textContent = "🔄 Verificando...";
+document.getElementById('aba_planilha').addEventListener('change', function() {
+  const aba = this.value;
+  mostrarPreview(aba);
+});
 
-    try {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("senha", senha);
+function mostrarPreview(aba) {
+  if (!workbookGlobal) return;
+  const worksheet = workbookGlobal.Sheets[aba];
+  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/login", {
-        method: "POST",
-        body: formData
-      });
+  const colunas = jsonData[0] || [];
+  const primeiraLinha = jsonData[1] || [];
 
-      const result = await resposta.json();
+  // Preencher dropdowns
+  const ySelect = document.getElementById('coluna_y');
+  const xSelect = document.getElementById('colunas_x');
+  ySelect.innerHTML = '';
+  xSelect.innerHTML = '';
+  colunas.forEach(titulo => {
+    const optY = document.createElement('option');
+    optY.value = titulo;
+    optY.textContent = titulo;
+    ySelect.appendChild(optY);
 
-      if (result && result.autorizado) {
-        msg.style.color = "green";
-        msg.textContent = `✅ Acesso permitido. Bem-vindo, ${result.nome || ''}!`;
+    const optX = document.createElement('option');
+    optX.value = titulo;
+    optX.textContent = titulo;
+    xSelect.appendChild(optX);
+  });
 
-        document.getElementById("login-box").style.display = "none";
-        document.getElementById("app").style.display = "block";
-        document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+  // Mostrar preview visual
+  const previewDiv = document.getElementById('previewColunas');
+  previewDiv.innerHTML = '';
+  const table = document.createElement('table');
+  table.className = 'min-w-full border';
 
-        const nomeAluno = result.nome || email;
-        const inicial = nomeAluno.charAt(0).toUpperCase();
-        document.getElementById("usuario-info").innerHTML = `
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold">
-              ${inicial}
-            </div>
-            <span class="text-sm font-medium">${nomeAluno}</span>
-            <button onclick="deslogarAluno()" class="text-blue-600 text-xs underline">Deslogar</button>
-          </div>
-        `;
+  const trHeader = document.createElement('tr');
+  colunas.forEach(t => {
+    const th = document.createElement('th');
+    th.className = 'border px-2 py-1 bg-gray-200';
+    th.textContent = t;
+    trHeader.appendChild(th);
+  });
+  table.appendChild(trHeader);
 
-        if (typeof SlimSelect !== "undefined") {
-          if (typeof slimSelectInstance !== "undefined" && slimSelectInstance) slimSelectInstance.destroy();
-          slimSelectInstance = new SlimSelect({
-            select: '#colunas_x',
-            settings: { closeOnSelect: false }
-          });
-        }
+  const trData = document.createElement('tr');
+  colunas.forEach((_, i) => {
+    const td = document.createElement('td');
+    td.className = 'border px-2 py-1';
+    td.textContent = primeiraLinha[i] !== undefined ? primeiraLinha[i] : '';
+    trData.appendChild(td);
+  });
+  table.appendChild(trData);
 
-        sessaoAtiva = true;
-        resetarTimer();
-
-      } else {
-        msg.style.color = "red";
-        msg.textContent = "❌ Login inválido ou conta inativa.";
-      }
-    } catch (error) {
-      console.error("Erro no login:", error);
-      msg.style.color = "red";
-      msg.textContent = "❌ Erro ao verificar login.";
-    }
-  }
-
-  function deslogarAluno() {
-    document.getElementById("app").style.display = "none";
-    document.getElementById("login-box").style.display = "block";
-    document.getElementById("usuario-info").innerHTML = "";
-  }
-
-  function recuperarSenha() {
-    const email = prompt("Digite seu e-mail para recuperar a senha:");
-    if (!email) return;
-    alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
-  }
+  previewDiv.appendChild(table);
+  previewDiv.classList.remove('hidden');
+}
 </script>
+
 
 
