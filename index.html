@@ -59,12 +59,18 @@
           }
         });
       }
+
+      // Depois de carregar os arquivos, carrega o controlador de entrada
+      const scriptEntrada = document.createElement("script");
+      scriptEntrada.src = "entradadedados.js";
+      document.body.appendChild(scriptEntrada);
     }
 
     carregarArquivos();
   </script>
 </body>
 </html>
+
 
 
 
