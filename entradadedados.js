@@ -1,76 +1,7 @@
-const configuracoesFerramentas = {
-  "Regressao Simples": ["Y", "X"],
-  "Capabilidade": ["Y", "LSL", "USL"]
-};
-
-const configuracoesGraficos = {
-  "Histograma Simples": ["Y"],
-  "Boxplot Simples": ["Y"],
-  "Dispersao Simples": ["Y", "X"]
-};
-
-function gerarMenus() {
-  gerarMenu("#menuFerramentas", configuracoesFerramentas);
-  gerarMenu("#menuGraficos", configuracoesGraficos);
-}
-
-function gerarMenu(seletor, configuracoes) {
-  const ul = document.querySelector(seletor);
-  ul.innerHTML = '';
-
-  Object.keys(configuracoes).forEach(nome => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = '#';
-    a.textContent = nome;
-    a.className = 'block px-4 py-2 hover:bg-gray-700';
-    a.addEventListener('click', function(event) {
-      event.preventDefault();
-      console.log("Ferramenta escolhida:", nome);
-      atualizarBoxAnalise(nome);
-    });
-    li.appendChild(a);
-    ul.appendChild(li);
-  });
-}
-
 function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
-  box.innerHTML = '';
-
-  const config = configuracoesFerramentas[ferramenta] || configuracoesGraficos[ferramenta];
-
-  if (!config) {
-    box.innerHTML = `<p class="text-sm text-gray-500">Ferramenta não reconhecida ou ainda não implementada.</p>`;
-    return;
-  }
-
-  config.forEach(campo => {
-    if (campo === "Y" || campo === "X") {
-      const label = document.createElement('label');
-      label.className = 'block font-medium mb-1';
-      label.textContent = `Variável ${campo}`;
-      box.appendChild(label);
-
-      const select = document.createElement('select');
-      select.id = `box_${campo.toLowerCase()}`;
-      select.className = 'border rounded p-1 mb-2 w-full';
-      box.appendChild(select);
-    } else {
-      const label = document.createElement('label');
-      label.className = 'block font-medium mb-1';
-      label.textContent = campo;
-      box.appendChild(label);
-
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.id = campo.toLowerCase();
-      input.className = 'border rounded p-1 mb-2 w-full';
-      box.appendChild(input);
-    }
-  });
-
-  preencherBoxDropdowns(); // Preenche dropdowns no momento da criação
+  box.innerHTML = `<p class="text-sm text-gray-500">Análise selecionada: ${ferramenta}</p>`;
+  // Aqui você pode colocar a lógica de gerar campos Y, X, LSL etc dependendo da análise
 }
 
 function preencherBoxDropdowns() {
@@ -83,7 +14,7 @@ function preencherBoxDropdowns() {
   ['box_y', 'box_x'].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
-      sel.innerHTML = ''; // Limpa antes de preencher para evitar acúmulo
+      sel.innerHTML = '';
       colunas.forEach(t => {
         const opt = document.createElement('option');
         opt.value = t;
@@ -94,15 +25,10 @@ function preencherBoxDropdowns() {
   });
 }
 
-// Chama para gerar o menu no carregamento
-gerarMenus();
-
-// Atualiza dropdowns do box quando mudar a aba
 document.getElementById('aba_planilha').addEventListener('change', function() {
   preencherBoxDropdowns();
 });
 
-// Atualiza dropdowns do box quando fizer upload de nova planilha
 document.getElementById('fileInput').addEventListener('change', function(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -126,8 +52,9 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
     });
 
     console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
-    mostrarPreview(abaSelect.value); // Atualiza o preview
-    preencherBoxDropdowns();         // <-- Garante atualização dos dropdowns do box
+    mostrarPreview(abaSelect.value);
+    preencherBoxDropdowns();
   };
   reader.readAsArrayBuffer(file);
 });
+
