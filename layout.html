@@ -6,18 +6,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
   nav button {
-    font-size: 0.60rem; /* tamanho dos botões principais */
+    font-size: 0.60rem;
   }
   nav ul li a {
-    font-size: 0.60rem; /* tamanho dos subitens */
+    font-size: 0.60rem;
   }
   nav ul li ul ul {
-    position: absolute;  /* garante posicionamento ao lado */
-    left: 100%;          /* faz o submenu abrir ao lado */
-    top: 0;              /* alinha no topo do pai */
-    margin-left: 0.25rem; /* espaço opcional entre o pai e o submenu */
+    display: none;
+  }
+  nav ul li ul li:hover > ul {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    margin-left: 0.25rem;
   }
 </style>
+
 
 
 </head>
