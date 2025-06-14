@@ -1,21 +1,25 @@
-!-- Primeiro carrega a biblioteca XLSX -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning by Working</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
 
 <nav class="bg-gray-800 text-white p-2 flex justify-between items-center">
   <div class="text-lg font-semibold">Learning by Working</div>
   <ul class="flex space-x-4 items-center">
     <li class="relative group">
       <button class="hover:bg-gray-700 px-3 py-1 rounded">Ferramentas</button>
-      <ul class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Regressão</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">ANOVA</a></li>
+      <ul id="menuFerramentas" class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
+        <!-- Itens de ferramentas serão gerados dinamicamente -->
       </ul>
     </li>
     <li class="relative group">
       <button class="hover:bg-gray-700 px-3 py-1 rounded">Gráficos</button>
-      <ul class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Boxplot</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Dispersão</a></li>
+      <ul id="menuGraficos" class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
+        <!-- Itens de gráficos serão gerados dinamicamente -->
       </ul>
     </li>
     <li>
@@ -24,6 +28,7 @@
   </ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
 </nav>
+
 
 <div class="max-w-6xl mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -46,7 +51,9 @@
     </div>
   </div>
 
-  <div id="previewColunas" class="mt-4 border rounded bg-gray-100 p-2 text-sm overflow-x-auto">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+  <!-- Tabela de preview -->
+  <div id="previewColunas" class="md:col-span-2 border rounded bg-gray-100 p-2 text-sm overflow-x-auto">
     <table class="min-w-full border">
       <thead>
         <tr>
@@ -64,6 +71,12 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Box ao lado -->
+  <div id="boxAnalise" class="border rounded bg-white shadow p-4">
+    <p class="text-sm text-gray-500">Escolha uma ferramenta para começar.</p>
+  </div>
+</div>
 
   <div class="text-center mt-4">
     <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">
@@ -93,11 +106,16 @@
   </div>
 </div>
 
+  <!-- Carregue a XLSX antes do seu script -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script>
+</body>
+  <script>
+console.log("JS incorporado e rodando");
+
 let workbookGlobal = null;
 
 document.getElementById('fileInput').addEventListener('change', function(event) {
+  console.log("Upload detectado");
   const file = event.target.files[0];
   if (!file) return;
 
@@ -108,24 +126,27 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 
     const abaSelect = document.getElementById('aba_planilha');
     abaSelect.innerHTML = '';
-    workbookGlobal.SheetNames.forEach(name => {
+
+    workbookGlobal.SheetNames.forEach((name, index) => {
       const opt = document.createElement('option');
       opt.value = name;
       opt.textContent = name;
       abaSelect.appendChild(opt);
+      if (index === 0) {
+        abaSelect.value = name;
+      }
     });
 
-    if (workbookGlobal.SheetNames.length > 0) {
-      abaSelect.value = workbookGlobal.SheetNames[0];
-      mostrarPreview(workbookGlobal.SheetNames[0]);
-    }
+    console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
+    mostrarPreview(abaSelect.value); // Chama o preview automaticamente
   };
   reader.readAsArrayBuffer(file);
 });
 
 document.getElementById('aba_planilha').addEventListener('change', function() {
   const aba = this.value;
-  mostrarPreview(aba);
+  console.log("Aba selecionada:", aba);
+  mostrarPreview(aba); // Atualiza preview ao mudar de aba
 });
 
 function mostrarPreview(aba) {
@@ -136,27 +157,13 @@ function mostrarPreview(aba) {
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
-  const ySelect = document.getElementById('coluna_y');
-  const xSelect = document.getElementById('colunas_x');
-  ySelect.innerHTML = '';
-  xSelect.innerHTML = '';
-  colunas.forEach(titulo => {
-    const optY = document.createElement('option');
-    optY.value = titulo;
-    optY.textContent = titulo;
-    ySelect.appendChild(optY);
-
-    const optX = document.createElement('option');
-    optX.value = titulo;
-    optX.textContent = titulo;
-    xSelect.appendChild(optX);
-  });
-
   const previewDiv = document.getElementById('previewColunas');
   previewDiv.innerHTML = '';
+
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
+  // Cabeçalho
   const trHeader = document.createElement('tr');
   colunas.forEach(t => {
     const th = document.createElement('th');
@@ -166,6 +173,7 @@ function mostrarPreview(aba) {
   });
   table.appendChild(trHeader);
 
+  // Primeira linha de dados
   const trData = document.createElement('tr');
   colunas.forEach((_, i) => {
     const td = document.createElement('td');
@@ -177,4 +185,7 @@ function mostrarPreview(aba) {
 
   previewDiv.appendChild(table);
 }
+
 </script>
+
+</html>
