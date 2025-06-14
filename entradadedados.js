@@ -38,7 +38,6 @@ function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
   box.innerHTML = '';
 
-  // Procura na configuração
   const config = configuracoesFerramentas[ferramenta] || configuracoesGraficos[ferramenta];
 
   if (!config) {
@@ -71,7 +70,7 @@ function atualizarBoxAnalise(ferramenta) {
     }
   });
 
-  preencherBoxDropdowns();
+  preencherBoxDropdowns(); // Preenche dropdowns no momento da criação
 }
 
 function preencherBoxDropdowns() {
@@ -84,6 +83,7 @@ function preencherBoxDropdowns() {
   ['box_y', 'box_x'].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
+      sel.innerHTML = ''; // Limpa antes de preencher para evitar acúmulo
       colunas.forEach(t => {
         const opt = document.createElement('option');
         opt.value = t;
@@ -96,3 +96,9 @@ function preencherBoxDropdowns() {
 
 // Chama para gerar o menu no carregamento
 gerarMenus();
+
+// Atualiza dropdowns do box quando mudar a aba
+document.getElementById('aba_planilha').addEventListener('change', function() {
+  preencherBoxDropdowns();
+});
+
