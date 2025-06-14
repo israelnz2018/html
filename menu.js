@@ -81,28 +81,39 @@ function gerarMenus() {
 
   Object.keys(configuracoesAnalises).forEach(grupo => {
     const liGrupo = document.createElement("li");
-    liGrupo.className = "relative group";
+    liGrupo.className = "relative";
 
     const buttonGrupo = document.createElement("button");
     buttonGrupo.className = "hover:bg-gray-700 px-2 py-1 rounded";
     buttonGrupo.textContent = grupo;
 
+    buttonGrupo.addEventListener("click", function(event) {
+      event.preventDefault();
+      liGrupo.classList.toggle("show");
+    });
+
     const ulSub = document.createElement("ul");
-    ulSub.className = "absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block z-10";
+    ulSub.className = "hidden absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded z-10";
 
     configuracoesAnalises[grupo].forEach(item => {
-      if (item.oculto) return; // Pula item oculto se houver
+      if (item.oculto) return;
 
       const liItem = document.createElement("li");
 
       if (item.subitens) {
         const divItem = document.createElement("div");
-        divItem.className = "px-4 py-2 hover:bg-gray-700 font-semibold";
+        divItem.className = "px-4 py-2 hover:bg-gray-700 font-semibold cursor-pointer";
         divItem.textContent = item.nome;
+
+        divItem.addEventListener("click", function(event) {
+          event.preventDefault();
+          liItem.classList.toggle("show");
+        });
+
         liItem.appendChild(divItem);
 
         const ulSubSub = document.createElement("ul");
-        ulSubSub.className = "bg-gray-700 border-t border-gray-600";
+        ulSubSub.className = "hidden bg-gray-700 border-t border-gray-600 rounded";
 
         item.subitens.forEach(sub => {
           const liSub = document.createElement("li");
@@ -143,4 +154,5 @@ function gerarMenus() {
 }
 
 gerarMenus();
+
 
