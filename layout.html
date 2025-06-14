@@ -3,26 +3,6 @@
 
 <nav class="bg-gray-800 text-white p-2 flex justify-between items-center">
   <div class="text-lg font-semibold">Learning by Working</div>
-  <ul class="flex space-x-4 items-center">
-    <li class="relative group">
-      <button class="hover:bg-gray-700 px-3 py-1 rounded">Ferramentas</button>
-      <ul class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Regressão</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">ANOVA</a></li>
-      </ul>
-    </li>
-    <li class="relative group">
-      <button class="hover:bg-gray-700 px-3 py-1 rounded">Gráficos</button>
-      <ul class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block">
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Boxplot</a></li>
-        <li><a href="#" class="block px-4 py-2 hover:bg-gray-700">Dispersão</a></li>
-      </ul>
-    </li>
-    <li>
-      <button class="hover:bg-gray-700 px-3 py-1 rounded">Ajuda</button>
-    </li>
-  </ul>
-  <div id="usuario-info" class="flex items-center space-x-2"></div>
 </nav>
 
 <div class="max-w-6xl mx-auto p-4">
@@ -47,33 +27,6 @@
   </div>
 
   <div id="previewColunas" class="mt-4 border rounded bg-gray-100 p-2 text-sm overflow-x-auto hidden"></div>
-
-  <div class="text-center mt-4">
-    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">
-      Enviar Análise
-    </button>
-  </div>
-</div>
-
-<div class="space-y-4 max-w-6xl mx-auto p-4">
-  <div class="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
-    <label class="font-semibold">Pergunta do aluno:</label>
-    <input id="perguntaAluno" type="text" class="flex-1 border rounded p-2" placeholder="Digite sua pergunta..." />
-    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">
-      Perguntar
-    </button>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
-      <h2 class="font-bold text-lg mb-2 text-center">Análise Estatística</h2>
-      <div id="conteudoAnalise" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
-    </div>
-    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
-      <h2 class="font-bold text-lg mb-2 text-center">Gráfico Isolado</h2>
-      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
-    </div>
-  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -82,45 +35,61 @@ let workbookGlobal = null;
 
 document.getElementById('fileInput').addEventListener('change', function(event) {
   const file = event.target.files[0];
-  if (!file) return;
+  if (!file) {
+    console.log("Nenhum arquivo selecionado");
+    return;
+  }
+
+  console.log("Arquivo selecionado:", file.name);
 
   const reader = new FileReader();
   reader.onload = function(e) {
     const data = new Uint8Array(e.target.result);
-    workbookGlobal = XLSX.read(data, { type: 'array' });
+    try {
+      workbookGlobal = XLSX.read(data, { type: 'array' });
+      console.log("Arquivo lido com sucesso", workbookGlobal);
 
-    const abaSelect = document.getElementById('aba_planilha');
-    abaSelect.innerHTML = '';
-    workbookGlobal.SheetNames.forEach(name => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name;
-      abaSelect.appendChild(opt);
-    });
-
-    // Seleciona a primeira aba e mostra preview automaticamente
-    if (workbookGlobal.SheetNames.length > 0) {
-      abaSelect.value = workbookGlobal.SheetNames[0];
-      mostrarPreview(workbookGlobal.SheetNames[0]);
+      preencherAbasEPreview();
+    } catch (err) {
+      console.error("Erro ao ler arquivo:", err);
     }
   };
   reader.readAsArrayBuffer(file);
 });
 
+function preencherAbasEPreview() {
+  const abaSelect = document.getElementById('aba_planilha');
+  abaSelect.innerHTML = '';
+
+  workbookGlobal.SheetNames.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    abaSelect.appendChild(opt);
+  });
+
+  if (workbookGlobal.SheetNames.length > 0) {
+    abaSelect.value = workbookGlobal.SheetNames[0];
+    mostrarPreview(workbookGlobal.SheetNames[0]);
+  }
+}
+
 document.getElementById('aba_planilha').addEventListener('change', function() {
-  const aba = this.value;
-  mostrarPreview(aba);
+  mostrarPreview(this.value);
 });
 
 function mostrarPreview(aba) {
   if (!workbookGlobal) return;
+
   const worksheet = workbookGlobal.Sheets[aba];
   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
-  // Preencher dropdowns
+  console.log("Colunas:", colunas);
+  console.log("Primeira linha:", primeiraLinha);
+
   const ySelect = document.getElementById('coluna_y');
   const xSelect = document.getElementById('colunas_x');
   ySelect.innerHTML = '';
@@ -137,7 +106,6 @@ function mostrarPreview(aba) {
     xSelect.appendChild(optX);
   });
 
-  // Mostrar preview visual
   const previewDiv = document.getElementById('previewColunas');
   previewDiv.innerHTML = '';
   const table = document.createElement('table');
@@ -165,6 +133,7 @@ function mostrarPreview(aba) {
   previewDiv.classList.remove('hidden');
 }
 </script>
+
 
 
 
