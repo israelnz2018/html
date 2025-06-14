@@ -102,3 +102,32 @@ document.getElementById('aba_planilha').addEventListener('change', function() {
   preencherBoxDropdowns();
 });
 
+// Atualiza dropdowns do box quando fizer upload de nova planilha
+document.getElementById('fileInput').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = new Uint8Array(e.target.result);
+    workbookGlobal = XLSX.read(data, { type: 'array' });
+
+    const abaSelect = document.getElementById('aba_planilha');
+    abaSelect.innerHTML = '';
+
+    workbookGlobal.SheetNames.forEach((name, index) => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      abaSelect.appendChild(opt);
+      if (index === 0) {
+        abaSelect.value = name;
+      }
+    });
+
+    console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
+    mostrarPreview(abaSelect.value); // Atualiza o preview
+    preencherBoxDropdowns();         // <-- Garante atualização dos dropdowns do box
+  };
+  reader.readAsArrayBuffer(file);
+});
