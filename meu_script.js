@@ -1,3 +1,5 @@
+console.log("meu_script.js carregado");
+
 document.addEventListener("DOMContentLoaded", function() {
   let workbookGlobal = null;
 
