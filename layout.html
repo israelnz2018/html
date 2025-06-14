@@ -4,22 +4,40 @@
   <meta charset="UTF-8">
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    nav button {
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
 
 <nav class="bg-gray-800 text-white p-2 flex justify-between items-center">
   <div class="text-lg font-semibold">Learning by Working</div>
-  <ul class="flex space-x-4 items-center">
+  <ul class="flex space-x-2 items-center">
     <li class="relative group">
-      <button class="hover:bg-gray-700 px-3 py-1 rounded">Ferramentas</button>
-      <ul id="menuFerramentas" class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block"></ul>
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Análise Exploratória</button>
     </li>
     <li class="relative group">
-      <button class="hover:bg-gray-700 px-3 py-1 rounded">Gráficos</button>
-      <ul id="menuGraficos" class="absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block"></ul>
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Análise Descritiva</button>
     </li>
-    <li>
-      <button class="hover:bg-gray-700 px-3 py-1 rounded">Ajuda</button>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Análise Inferencial</button>
+    </li>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Análise Investigativa</button>
+    </li>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Análise Preditiva</button>
+    </li>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Análise Prescritiva</button>
+    </li>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Gráficos</button>
+    </li>
+    <li class="relative group">
+      <button class="hover:bg-gray-700 px-2 py-1 rounded">Ajuda</button>
     </li>
   </ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
@@ -169,10 +187,3 @@ function mostrarPreview(aba) {
 
 </body>
 </html>
-
-
-
-
-
-
-
