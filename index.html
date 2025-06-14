@@ -11,7 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/slim-select@2.6.0/dist/slimselect.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/slim-select@2.6.0/dist/slimselect.min.js"></script>
 
-  <!-- XLSX (carregado no index para garantir que estará disponível antes do layout) -->
+  <!-- XLSX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -30,8 +30,7 @@
     const arquivos = [
       "acesso_permissoes.html",
       "layout.html",
-      "pokayoke.html",
-      "menu.js"
+      "pokayoke.html"
     ];
 
     async function carregarArquivos() {
@@ -58,7 +57,11 @@
         });
       }
 
-      // Depois de carregar os arquivos, carrega o controlador de entrada
+      // Depois de carregar os arquivos, carrega os scripts dinâmicos
+      const scriptMenu = document.createElement("script");
+      scriptMenu.src = "menu.js";
+      document.body.appendChild(scriptMenu);
+
       const scriptEntrada = document.createElement("script");
       scriptEntrada.src = "entradadedados.js";
       document.body.appendChild(scriptEntrada);
@@ -66,8 +69,10 @@
 
     carregarArquivos();
   </script>
+
 </body>
 </html>
+
 
 
 
