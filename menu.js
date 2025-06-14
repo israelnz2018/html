@@ -125,6 +125,7 @@ function gerarMenus() {
             event.preventDefault();
             console.log("Análise escolhida:", sub);
             atualizarBoxAnalise(sub);
+            fecharTodosOsMenus();  // Fecha ao escolher
           });
           liSub.appendChild(aSub);
           ulSubSub.appendChild(liSub);
@@ -140,6 +141,7 @@ function gerarMenus() {
           event.preventDefault();
           console.log("Análise escolhida:", item.nome);
           atualizarBoxAnalise(item.nome);
+          fecharTodosOsMenus();  // Fecha ao escolher
         });
         liItem.appendChild(aItem);
       }
@@ -167,7 +169,10 @@ function gerarMenus() {
   });
 }
 
+// Função para fechar todos os menus
+function fecharTodosOsMenus() {
+  document.querySelectorAll("nav ul li.show").forEach(li => li.classList.remove("show"));
+  document.querySelectorAll("nav ul li ul li.show").forEach(li => li.classList.remove("show"));
+}
+
 gerarMenus();
-
-
-
