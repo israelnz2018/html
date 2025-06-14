@@ -1,26 +1,45 @@
 const configuracoesFerramentas = {
   "Regressao Simples": ["Y", "X"],
-  "Capabilidade": ["Y", "LSL", "USL"],
-  "Histograma Simples": ["Y"],
-  "Boxplot Simples": ["Y"],
-  "Dispersao Simples": ["Y", "X"],
-  // Adicione mais conforme precisar
+  "Capabilidade": ["Y", "LSL", "USL"]
 };
 
-document.querySelectorAll('nav ul ul a').forEach(item => {
-  item.addEventListener('click', function(event) {
-    event.preventDefault();  // impede o # ou navegação
-    const ferramenta = this.textContent.trim();
-    console.log("Ferramenta escolhida:", ferramenta);
-    atualizarBoxAnalise(ferramenta);
+const configuracoesGraficos = {
+  "Histograma Simples": ["Y"],
+  "Boxplot Simples": ["Y"],
+  "Dispersao Simples": ["Y", "X"]
+};
+
+function gerarMenus() {
+  gerarMenu("#menuFerramentas", configuracoesFerramentas);
+  gerarMenu("#menuGraficos", configuracoesGraficos);
+}
+
+function gerarMenu(seletor, configuracoes) {
+  const ul = document.querySelector(seletor);
+  ul.innerHTML = '';
+
+  Object.keys(configuracoes).forEach(nome => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#';
+    a.textContent = nome;
+    a.className = 'block px-4 py-2 hover:bg-gray-700';
+    a.addEventListener('click', function(event) {
+      event.preventDefault();
+      console.log("Ferramenta escolhida:", nome);
+      atualizarBoxAnalise(nome);
+    });
+    li.appendChild(a);
+    ul.appendChild(li);
   });
-});
+}
 
 function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
-  box.innerHTML = '';  // Limpa o conteúdo anterior
+  box.innerHTML = '';
 
-  const config = configuracoesFerramentas[ferramenta];
+  // Procura na configuração
+  const config = configuracoesFerramentas[ferramenta] || configuracoesGraficos[ferramenta];
 
   if (!config) {
     box.innerHTML = `<p class="text-sm text-gray-500">Ferramenta não reconhecida ou ainda não implementada.</p>`;
@@ -74,3 +93,6 @@ function preencherBoxDropdowns() {
     }
   });
 }
+
+// Chama para gerar o menu no carregamento
+gerarMenus();
