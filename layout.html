@@ -103,6 +103,45 @@
 <script src="meu_script.js"></script>
 
 </body>
+  <script>
+console.log("JS incorporado e rodando");
+
+let workbookGlobal = null;
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+  console.log("Upload detectado");
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = new Uint8Array(e.target.result);
+    workbookGlobal = XLSX.read(data, { type: 'array' });
+
+    const abaSelect = document.getElementById('aba_planilha');
+    abaSelect.innerHTML = '';
+
+    workbookGlobal.SheetNames.forEach((name, index) => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      abaSelect.appendChild(opt);
+      if (index === 0) {
+        abaSelect.value = name;
+      }
+    });
+
+    console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('aba_planilha').addEventListener('change', function() {
+  const aba = this.value;
+  console.log("Aba selecionada:", aba);
+});
+</script>
+
 </html>
 
 
