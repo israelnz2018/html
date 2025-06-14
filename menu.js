@@ -39,7 +39,7 @@ const configuracoesAnalises = {
     {
       nome: "Proporção",
       subitens: ["1 Proporção", "2 Proporções"]
-    }
+    },
     {
       nome: "Associação",
       subitens: ["Qui- quadrado"]
@@ -59,9 +59,9 @@ const configuracoesAnalises = {
     { nome: "Grafico de tendencias" },
     { nome: "Regressão linear simples" },
     { nome: "Regressão linear múltipla" },
-    { nome: "Regressão logística binária)" },
-    { nome: "Regressão logística ordinal)" },
-    { nome: "Regressão logística nominal)" },
+    { nome: "Regressão logística binária" },
+    { nome: "Regressão logística ordinal" },
+    { nome: "Regressão logística nominal" }
   ],
   "Análise Prescritiva": [
     { nome: "Analise inteligente" }
@@ -91,6 +91,8 @@ function gerarMenus() {
     ulSub.className = "absolute left-0 mt-1 bg-gray-800 border border-gray-700 rounded hidden group-hover:block z-10";
 
     configuracoesAnalises[grupo].forEach(item => {
+      if (item.oculto) return; // Pula item oculto se houver
+
       const liItem = document.createElement("li");
 
       if (item.subitens) {
@@ -141,3 +143,4 @@ function gerarMenus() {
 }
 
 gerarMenus();
+
