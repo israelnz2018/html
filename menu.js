@@ -102,7 +102,7 @@ function gerarMenus() {
 
       if (item.subitens) {
         const divItem = document.createElement("div");
-        divItem.className = "px-4 py-2 hover:bg-gray-700 font-semibold cursor-pointer";
+        divItem.className = "block px-4 py-2 hover:bg-gray-700 cursor-pointer";
         divItem.textContent = item.nome;
 
         divItem.addEventListener("click", function(event) {
