@@ -67,6 +67,8 @@
 
         document.getElementById("login-box").style.display = "none";
         document.getElementById("app").style.display = "block";
+        document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
 
         const nomeAluno = result.nome || email;
         const inicial = nomeAluno.charAt(0).toUpperCase();
