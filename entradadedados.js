@@ -1,5 +1,5 @@
 const configuracoesFerramentas = {
-  "Regressao Linear": ["Y", "X"],
+  "Regressao Simples": ["Y", "X"],
   "Capabilidade": ["Y", "LSL", "USL"],
   "Histograma Simples": ["Y"],
   "Boxplot Simples": ["Y"],
@@ -7,8 +7,9 @@ const configuracoesFerramentas = {
   // Adicione mais conforme precisar
 };
 
-document.querySelectorAll('nav button').forEach(botao => {
-  botao.addEventListener('click', function() {
+document.querySelectorAll('nav ul ul a').forEach(item => {
+  item.addEventListener('click', function(event) {
+    event.preventDefault();  // impede o # ou navegação
     const ferramenta = this.textContent.trim();
     console.log("Ferramenta escolhida:", ferramenta);
     atualizarBoxAnalise(ferramenta);
