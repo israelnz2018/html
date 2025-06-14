@@ -125,8 +125,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
     });
 
     if (workbookGlobal.SheetNames.length > 0) {
-      abaSelect.value = workbookGlobal.SheetNames[0];
-      mostrarPreview(workbookGlobal.SheetNames[0]);
+      abaSelect.value = workbookGlobal.SheetNames[0];  // Seleciona automaticamente a primeira aba
     }
   };
   reader.readAsArrayBuffer(file);
@@ -187,14 +186,3 @@ function mostrarPreview(aba) {
   previewDiv.appendChild(table);
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
