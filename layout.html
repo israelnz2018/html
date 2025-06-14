@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
- <style>
+<style>
   nav button {
     font-size: 0.60rem;
   }
+
   nav ul li a {
     font-size: 0.60rem;
   }
@@ -27,9 +28,14 @@
   }
 
   nav ul li ul ul {
+    display: none; /* Sub-submenus também escondidos por padrão */
+    position: absolute;
     left: 100%;
     top: 0;
     margin-left: 0.25rem;
+    background-color: #374151; /* bg-gray-700 */
+    border: 1px solid #4b5563; /* border-gray-600 */
+    border-radius: 0.25rem;
   }
 
   /* Estilo base dos subitens */
@@ -42,7 +48,13 @@
   nav ul li.show > ul {
     display: block;
   }
+
+  /* Quando ativo, o sub-submenu aparece */
+  nav ul li ul li.show > ul {
+    display: block;
+  }
 </style>
+
 
 </head>
 <body>
