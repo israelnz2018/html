@@ -33,36 +33,40 @@
       "pokayoke.html"
     ];
 
-<script src="menu.js"></script>
-<script src="entradadedados.js"></script>
-<script src="funcionalidade.js"></script>
-async function carregarArquivos() {
-  for (const nome of arquivos) {
-    const resposta = await fetch(nome);
-    const conteudo = await resposta.text();
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = conteudo;
+    async function carregarArquivos() {
+      for (const nome of arquivos) {
+        const resposta = await fetch(nome);
+        const conteudo = await resposta.text();
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = conteudo;
 
-    Array.from(tempDiv.childNodes).forEach(node => {
-      if (node.tagName === "SCRIPT") {
-        const script = document.createElement("script");
-        script.textContent = node.textContent;
-        document.body.appendChild(script);
-      } else if (node.tagName === "STYLE") {
-        document.head.appendChild(node);
-      } else {
-        if (nome === "acesso_permissoes.html") {
-          document.getElementById("login-container").appendChild(node);
-        } else {
-          document.getElementById("app").appendChild(node);
-        }
+        Array.from(tempDiv.childNodes).forEach(node => {
+          if (node.tagName === "SCRIPT") {
+            const script = document.createElement("script");
+            script.textContent = node.textContent;
+            document.body.appendChild(script);
+          } else if (node.tagName === "STYLE") {
+            document.head.appendChild(node);
+          } else {
+            if (nome === "acesso_permissoes.html") {
+              document.getElementById("login-container").appendChild(node);
+            } else {
+              document.getElementById("app").appendChild(node);
+            }
+          }
+        });
       }
-    });
-  }
-}
+    }
 
-carregarArquivos();
-</script>
+    carregarArquivos();
+  </script>
+
+  <script src="menu.js"></script>
+  <script src="entradadedados.js"></script>
+  <script src="funcionalidade.js"></script>
+
+</body>
+</html>
 
 
 
