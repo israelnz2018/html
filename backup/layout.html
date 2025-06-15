@@ -1,8 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning by Working</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    nav button {
+      font-size: 0.60rem;
+    }
+
+    nav ul li a {
+      font-size: 0.60rem;
+    }
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      background-color: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 0.25rem;
+      z-index: 10;
+    }
+
+    nav ul li ul li {
+      position: relative;
+    }
+
+    nav ul li ul ul {
+      display: none;
+      position: absolute;
+      left: 100%;
+      top: 0;
+      margin-left: 0.25rem;
+      background-color: #374151;
+      border: 1px solid #4b5563;
+      border-radius: 0.25rem;
+    }
+
+    nav ul li ul li a {
+      display: block;
+      padding: 0.25rem 1rem;
+    }
+
+    nav ul li.show > ul {
+      display: block;
+    }
+
+    nav ul li ul li.show > ul {
+      display: block;
+    }
+  </style>
+</head>
 <body>
 
 <nav class="bg-gray-800 text-white p-2 flex justify-between items-center">
   <div class="text-lg font-semibold">Learning by Working</div>
-  <ul class="flex space-x-2 items-center"></ul> <!-- O menu.js vai preencher aqui -->
+  <ul class="flex space-x-2 items-center"></ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
 </nav>
 
@@ -73,44 +126,56 @@
 </div>
 
 <script>
-console.log("JS incorporado e rodando");
-
 let workbookGlobal = null;
 
-document.getElementById('fileInput').addEventListener('change', function(event) {
-  console.log("Upload detectado");
-  const file = event.target.files[0];
-  if (!file) return;
+function ativarLayout() {
+  console.log("JS do layout ativado");
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const data = new Uint8Array(e.target.result);
-    workbookGlobal = XLSX.read(data, { type: 'array' });
+  const fileEl = document.getElementById('fileInput');
+  const abaEl = document.getElementById('aba_planilha');
 
-    const abaSelect = document.getElementById('aba_planilha');
-    abaSelect.innerHTML = '';
+  if (fileEl) {
+    fileEl.addEventListener('change', function(event) {
+      console.log("Upload detectado");
+      const file = event.target.files[0];
+      if (!file) return;
 
-    workbookGlobal.SheetNames.forEach((name, index) => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name;
-      abaSelect.appendChild(opt);
-      if (index === 0) {
-        abaSelect.value = name;
-      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        workbookGlobal = XLSX.read(data, { type: 'array' });
+
+        abaEl.innerHTML = '';
+
+        workbookGlobal.SheetNames.forEach((name, index) => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          abaEl.appendChild(opt);
+          if (index === 0) {
+            abaEl.value = name;
+          }
+        });
+
+        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
+        mostrarPreview(abaEl.value);
+      };
+      reader.readAsArrayBuffer(file);
     });
+  } else {
+    console.warn("⚠ fileInput não encontrado no DOM ao ativar layout.");
+  }
 
-    console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
-    mostrarPreview(abaSelect.value);
-  };
-  reader.readAsArrayBuffer(file);
-});
-
-document.getElementById('aba_planilha').addEventListener('change', function() {
-  const aba = this.value;
-  console.log("Aba selecionada:", aba);
-  mostrarPreview(aba);
-});
+  if (abaEl) {
+    abaEl.addEventListener('change', function() {
+      const aba = this.value;
+      console.log("Aba selecionada:", aba);
+      mostrarPreview(aba);
+    });
+  } else {
+    console.warn("⚠ aba_planilha não encontrado no DOM ao ativar layout.");
+  }
+}
 
 function mostrarPreview(aba) {
   if (!workbookGlobal) return;
@@ -148,6 +213,6 @@ function mostrarPreview(aba) {
 }
 </script>
 
-<script src="menu.js"></script> <!-- Aqui carrega o menu dinâmico -->
+<script src="menu.js"></script>
 </body>
 </html>
