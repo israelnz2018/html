@@ -1,3 +1,8 @@
+window.addEventListener("DOMContentLoaded", function () {
+  // TODO O CÓDIGO ORIGINAL DO ARQUIVO
+});
+
+
 const configuracoesFerramentas = {
   // Análise Exploratória
   "Histogramas simples": ["Y"],
