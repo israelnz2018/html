@@ -202,7 +202,7 @@ function iniciarFuncionalidade() {
   ativarBotaoEnviarAnalise();
 }
 
-window.addEventListener("load", iniciarFuncionalidade);
+
 
 
 
