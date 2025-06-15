@@ -64,7 +64,7 @@ function deslogar() {
   sessaoAtiva = false;
   clearTimeout(inatividadeTimer);
 
-  ['prompt', 'arquivo', 'remover', 'ferramenta', 'grafico_tipo', 'coluna_y', 'colunas_x'].forEach(id => {
+  ['prompt', 'arquivo', 'remover', 'coluna_y', 'colunas_x'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.disabled = true;
@@ -127,12 +127,19 @@ async function enviarAnaliseCompleta() {
 
   const arquivoInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
-  const ferramenta = document.getElementById('ferramenta')?.value || "";
-  const grafico = document.getElementById('grafico_tipo')?.value || "";
   const colunaY = document.getElementById('box_y')?.value || "";
   const colunasX = Array.from(document.getElementById('box_x')?.selectedOptions || []).map(opt => opt.value).join(",");
   const prompt = document.getElementById('perguntaAluno')?.value.trim() || "";
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+
+  let analise = "";
+  let grafico = "";
+
+  if (analiseSelecionada.toLowerCase().includes("grafico")) {
+    grafico = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  } else {
+    analise = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  }
 
   if (!arquivoInput?.files[0]) {
     exibirModalErro("⚠ Você precisa enviar um arquivo.");
@@ -144,20 +151,24 @@ async function enviarAnaliseCompleta() {
     return;
   }
 
+  if (!analise && !grafico) {
+    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
+    return;
+  }
+
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
-  formData.append("ferramenta", ferramenta);
+  formData.append("analise", analise);
   formData.append("grafico", grafico);
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
   formData.append("prompt", prompt);
-  formData.append("analise", analiseSelecionada);
 
   const containerAnalise = document.getElementById('conteudoAnalise');
   const containerGrafico = document.getElementById('conteudoGrafico');
 
-  console.log("📦 Enviando ao backend:", Object.fromEntries(formData.entries()));
+  console.log("📦 Pacote que seria enviado:", Object.fromEntries(formData.entries()));
 
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
@@ -201,6 +212,7 @@ function iniciarFuncionalidade() {
   iniciarMonitoramentoInatividade();
   ativarBotaoEnviarAnalise();
 }
+
 
 
 
