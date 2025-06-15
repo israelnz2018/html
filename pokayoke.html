@@ -1,30 +1,34 @@
-
-
 <script>
-document.getElementById('btnEnviar').addEventListener('click', function() {
-  const ferramenta = document.getElementById('ferramenta').value;
-  const grafico = document.getElementById('grafico').value;
-  const colunaY = document.getElementById('coluna_y').value;
-  const colunasX = Array.from(document.getElementById('colunas_x').selectedOptions).map(opt => opt.value);
-  const fileInput = document.getElementById('fileInput').files[0];
+function ativarPokayoke() {
+  const btn = document.getElementById('btnEnviar');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      const ferramenta = document.getElementById('ferramenta').value;
+      const grafico = document.getElementById('grafico').value;
+      const colunaY = document.getElementById('coluna_y').value;
+      const colunasX = Array.from(document.getElementById('colunas_x').selectedOptions).map(opt => opt.value);
+      const fileInput = document.getElementById('fileInput').files[0];
 
-  if (!fileInput) {
-    alert('⚠️ Por favor, envie um arquivo antes de continuar.');
-    return;
+      if (!fileInput) {
+        alert('⚠️ Por favor, envie um arquivo antes de continuar.');
+        return;
+      }
+
+      if (!ferramenta && !grafico) {
+        alert('⚠️ Você deve escolher pelo menos uma ferramenta estatística ou um gráfico.');
+        return;
+      }
+
+      if (!colunaY && colunasX.length === 0) {
+        alert('⚠️ Selecione pelo menos uma coluna Y ou colunas X.');
+        return;
+      }
+
+      alert('✅ Validação ok! Agora você pode processar a análise.');
+    });
+  } else {
+    console.warn("⚠️ Botão #btnEnviar não encontrado ao ativar pokayoke.");
   }
-
-  if (!ferramenta && !grafico) {
-    alert('⚠️ Você deve escolher pelo menos uma ferramenta estatística ou um gráfico.');
-    return;
-  }
-
-  if (!colunaY && colunasX.length === 0) {
-    alert('⚠️ Selecione pelo menos uma coluna Y ou colunas X.');
-    return;
-  }
-
-  // Aqui você dispara o envio (exemplo simples)
-  alert('✅ Validação ok! Agora você pode processar a análise.');
-  // Você pode acionar o backend aqui
-});
+}
 </script>
+
