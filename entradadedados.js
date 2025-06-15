@@ -1,8 +1,3 @@
-window.addEventListener("DOMContentLoaded", function () {
-  // TODO O CÓDIGO ORIGINAL DO ARQUIVO
-});
-
-
 const configuracoesFerramentas = {
   // Análise Exploratória
   "Histogramas simples": ["Y"],
@@ -52,9 +47,13 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs"]
 };
 
-
 function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
+  if (!box) {
+    console.warn("⚠ Elemento #boxAnalise não encontrado.");
+    return;
+  }
+
   box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramenta}</p>`;
 
   const config = configuracoesFerramentas[ferramenta] || configuracoesGraficos[ferramenta];
@@ -77,7 +76,9 @@ function atualizarBoxAnalise(ferramenta) {
 
 function preencherBoxDropdowns() {
   if (!workbookGlobal) return;
-  const aba = document.getElementById('aba_planilha').value;
+  const abaEl = document.getElementById('aba_planilha');
+  if (!abaEl) return;
+  const aba = abaEl.value;
   const worksheet = workbookGlobal.Sheets[aba];
   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   const colunas = jsonData[0] || [];
@@ -96,37 +97,49 @@ function preencherBoxDropdowns() {
   });
 }
 
-document.getElementById('aba_planilha').addEventListener('change', function() {
-  preencherBoxDropdowns();
-});
+function ativarEntradaDados() {
+  const abaEl = document.getElementById('aba_planilha');
+  const fileEl = document.getElementById('fileInput');
 
-document.getElementById('fileInput').addEventListener('change', function(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  if (abaEl) {
+    abaEl.addEventListener('change', preencherBoxDropdowns);
+  } else {
+    console.warn("⚠ Elemento #aba_planilha não encontrado.");
+  }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const data = new Uint8Array(e.target.result);
-    workbookGlobal = XLSX.read(data, { type: 'array' });
+  if (fileEl) {
+    fileEl.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-    const abaSelect = document.getElementById('aba_planilha');
-    abaSelect.innerHTML = '';
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        workbookGlobal = XLSX.read(data, { type: 'array' });
 
-    workbookGlobal.SheetNames.forEach((name, index) => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name;
-      abaSelect.appendChild(opt);
-      if (index === 0) {
-        abaSelect.value = name;
-      }
+        if (!abaEl) return;
+        abaEl.innerHTML = '';
+
+        workbookGlobal.SheetNames.forEach((name, index) => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          abaEl.appendChild(opt);
+          if (index === 0) {
+            abaEl.value = name;
+          }
+        });
+
+        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
+        mostrarPreview(abaEl.value);
+        preencherBoxDropdowns();
+      };
+      reader.readAsArrayBuffer(file);
     });
+  } else {
+    console.warn("⚠ Elemento #fileInput não encontrado.");
+  }
+}
 
-    console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
-    mostrarPreview(abaSelect.value);
-    preencherBoxDropdowns();
-  };
-  reader.readAsArrayBuffer(file);
-});
 
 
