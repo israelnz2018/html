@@ -1,8 +1,3 @@
-window.addEventListener("DOMContentLoaded", function () {
-  // TODO O CÓDIGO ORIGINAL DO ARQUIVO
-});
-
-
 const configuracoesAnalises = {
   "Análise Exploratória": [
     {
@@ -82,6 +77,11 @@ const configuracoesAnalises = {
 
 function gerarMenus() {
   const navUl = document.querySelector("nav ul");
+  if (!navUl) {
+    console.warn("⚠ Elemento <nav><ul></ul></nav> não encontrado ao gerar menus.");
+    return;
+  }
+
   navUl.innerHTML = '';
 
   Object.keys(configuracoesAnalises).forEach(grupo => {
@@ -130,7 +130,7 @@ function gerarMenus() {
             event.preventDefault();
             console.log("Análise escolhida:", sub);
             atualizarBoxAnalise(sub);
-            fecharTodosOsMenus();  // Fecha ao escolher
+            fecharTodosOsMenus();
           });
           liSub.appendChild(aSub);
           ulSubSub.appendChild(liSub);
@@ -146,7 +146,7 @@ function gerarMenus() {
           event.preventDefault();
           console.log("Análise escolhida:", item.nome);
           atualizarBoxAnalise(item.nome);
-          fecharTodosOsMenus();  // Fecha ao escolher
+          fecharTodosOsMenus();
         });
         liItem.appendChild(aItem);
       }
@@ -159,7 +159,6 @@ function gerarMenus() {
     navUl.appendChild(liGrupo);
   });
 
-  // Fecha menus ao clicar fora
   document.addEventListener("click", function(event) {
     document.querySelectorAll("nav ul li.show").forEach(li => {
       if (!li.contains(event.target)) {
@@ -174,10 +173,8 @@ function gerarMenus() {
   });
 }
 
-// Função para fechar todos os menus
 function fecharTodosOsMenus() {
   document.querySelectorAll("nav ul li.show").forEach(li => li.classList.remove("show"));
   document.querySelectorAll("nav ul li ul li.show").forEach(li => li.classList.remove("show"));
 }
 
-gerarMenus();
