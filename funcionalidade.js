@@ -20,24 +20,30 @@ function iniciarMonitoramentoInatividade() {
 function perguntarIA() {
   const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
-  if (!pergunta) return;
-
-  const ultima = document.querySelector('#conteudoAnalise div');
-  if (!ultima || !ultima.innerText) {
-    exibirModalErro("⚠ Nenhuma análise encontrada.");
+  if (!pergunta) {
+    exibirModalErro("⚠ Você precisa digitar uma pergunta.");
     return;
   }
 
-  const textoPlano = ultima.innerText.trim();
-  const payload = { analise: textoPlano, pergunta };
+  // Pega o último conteúdo da análise (lado esquerdo)
+  const conteudo = document.getElementById('conteudoAnalise');
+  if (!conteudo) {
+    exibirModalErro("⚠ Área de análise não encontrada.");
+    return;
+  }
+  const ultimaAnalise = conteudo.innerText.trim();
+  if (!ultimaAnalise) {
+    exibirModalErro("⚠ Nenhuma análise disponível para perguntar.");
+    return;
+  }
 
-  const blocoPergunta = document.createElement('div');
-  blocoPergunta.className = 'pergunta-resposta';
-  blocoPergunta.style.marginBottom = '24px';
-  blocoPergunta.style.border = '1px solid #007bff';
-  blocoPergunta.style.padding = '12px';
-  blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
-  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+  // Envia para o webhook
+  const payload = {
+    analise: ultimaAnalise,
+    pergunta: pergunta
+  };
+
+  console.log("📦 Enviando para o webhook:", payload);
 
   fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
     method: 'POST',
@@ -46,15 +52,18 @@ function perguntarIA() {
   })
   .then(res => res.json())
   .then(data => {
-    const respostaFinal = (data?.analise || "❌ Nenhuma resposta recebida.")
-      .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-      .replace(/\n/g, "<br>");
-    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+    console.log("✅ Resposta do agente:", data);
+    const bloco = document.createElement('div');
+    bloco.className = 'pergunta-resposta';
+    bloco.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${data.user_message}`;
+    conteudo.prepend(bloco);
   })
   .catch(e => {
-    blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
+    console.error("❌ Erro ao enviar para o webhook:", e);
+    exibirModalErro(`❌ Erro ao enviar pergunta: ${e.message}`);
   });
 }
+
 
 
 function deslogar() {
