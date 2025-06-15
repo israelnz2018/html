@@ -33,37 +33,53 @@
       "pokayoke.html"
     ];
 
-    async function carregarArquivos() {
-      for (const nome of arquivos) {
-        const resposta = await fetch(nome);
-        const conteudo = await resposta.text();
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = conteudo;
+<script>
+  const arquivos = [
+    "acesso_permissoes.html",
+    "layout.html",
+    "pokayoke.html"
+  ];
 
-        Array.from(tempDiv.childNodes).forEach(node => {
-          if (node.tagName === "SCRIPT") {
-            const script = document.createElement("script");
-            script.textContent = node.textContent;
-            document.body.appendChild(script);
-          } else if (node.tagName === "STYLE") {
-            document.head.appendChild(node);
+  async function carregarArquivos() {
+    for (const nome of arquivos) {
+      const resposta = await fetch(nome);
+      const conteudo = await resposta.text();
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = conteudo;
+
+      Array.from(tempDiv.childNodes).forEach(node => {
+        if (node.tagName === "SCRIPT") {
+          const script = document.createElement("script");
+          script.textContent = node.textContent;
+          document.body.appendChild(script);
+        } else if (node.tagName === "STYLE") {
+          document.head.appendChild(node);
+        } else {
+          if (nome === "acesso_permissoes.html") {
+            document.getElementById("login-container").appendChild(node);
           } else {
-            if (nome === "acesso_permissoes.html") {
-              document.getElementById("login-container").appendChild(node);
-            } else {
-              document.getElementById("app").appendChild(node);
-            }
+            document.getElementById("app").appendChild(node);
           }
-        });
-      }
+        }
+      });
     }
+  }
 
-    carregarArquivos();
-  </script>
+  carregarArquivos().then(() => {
+    const s1 = document.createElement("script");
+    s1.src = "menu.js";
+    document.body.appendChild(s1);
 
-  <script src="menu.js"></script>
-  <script src="entradadedados.js"></script>
-  <script src="funcionalidade.js"></script>
+    const s2 = document.createElement("script");
+    s2.src = "entradadedados.js";
+    document.body.appendChild(s2);
+
+    const s3 = document.createElement("script");
+    s3.src = "funcionalidade.js";
+    document.body.appendChild(s3);
+  });
+</script>
+
 
 </body>
 </html>
