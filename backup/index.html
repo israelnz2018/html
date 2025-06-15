@@ -44,7 +44,7 @@
           if (node.tagName === "SCRIPT") {
             const script = document.createElement("script");
             script.textContent = node.textContent;
-            document.body.appendChild(script);
+            setTimeout(() => document.body.appendChild(script), 0);
           } else if (node.tagName === "STYLE") {
             document.head.appendChild(node);
           } else {
@@ -61,29 +61,26 @@
     carregarArquivos().then(() => {
       const s1 = document.createElement("script");
       s1.src = "menu.js";
+      s1.onload = () => {
+        if (typeof gerarMenus === 'function') gerarMenus();
+      };
       document.body.appendChild(s1);
 
       const s2 = document.createElement("script");
       s2.src = "entradadedados.js";
+      s2.onload = () => {
+        if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
+      };
       document.body.appendChild(s2);
 
       const s3 = document.createElement("script");
       s3.src = "funcionalidade.js";
+      s3.onload = () => {
+        if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
+      };
       document.body.appendChild(s3);
     });
   </script>
-
-  <script>
-  window.addEventListener("load", function() {
-    const btn = document.getElementById("btnEnviarAnalise");
-    if (btn) {
-      btn.addEventListener("click", enviarAnaliseCompleta);
-    } else {
-      console.warn("⚠ Botão não encontrado na hora de ativar.");
-    }
-  });
-</script>
-
 
 </body>
 </html>
