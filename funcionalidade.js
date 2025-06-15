@@ -159,7 +159,7 @@ async function enviarAnaliseCompleta() {
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
-  formData.append("analise", analise);
+  formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
