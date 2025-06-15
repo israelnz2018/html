@@ -157,6 +157,8 @@ async function enviarAnaliseCompleta() {
   const containerAnalise = document.getElementById('conteudoAnalise');
   const containerGrafico = document.getElementById('conteudoGrafico');
 
+  console.log("📦 Enviando ao backend:", Object.fromEntries(formData.entries()));
+
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
       method: 'POST',
