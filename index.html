@@ -55,9 +55,16 @@ async function carregarArquivos() {
         }
       }
     });
+
+    // Conecta o botão assim que o layout relevante foi injetado
+    const btn = document.getElementById('btnEnviarAnalise');
+    if (btn && !btn.dataset.listener) {
+      btn.addEventListener('click', enviarAnaliseCompleta);
+      btn.dataset.listener = 'true'; // Marcação para não conectar duas vezes
+    }
   }
 
-  // Carrega os scripts depois do layout estar no DOM
+  // Carrega os scripts depois do layout
   const scriptMenu = document.createElement("script");
   scriptMenu.src = "menu.js";
   document.body.appendChild(scriptMenu);
@@ -68,17 +75,12 @@ async function carregarArquivos() {
 
   const scriptFuncionalidade = document.createElement("script");
   scriptFuncionalidade.src = "funcionalidade.js";
-  scriptFuncionalidade.onload = () => {
-    // Garante que o botão só conecta quando tudo carregou
-    const btn = document.getElementById('btnEnviarAnalise');
-    if (btn) {
-      btn.addEventListener('click', enviarAnaliseCompleta);
-    } else {
-      console.warn("⚠ Botão Enviar Análise não encontrado após carregamento.");
-    }
-  };
   document.body.appendChild(scriptFuncionalidade);
 }
+
+carregarArquivos();
+</script>
+
 
 carregarArquivos();
 </script>
