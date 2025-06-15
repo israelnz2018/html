@@ -68,6 +68,15 @@ async function carregarArquivos() {
 
   const scriptFuncionalidade = document.createElement("script");
   scriptFuncionalidade.src = "funcionalidade.js";
+  scriptFuncionalidade.onload = () => {
+    // Garante que o botão só conecta quando tudo carregou
+    const btn = document.getElementById('btnEnviarAnalise');
+    if (btn) {
+      btn.addEventListener('click', enviarAnaliseCompleta);
+    } else {
+      console.warn("⚠ Botão Enviar Análise não encontrado após carregamento.");
+    }
+  };
   document.body.appendChild(scriptFuncionalidade);
 }
 
