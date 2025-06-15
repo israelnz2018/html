@@ -2,7 +2,6 @@ window.addEventListener("DOMContentLoaded", function () {
   // TODO O CÓDIGO ORIGINAL DO ARQUIVO
 });
 
-
 let sessaoAtiva = false;
 let inatividadeTimer = null;
 let slimSelectInstance = null;
@@ -24,11 +23,6 @@ function iniciarMonitoramentoInatividade() {
 
 iniciarMonitoramentoInatividade();
 
-const btn = document.getElementById('btnEnviarAnalise');
-if (btn) {
-  btn.addEventListener('click', enviarAnaliseCompleta);
-}
-
 async function perguntarIA() {
   const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
@@ -41,7 +35,6 @@ async function perguntarIA() {
   }
 
   const textoPlano = ultima.innerText.trim();
-
   const payload = { analise: textoPlano, prompt: pergunta };
 
   const blocoPergunta = document.createElement('div');
@@ -60,8 +53,8 @@ async function perguntarIA() {
     });
 
     const data = await response.json();
-
     let respostaFinal = "";
+
     if (typeof data === "string") {
       respostaFinal = data;
     } else if (data?.analise) {
@@ -140,7 +133,6 @@ function fecharModalErro() {
   const modal = document.getElementById("modal-erro");
   if (modal) modal.style.display = "none";
 }
-document.getElementById('btnEnviarAnalise').addEventListener('click', enviarAnaliseCompleta);
 
 async function enviarAnaliseCompleta() {
   sessaoAtiva = true;
@@ -203,5 +195,17 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
+function ativarBotaoEnviarAnalise() {
+  const btn = document.getElementById('btnEnviarAnalise');
+  if (btn) {
+    btn.addEventListener('click', enviarAnaliseCompleta);
+  } else {
+    console.warn("⚠ Botão 'Enviar Análise' não encontrado.");
+  }
+}
+
+window.addEventListener("load", ativarBotaoEnviarAnalise);
+
 
 
