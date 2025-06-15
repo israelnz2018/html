@@ -33,56 +33,49 @@
       "pokayoke.html"
     ];
 
-<script>
-  const arquivos = [
-    "acesso_permissoes.html",
-    "layout.html",
-    "pokayoke.html"
-  ];
+    async function carregarArquivos() {
+      for (const nome of arquivos) {
+        const resposta = await fetch(nome);
+        const conteudo = await resposta.text();
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = conteudo;
 
-  async function carregarArquivos() {
-    for (const nome of arquivos) {
-      const resposta = await fetch(nome);
-      const conteudo = await resposta.text();
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = conteudo;
-
-      Array.from(tempDiv.childNodes).forEach(node => {
-        if (node.tagName === "SCRIPT") {
-          const script = document.createElement("script");
-          script.textContent = node.textContent;
-          document.body.appendChild(script);
-        } else if (node.tagName === "STYLE") {
-          document.head.appendChild(node);
-        } else {
-          if (nome === "acesso_permissoes.html") {
-            document.getElementById("login-container").appendChild(node);
+        Array.from(tempDiv.childNodes).forEach(node => {
+          if (node.tagName === "SCRIPT") {
+            const script = document.createElement("script");
+            script.textContent = node.textContent;
+            document.body.appendChild(script);
+          } else if (node.tagName === "STYLE") {
+            document.head.appendChild(node);
           } else {
-            document.getElementById("app").appendChild(node);
+            if (nome === "acesso_permissoes.html") {
+              document.getElementById("login-container").appendChild(node);
+            } else {
+              document.getElementById("app").appendChild(node);
+            }
           }
-        }
-      });
+        });
+      }
     }
-  }
 
-  carregarArquivos().then(() => {
-    const s1 = document.createElement("script");
-    s1.src = "menu.js";
-    document.body.appendChild(s1);
+    carregarArquivos().then(() => {
+      const s1 = document.createElement("script");
+      s1.src = "menu.js";
+      document.body.appendChild(s1);
 
-    const s2 = document.createElement("script");
-    s2.src = "entradadedados.js";
-    document.body.appendChild(s2);
+      const s2 = document.createElement("script");
+      s2.src = "entradadedados.js";
+      document.body.appendChild(s2);
 
-    const s3 = document.createElement("script");
-    s3.src = "funcionalidade.js";
-    document.body.appendChild(s3);
-  });
-</script>
-
+      const s3 = document.createElement("script");
+      s3.src = "funcionalidade.js";
+      document.body.appendChild(s3);
+    });
+  </script>
 
 </body>
 </html>
+
 
 
 
