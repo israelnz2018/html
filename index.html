@@ -73,6 +73,18 @@
     });
   </script>
 
+  <script>
+  window.addEventListener("load", function() {
+    const btn = document.getElementById("btnEnviarAnalise");
+    if (btn) {
+      btn.addEventListener("click", enviarAnaliseCompleta);
+    } else {
+      console.warn("⚠ Botão não encontrado na hora de ativar.");
+    }
+  });
+</script>
+
+
 </body>
 </html>
 
