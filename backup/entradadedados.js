@@ -1,8 +1,3 @@
-window.addEventListener("DOMContentLoaded", function () {
-  // TODO O CÓDIGO ORIGINAL DO ARQUIVO
-});
-
-
 const configuracoesFerramentas = {
   // Análise Exploratória
   "Histogramas simples": ["Y"],
@@ -25,25 +20,25 @@ const configuracoesFerramentas = {
   "Graficos 3D": ["Y", "X", "Z"],
 
   // Análise Inferencial
-  "1 Sample T": ["X", "Field"],
-  "2 Sample T": ["Xs"],
+  "1 Sample T": ["Y", "Field"],
+  "2 Sample T": ["Y", "Xs"],
   "Paired Test": ["Xs"],
-  "One way ANOVA": ["Xs"],
-  "1 Wilcoxon": ["X", "Field"],
-  "1 Teste de Sinal": ["X", "Field"],
+  "One way ANOVA": ["Y", "Xs"],
+  "1 Wilcoxon": ["Y", "Field"],
+  "1 Teste de Sinal": ["Y", "Field"],
   "2 Man Witney": ["Xs"],
   "2 Wilcoxon": ["Xs"],
   "Friedman": ["Xs"],
-  "Intervalo de Confianca": ["X", "Field_NivelConfiança", "Field_Valor"],
+  "Intervalo de Confianca": ["Y", "Field_NivelConfiança", "Field_Valor"],
   "F/Levene Test": ["Xs"],
   "Bartlett": ["Xs"],
-  "1 Proporcao": ["X", "Field"],
+  "1 Proporcao": ["Y", "Field"],
   "2 Proporcoes": ["Xs"],
   "Qui- quadrado": ["Xs"],
 
   // Análise Preditiva
   "Analise de correlacao": ["Y", "X"],
-  "Grafico de dispersao": ["Y", "X"],
+  "Grafico de disperao": ["Y", "X"],
   "Grafico de tendencias": ["Y", "X"],
   "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs"],
@@ -52,14 +47,23 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs"]
 };
 
-
 function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
+  if (!box) {
+    console.warn("⚠ Elemento #boxAnalise não encontrado.");
+    return;
+  }
+
   box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramenta}</p>`;
 
-  const config = configuracoesFerramentas[ferramenta] || configuracoesGraficos[ferramenta];
-  if (config) {
-    config.forEach(campo => {
+  const config = configuracoesFerramentas[ferramenta];
+  if (!config) {
+    console.warn(`⚠ Configuração não encontrada para: ${ferramenta}`);
+    return;
+  }
+
+  config.forEach(campo => {
+    if (["Y", "X", "Xs", "Subgrupo"].includes(campo)) {
       const label = document.createElement("label");
       label.className = "block font-medium mb-1";
       label.textContent = `Variável ${campo}`;
@@ -68,21 +72,39 @@ function atualizarBoxAnalise(ferramenta) {
       const select = document.createElement("select");
       select.id = `box_${campo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
+      if (campo === "Xs") {
+        select.multiple = true;
+      }
       box.appendChild(select);
-    });
+    }
 
-    preencherBoxDropdowns();
-  }
+    if (campo.startsWith("Field")) {
+      const label = document.createElement("label");
+      label.className = "block font-medium mb-1";
+      label.textContent = campo.replace("Field_", "").replace("_", " ");
+      box.appendChild(label);
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = `box_${campo.toLowerCase()}`;
+      input.className = "border rounded p-1 mb-2 w-full";
+      box.appendChild(input);
+    }
+  });
+
+  preencherBoxDropdowns();
 }
 
 function preencherBoxDropdowns() {
   if (!workbookGlobal) return;
-  const aba = document.getElementById('aba_planilha').value;
+  const abaEl = document.getElementById('aba_planilha');
+  if (!abaEl) return;
+  const aba = abaEl.value;
   const worksheet = workbookGlobal.Sheets[aba];
   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   const colunas = jsonData[0] || [];
 
-  ['box_y', 'box_x'].forEach(id => {
+  ["box_y", "box_x", "box_subgrupo"].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
       sel.innerHTML = '';
@@ -96,35 +118,46 @@ function preencherBoxDropdowns() {
   });
 }
 
-document.getElementById('aba_planilha').addEventListener('change', function() {
-  preencherBoxDropdowns();
-});
+function ativarEntradaDados() {
+  const abaEl = document.getElementById('aba_planilha');
+  const fileEl = document.getElementById('fileInput');
 
-document.getElementById('fileInput').addEventListener('change', function(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  if (abaEl) {
+    abaEl.addEventListener('change', preencherBoxDropdowns);
+  } else {
+    console.warn("⚠ Elemento #aba_planilha não encontrado.");
+  }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const data = new Uint8Array(e.target.result);
-    workbookGlobal = XLSX.read(data, { type: 'array' });
+  if (fileEl) {
+    fileEl.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-    const abaSelect = document.getElementById('aba_planilha');
-    abaSelect.innerHTML = '';
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        workbookGlobal = XLSX.read(data, { type: 'array' });
 
-    workbookGlobal.SheetNames.forEach((name, index) => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name;
-      abaSelect.appendChild(opt);
-      if (index === 0) {
-        abaSelect.value = name;
-      }
+        if (!abaEl) return;
+        abaEl.innerHTML = '';
+
+        workbookGlobal.SheetNames.forEach((name, index) => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          abaEl.appendChild(opt);
+          if (index === 0) {
+            abaEl.value = name;
+          }
+        });
+
+        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
+        mostrarPreview(abaEl.value);
+        preencherBoxDropdowns();
+      };
+      reader.readAsArrayBuffer(file);
     });
-
-    console.log("Dropdown preenchido. Primeira aba:", abaSelect.value);
-    mostrarPreview(abaSelect.value);
-    preencherBoxDropdowns();
-  };
-  reader.readAsArrayBuffer(file);
-});
+  } else {
+    console.warn("⚠ Elemento #fileInput não encontrado.");
+  }
+}
