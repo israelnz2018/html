@@ -1,7 +1,3 @@
-window.addEventListener("DOMContentLoaded", function () {
-  // TODO O CÓDIGO ORIGINAL DO ARQUIVO
-});
-
 let sessaoAtiva = false;
 let inatividadeTimer = null;
 let slimSelectInstance = null;
@@ -21,9 +17,7 @@ function iniciarMonitoramentoInatividade() {
   );
 }
 
-iniciarMonitoramentoInatividade();
-
-async function perguntarIA() {
+function perguntarIA() {
   const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
   if (!pergunta) return;
@@ -45,30 +39,29 @@ async function perguntarIA() {
   blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
   document.getElementById('conteudoAnalise').prepend(blocoPergunta);
 
-  try {
-    const response = await fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+  fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(data => {
+      let respostaFinal = "";
+
+      if (typeof data === "string") {
+        respostaFinal = data;
+      } else if (data?.analise) {
+        respostaFinal = data.analise;
+      } else {
+        respostaFinal = JSON.stringify(data);
+      }
+
+      respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+      blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+    })
+    .catch(e => {
+      blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
     });
-
-    const data = await response.json();
-    let respostaFinal = "";
-
-    if (typeof data === "string") {
-      respostaFinal = data;
-    } else if (data?.analise) {
-      respostaFinal = data.analise;
-    } else {
-      respostaFinal = JSON.stringify(data);
-    }
-
-    respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
-    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
-
-  } catch (e) {
-    blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
-  }
 }
 
 function deslogar() {
@@ -146,12 +139,12 @@ async function enviarAnaliseCompleta() {
   const colunasX = Array.from(document.getElementById('box_x')?.selectedOptions || []).map(opt => opt.value).join(",");
   const prompt = document.getElementById('perguntaAluno')?.value.trim() || "";
 
-  if (!arquivoInput.files[0]) {
+  if (!arquivoInput?.files[0]) {
     exibirModalErro("⚠ Você precisa enviar um arquivo.");
     return;
   }
 
-  if (!abaSelect.value) {
+  if (!abaSelect?.value) {
     exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
     return;
   }
@@ -205,7 +198,13 @@ function ativarBotaoEnviarAnalise() {
   }
 }
 
-window.addEventListener("load", ativarBotaoEnviarAnalise);
+function iniciarFuncionalidade() {
+  iniciarMonitoramentoInatividade();
+  ativarBotaoEnviarAnalise();
+}
+
+window.addEventListener("load", iniciarFuncionalidade);
+
 
 
 
