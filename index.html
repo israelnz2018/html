@@ -34,6 +34,7 @@
     ];
 
     <script>
+<script>
 async function carregarArquivos() {
   for (const nome of arquivos) {
     const resposta = await fetch(nome);
@@ -57,21 +58,11 @@ async function carregarArquivos() {
       }
     });
   }
-
-  // Depois de carregar os arquivos, carrega os scripts dinâmicos
-  const scriptMenu = document.createElement("script");
-  scriptMenu.src = "menu.js";
-  document.body.appendChild(scriptMenu);
-
-  const scriptEntrada = document.createElement("script");
-  scriptEntrada.src = "entradadedados.js";
-  document.body.appendChild(scriptEntrada);
-
-  // Só carrega funcionalidade.js depois de tudo
-  const scriptFuncionalidade = document.createElement("script");
-  scriptFuncionalidade.src = "funcionalidade.js";
-  document.body.appendChild(scriptFuncionalidade);
 }
-
 carregarArquivos();
 </script>
+
+<!-- Carrega os scripts DEPOIS dos arquivos -->
+<script src="menu.js"></script>
+<script src="entradadedados.js"></script>
+<script src="funcionalidade.js"></script>
