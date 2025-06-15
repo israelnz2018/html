@@ -1,3 +1,8 @@
+window.addEventListener("DOMContentLoaded", function () {
+  // TODO O CÓDIGO ORIGINAL DO ARQUIVO
+});
+
+
 let sessaoAtiva = false;
 let inatividadeTimer = null;
 let slimSelectInstance = null;
