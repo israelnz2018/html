@@ -20,24 +20,24 @@ function iniciarMonitoramentoInatividade() {
 function perguntarIA() {
   const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
-  if (!pergunta) return;
+  if (!pergunta) {
+    exibirModalErro("⚠ Você precisa digitar uma pergunta.");
+    return;
+  }
 
   const ultima = document.querySelector('#conteudoAnalise div');
-  if (!ultima || !ultima.innerText) {
-    exibirModalErro("⚠ Nenhuma análise encontrada.");
+  if (!ultima || !ultima.innerText.trim()) {
+    exibirModalErro("⚠ Nenhuma análise disponível para contextualizar a pergunta.");
     return;
   }
 
   const textoPlano = ultima.innerText.trim();
   const payload = { analise: textoPlano, prompt: pergunta };
 
-  const blocoPergunta = document.createElement('div');
-  blocoPergunta.className = 'pergunta-resposta';
-  blocoPergunta.style.marginBottom = '24px';
-  blocoPergunta.style.border = '1px solid #007bff';
-  blocoPergunta.style.padding = '12px';
-  blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
-  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+  const bloco = document.createElement('div');
+  bloco.className = 'pergunta-resposta border rounded p-2 mb-2';
+  bloco.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando resposta...</em>`;
+  document.getElementById('conteudoAnalise').prepend(bloco);
 
   fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
     method: 'POST',
@@ -51,10 +51,11 @@ function perguntarIA() {
                           JSON.stringify(data);
 
       respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
-      blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+      bloco.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
     })
     .catch(e => {
-      blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
+      bloco.innerHTML = `<span style="color:red;">❌ Erro ao buscar resposta: ${e.message}</span>`;
+      console.error("❌ Erro detalhado:", e);
     });
 }
 
@@ -208,13 +209,21 @@ function ativarBotaoEnviarAnalise() {
   }
 }
 
+function ativarBotaoPerguntar() {
+  const btn = document.getElementById('btnPerguntar');
+  if (btn) {
+    btn.addEventListener('click', perguntarIA);
+    console.log("✅ Botão Perguntar ativado!");
+  } else {
+    console.warn("⚠ Botão 'Perguntar' não encontrado.");
+  }
+}
+
 function iniciarFuncionalidade() {
   iniciarMonitoramentoInatividade();
   ativarBotaoEnviarAnalise();
+  ativarBotaoPerguntar();
 }
-
-
-
 
 
 
