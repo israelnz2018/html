@@ -17,51 +17,65 @@ function iniciarMonitoramentoInatividade() {
   );
 }
 
-function perguntarIA() {
+async function perguntarIA() {
+  alert('▶️ perguntarIA foi acionado');
+
   const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
-  if (!pergunta) {
-    exibirModalErro("⚠ Você precisa digitar uma pergunta.");
+  if (!pergunta) return;
+
+  const ultima = document.querySelector('#conteudoAnalise div');
+  if (!ultima || !ultima.innerText) {
+    alert('⚠️ Nenhuma análise encontrada.');
     return;
   }
 
-  // Pega o último conteúdo da análise (lado esquerdo)
-  const conteudo = document.getElementById('conteudoAnalise');
-  if (!conteudo) {
-    exibirModalErro("⚠ Área de análise não encontrada.");
-    return;
-  }
-  const ultimaAnalise = conteudo.innerText.trim();
-  if (!ultimaAnalise) {
-    exibirModalErro("⚠ Nenhuma análise disponível para perguntar.");
-    return;
-  }
+  const textoPlano = ultima.innerText.trim();
+  console.log("🔍 Última análise capturada:", textoPlano);
 
-  // Envia para o webhook
   const payload = {
-    analise: ultimaAnalise,
-    pergunta: pergunta
+    analise: textoPlano,
+    prompt: pergunta
   };
 
-  console.log("📦 Enviando para o webhook:", payload);
+  const blocoPergunta = document.createElement('div');
+  blocoPergunta.className = 'pergunta-resposta';
+  blocoPergunta.style.marginBottom = '24px';
+  blocoPergunta.style.border = '1px solid #007bff';
+  blocoPergunta.style.padding = '12px';
+  blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
+  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
 
-  fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("✅ Resposta do agente:", data);
-    const bloco = document.createElement('div');
-    bloco.className = 'pergunta-resposta';
-    bloco.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${data.user_message}`;
-    conteudo.prepend(bloco);
-  })
-  .catch(e => {
-    console.error("❌ Erro ao enviar para o webhook:", e);
-    exibirModalErro(`❌ Erro ao enviar pergunta: ${e.message}`);
-  });
+  try {
+    const response = await fetch(
+      'https://primary-production-1d53.up.railway.app/webhook/perguntar-ia',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await response.json();
+    console.log("🟡 Resposta bruta recebida do agente:", data);
+
+    let respostaFinal = "";
+
+    if (typeof data === "string") {
+      respostaFinal = data;
+    } else if (data?.analise) {
+      respostaFinal = data.analise;
+    } else {
+      respostaFinal = JSON.stringify(data);
+    }
+
+    respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+
+    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+  } catch (e) {
+    console.error("❌ Erro no fetch ou no processamento:", e);
+    blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
+  }
 }
 
 
