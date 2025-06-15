@@ -33,6 +33,10 @@
       "pokayoke.html"
     ];
 
+<script src="menu.js"></script>
+<script src="entradadedados.js"></script>
+<script src="funcionalidade.js"></script>
+<script>
 async function carregarArquivos() {
   for (const nome of arquivos) {
     const resposta = await fetch(nome);
@@ -55,38 +59,12 @@ async function carregarArquivos() {
         }
       }
     });
-
-    // Conecta o botão assim que o layout relevante foi injetado
-    const btn = document.getElementById('btnEnviarAnalise');
-    if (btn && !btn.dataset.listener) {
-      btn.addEventListener('click', enviarAnaliseCompleta);
-      btn.dataset.listener = 'true'; // Marcação para não conectar duas vezes
-    }
   }
-// Carrega os scripts depois do layout
-const scriptMenu = document.createElement("script");
-scriptMenu.src = "menu.js";
-document.body.appendChild(scriptMenu);
-
-const scriptEntrada = document.createElement("script");
-scriptEntrada.src = "entradadedados.js";
-document.body.appendChild(scriptEntrada);
-
-const scriptFuncionalidade = document.createElement("script");
-scriptFuncionalidade.src = "funcionalidade.js";
-scriptFuncionalidade.onload = () => {
-  const btn = document.getElementById('btnEnviarAnalise');
-  if (btn) {
-    btn.addEventListener('click', enviarAnaliseCompleta);
-  } else {
-    console.warn("⚠ Botão Enviar Análise não encontrado após carregar funcionalidade.js");
-  }
-};
-document.body.appendChild(scriptFuncionalidade);
 }
 
 carregarArquivos();
 </script>
+
 
 
 
