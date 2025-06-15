@@ -39,7 +39,7 @@ function perguntarIA() {
   blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
   document.getElementById('conteudoAnalise').prepend(blocoPergunta);
 
-  fetch('https://primary-production-1d53.up.railway.app/webhook-test/perguntar-ia', {
+  fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
