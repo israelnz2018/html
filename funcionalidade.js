@@ -20,44 +20,42 @@ function iniciarMonitoramentoInatividade() {
 function perguntarIA() {
   const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
-  if (!pergunta) {
-    exibirModalErro("⚠ Você precisa digitar uma pergunta.");
-    return;
-  }
+  if (!pergunta) return;
 
   const ultima = document.querySelector('#conteudoAnalise div');
-  if (!ultima || !ultima.innerText.trim()) {
-    exibirModalErro("⚠ Nenhuma análise disponível para contextualizar a pergunta.");
+  if (!ultima || !ultima.innerText) {
+    exibirModalErro("⚠ Nenhuma análise encontrada.");
     return;
   }
 
   const textoPlano = ultima.innerText.trim();
-  const payload = { analise: textoPlano, prompt: pergunta };
+  const payload = { analise: textoPlano, pergunta };
 
-  const bloco = document.createElement('div');
-  bloco.className = 'pergunta-resposta border rounded p-2 mb-2';
-  bloco.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando resposta...</em>`;
-  document.getElementById('conteudoAnalise').prepend(bloco);
+  const blocoPergunta = document.createElement('div');
+  blocoPergunta.className = 'pergunta-resposta';
+  blocoPergunta.style.marginBottom = '24px';
+  blocoPergunta.style.border = '1px solid #007bff';
+  blocoPergunta.style.padding = '12px';
+  blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
+  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
 
-  fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
+  fetch('https://primary-production-1d53.up.railway.app/webhook-test/perguntar-ia', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   })
-    .then(res => res.json())
-    .then(data => {
-      let respostaFinal = typeof data === "string" ? data :
-                          data?.analise ? data.analise :
-                          JSON.stringify(data);
-
-      respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
-      bloco.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
-    })
-    .catch(e => {
-      bloco.innerHTML = `<span style="color:red;">❌ Erro ao buscar resposta: ${e.message}</span>`;
-      console.error("❌ Erro detalhado:", e);
-    });
+  .then(res => res.json())
+  .then(data => {
+    const respostaFinal = (data?.analise || "❌ Nenhuma resposta recebida.")
+      .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+      .replace(/\n/g, "<br>");
+    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+  })
+  .catch(e => {
+    blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
+  });
 }
+
 
 function deslogar() {
   if (!confirm("Tem certeza que deseja sair?\nTudo será apagado.")) return;
