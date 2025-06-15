@@ -19,31 +19,43 @@ function iniciarMonitoramentoInatividade() {
 
 iniciarMonitoramentoInatividade();
 
-async function enviarFormulario(event) {
-  event.preventDefault();
+document.getElementById('btnEnviarAnalise').addEventListener('click', async function () {
   sessaoAtiva = true;
   resetarTimer();
 
-  const spinner = document.getElementById('spinner');
-  if (spinner) spinner.style.display = 'inline-block';
+  const arquivoInput = document.getElementById('fileInput');
+  const abaSelect = document.getElementById('aba_planilha');
+  const ferramenta = document.getElementById('ferramenta')?.value || "";
+  const grafico = document.getElementById('grafico_tipo')?.value || "";
+  const colunaY = document.getElementById('box_y')?.value || "";
+  const colunasX = Array.from(document.getElementById('box_x')?.selectedOptions || []).map(opt => opt.value).join(",");
+  const prompt = document.getElementById('perguntaAluno')?.value.trim() || "";
 
-  const form = document.getElementById('formulario');
-  const formData = new FormData(form);
-  formData.delete('senha');
-
-  const prompt = document.getElementById('prompt')?.value.trim() || "";
-  formData.set('prompt', prompt);
-
-  const containerAnalise = document.getElementById('analise');
-  const containerGrafico = document.getElementById('grafico');
-
-  if (containerAnalise) {
-    const carregando = document.createElement('div');
-    carregando.id = 'carregando-analise';
-    carregando.textContent = 'Processando...';
-    carregando.style.marginBottom = '12px';
-    containerAnalise.prepend(carregando);
+  if (!arquivoInput.files[0]) {
+    exibirModalErro("⚠ Você precisa enviar um arquivo.");
+    return;
   }
+
+  if (!abaSelect.value) {
+    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("arquivo", arquivoInput.files[0]);
+  formData.append("aba", abaSelect.value);
+  formData.append("ferramenta", ferramenta);
+  formData.append("grafico", grafico);
+  formData.append("coluna_y", colunaY);
+  formData.append("colunas_x", colunasX);
+  formData.append("prompt", prompt);
+
+  const btn = this;
+  btn.disabled = true;
+  btn.textContent = "Processando...";
+
+  const containerAnalise = document.getElementById('conteudoAnalise');
+  const containerGrafico = document.getElementById('conteudoGrafico');
 
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
@@ -52,57 +64,36 @@ async function enviarFormulario(event) {
     });
 
     const respostaTexto = await resposta.text();
-    let json = JSON.parse(respostaTexto);
+    const json = JSON.parse(respostaTexto);
 
-    if (json.analise && json.analise.trim()) {
-      document.getElementById('carregando-analise')?.remove();
-
-      const parteAnalise = json.analise
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br>');
-
-      containerAnalise.insertAdjacentHTML(
-        'afterbegin',
-        `
-        <div class="analise-completa" style="margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid #ccc;">
-          <div class="analise-texto">${parteAnalise}</div>
-          ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" alt="Gráfico da análise" style="margin-top:12px; border-radius:6px; max-width:100%;" />` : ''}
-        </div>
-        `
-      );
-
-      const botaoPerguntar = document.getElementById('botao-perguntar');
-      if (botaoPerguntar) {
-        botaoPerguntar.style.display = 'inline-block';
-        botaoPerguntar.disabled = false;
-      }
+    if (json.analise) {
+      containerAnalise.innerHTML = `
+        <div>${json.analise.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
+      `;
     }
 
-    if (json.grafico_isolado_base64 && containerGrafico) {
-      const img = document.createElement('img');
-      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-      img.alt = 'Gráfico isolado';
-      img.style.maxWidth = '100%';
-      img.style.borderRadius = '6px';
-      containerGrafico.appendChild(img);
+    if (json.grafico_isolado_base64) {
+      containerGrafico.innerHTML = `
+        <img src="data:image/png;base64,${json.grafico_isolado_base64}" style="max-width:100%;" />
+      `;
     }
 
-  } catch (error) {
-    containerAnalise.insertAdjacentHTML(
-      'afterbegin',
-      `<div style="color:red; margin-bottom:12px;">❌ Erro: ${error.message}</div>`
-    );
+  } catch (e) {
+    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
+    console.error("❌ Erro detalhado:", e);
   } finally {
-    if (spinner) spinner.style.display = 'none';
+    btn.disabled = false;
+    btn.textContent = "Enviar Análise";
   }
-}
+});
 
 async function perguntarIA() {
-  const promptInput = document.getElementById('prompt');
+  const promptInput = document.getElementById('perguntaAluno');
   const pergunta = promptInput?.value.trim();
   if (!pergunta) return;
 
-  const ultima = document.querySelector('.analise-completa .analise-texto');
+  const ultima = document.querySelector('#conteudoAnalise div');
   if (!ultima || !ultima.innerText) {
     exibirModalErro("⚠ Nenhuma análise encontrada.");
     return;
@@ -118,7 +109,7 @@ async function perguntarIA() {
   blocoPergunta.style.border = '1px solid #007bff';
   blocoPergunta.style.padding = '12px';
   blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
-  document.getElementById('analise').prepend(blocoPergunta);
+  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
 
   try {
     const response = await fetch('https://primary-production-1d53.up.railway.app/webhook/perguntar-ia', {
@@ -165,8 +156,8 @@ function deslogar() {
     slimSelectInstance = null;
   }
 
-  document.getElementById('analise').innerHTML = '';
-  document.getElementById('grafico').innerHTML = '';
+  document.getElementById('conteudoAnalise').innerHTML = '';
+  document.getElementById('conteudoGrafico').innerHTML = '';
 }
 
 function exibirModalErro(mensagem) {
@@ -208,3 +199,4 @@ function fecharModalErro() {
   const modal = document.getElementById("modal-erro");
   if (modal) modal.style.display = "none";
 }
+
