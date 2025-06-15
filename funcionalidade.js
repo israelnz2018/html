@@ -46,15 +46,9 @@ function perguntarIA() {
   })
     .then(res => res.json())
     .then(data => {
-      let respostaFinal = "";
-
-      if (typeof data === "string") {
-        respostaFinal = data;
-      } else if (data?.analise) {
-        respostaFinal = data.analise;
-      } else {
-        respostaFinal = JSON.stringify(data);
-      }
+      let respostaFinal = typeof data === "string" ? data :
+                          data?.analise ? data.analise :
+                          JSON.stringify(data);
 
       respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
       blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
@@ -138,6 +132,7 @@ async function enviarAnaliseCompleta() {
   const colunaY = document.getElementById('box_y')?.value || "";
   const colunasX = Array.from(document.getElementById('box_x')?.selectedOptions || []).map(opt => opt.value).join(",");
   const prompt = document.getElementById('perguntaAluno')?.value.trim() || "";
+  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
 
   if (!arquivoInput?.files[0]) {
     exibirModalErro("⚠ Você precisa enviar um arquivo.");
@@ -157,6 +152,7 @@ async function enviarAnaliseCompleta() {
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
   formData.append("prompt", prompt);
+  formData.append("analise", analiseSelecionada);
 
   const containerAnalise = document.getElementById('conteudoAnalise');
   const containerGrafico = document.getElementById('conteudoGrafico');
@@ -193,6 +189,7 @@ function ativarBotaoEnviarAnalise() {
   const btn = document.getElementById('btnEnviarAnalise');
   if (btn) {
     btn.addEventListener('click', enviarAnaliseCompleta);
+    console.log("✅ Botão Enviar Análise ativado!");
   } else {
     console.warn("⚠ Botão 'Enviar Análise' não encontrado.");
   }
@@ -204,6 +201,7 @@ function iniciarFuncionalidade() {
 }
 
 window.addEventListener("load", iniciarFuncionalidade);
+
 
 
 
