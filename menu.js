@@ -25,8 +25,8 @@ const configuracoesAnalises = {
     { nome: "Gráfico de disperao com subgrupo" },
     { nome: "Gráfico de tendecias" },
     { nome: "Gráfico de tendecias com subgrupo" },
-    { nome: "Gráficos de bolhas" }
-    { nome: "Gráficos de superficie" },
+    { nome: "Gráficos de bolhas" },
+    { nome: "Gráficos de superficie" }
   ],
   "Análise Inferencial": [
     {
@@ -50,7 +50,6 @@ const configuracoesAnalises = {
       subitens: ["Qui- quadrado"]
     }
   ],
-  
   "Análise Preditiva": [
     { nome: "Análise de tipo de regressão" },
     { nome: "Regressão linear simples" },
@@ -78,17 +77,18 @@ const configuracoesAnalises = {
     { nome: "Capabilidade com dados transformados" },
     { nome: "Capabilidade com dados discretizados" }
   ],
-  
-    "Análises Diversas": [
+  "Análises Diversas": [
     {
       nome: "Análise quantitativa",
-      subitens: ["Cálculo de probabilidade", "Análise de limpeza dos dados", "Análise Prescritiva inteligente", ]
+      subitens: ["Cálculo de probabilidade", "Análise de limpeza dos dados", "Análise Prescritiva inteligente"]
     },
+    {
       nome: "Análise qualitativa",
-      subitens: ["5 porquês", "Arvore de falhas","Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização" ]
+      subitens: ["5 porquês", "Arvore de falhas", "Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização"]
     }
-  
+  ]
 };
+
 
 function gerarMenus() {
   const navUl = document.querySelector("nav ul");
