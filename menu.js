@@ -2,77 +2,92 @@ const configuracoesAnalises = {
   "Análise Exploratória": [
     {
       nome: "Análise de variabilidade",
-      subitens: ["Histogramas simples", "Boxplots simples"]
+      subitens: ["Gráfico Sumario", "Boxplot e outliers"]
     },
     {
-      nome: "Analise de correlacao",
-      subitens: ["Correlacao de person", "Matrix de correlacao"]
+      nome: "Análise de correlação",
+      subitens: ["Correlação de person", "Matrix de correlação"]
     },
-    { nome: "Analise de outliers" },
-    { nome: "Analise de estabilidade" },
-    { nome: "Analise de distribuição" },
-    { nome: "Analise de agrupamento" }
+    { nome: "Análise de estabilidade" },
+    { nome: "Análise de distribuição estatística" }
   ],
   "Análise Descritiva (Gráficos)": [
-    { nome: "Gráfico Sumario" },
-    { nome: "Gráfico de Pareto" },
-    { nome: "Grafifo de barras" },
-    { nome: "Grafico de pizza" },
-    { nome: "Grafico BoxPlot" },
-    { nome: "Grafico de disperao" },
-    { nome: "Grafico de tendecias" },
-    { nome: "Graficos 3D" }
+    { nome: "Histograma simples" },
+    { nome: "Histograma com subgrupo" },
+    { nome: "Pareto simples" },
+    { nome: "Pareto com subgrupo" },
+    { nome: "Gráfifo de barras" },
+    { nome: "Gráfifo de barras com subgrupo" },
+    { nome: "Gráfico de pizza" },
+    { nome: "BoxPlot simples" },
+    { nome: "BoxPlot com subgrupo" },
+    { nome: "Gráfico de disperao" },
+    { nome: "Gráfico de disperao com subgrupo" },
+    { nome: "Gráfico de tendecias" },
+    { nome: "Gráfico de tendecias com subgrupo" },
+    { nome: "Gráficos de bolhas" }
+    { nome: "Gráficos de superficie" },
   ],
   "Análise Inferencial": [
     {
-      nome: "Medias",
+      nome: "Análise de Médias",
       subitens: ["1 Sample T", "2 Sample T", "Paired Test", "One way ANOVA"]
     },
     {
-      nome: "Medianas",
+      nome: "Análise de Medianas",
       subitens: ["1 Wilcoxon", "1 Teste de Sinal", "2 Man Witney", "2 Wilcoxon", "Friedman"]
     },
     {
-      nome: "Varianças",
+      nome: "Análise de Varianças",
       subitens: ["Intervalo de Confianca", "F/Levene Test", "Bartlett"]
     },
     {
-      nome: "Proporção",
+      nome: "Análise de Proporção",
       subitens: ["1 Proporção", "2 Proporções"]
     },
     {
-      nome: "Associação",
+      nome: "Análise de Associação",
       subitens: ["Qui- quadrado"]
     }
   ],
-  "Análise Qualitativa (Investigativa)": [
-    { nome: "5 porquês" },
-    { nome: "Arvore de falhas" },
-    { nome: "Espinha de peixe" },
-    { nome: "Brainstorming" },
-    { nome: "Mapeamento do processo" },
-    { nome: "Matriz de priorização" }
-  ],
+  
   "Análise Preditiva": [
-    { nome: "Analise de correlação" },
-    { nome: "Grafico de dispersão" },
-    { nome: "Grafico de tendencias" },
+    { nome: "Análise de tipo de regressão" },
     { nome: "Regressão linear simples" },
     { nome: "Regressão linear múltipla" },
     { nome: "Regressão logística binária" },
     { nome: "Regressão logística ordinal" },
     { nome: "Regressão logística nominal" }
   ],
-  "Análise Prescritiva": [
-    { nome: "Analise inteligente" }
+  "Análise de controle de processo": [
+    { nome: "Carta IMR" },
+    { nome: "Carta X-BarraR" },
+    { nome: "Carta X-BarraS" },
+    { nome: "Carta C" },
+    { nome: "Carta U" },
+    { nome: "Carta N" },
+    { nome: "Carta NP" }
   ],
-  "Análises Diversas": [
-    { nome: "Análise de capabilidade" },
-    { nome: "Análise de sistema de medição" },
-    { nome: "Delineamento de experimentos" },
-    { nome: "Cálculo de probabilidade" },
-    { nome: "Análise de agrupamento" }
-  ]
+  "Análises de Capabilidade": [
+    { nome: "Teste de normalidade" },
+    { nome: "Teste de estabilidade" },
+    { nome: "Análise de distribuição estatística" },
+    { nome: "Capabilidade para dados normais" },
+    { nome: "Capabilidade para dados normais com subgrupos" },
+    { nome: "Capabilidade para outras distribuições" },
+    { nome: "Capabilidade com dados transformados" },
+    { nome: "Capabilidade com dados discretizados" }
+  ],
+  
+    "Análises Diversas": [
+    {
+      nome: "Análise quantitativa",
+      subitens: ["Cálculo de probabilidade", "Análise de limpeza dos dados", "Análise Prescritiva inteligente", ]
+    },
+      nome: "Análise qualitativa",
+      subitens: ["5 porquês", "Arvore de falhas","Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização" ]
+    }
+  
 };
 
 function gerarMenus() {
