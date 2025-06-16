@@ -209,8 +209,8 @@ async function enviarAnaliseCompleta() {
     }
 
     if (json.grafico_isolado_base64) {
-      containerGrafico.innerHTML = `
-        <img src="data:image/png;base64,${json.grafico_isolado_base64}" style="max-width:100%;" />
+      containerGrafico.innerHTML += `
+        <img src="data:image/png;base64,${json.grafico_isolado_base64}" style="max-width:100%; margin-bottom:10px;" />
       `;
     }
 
