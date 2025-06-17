@@ -1,6 +1,6 @@
 const configuracoesFerramentas = {
   // Análise Exploratória
-  "Histogramas simples": ["Y"],
+  "Histograma simples": ["Y"],
   "Boxplots simples": ["Y"],
   "Correlacao de person": ["Y", "X"],
   "Matrix de correlacao": ["Xs"],
@@ -11,13 +11,13 @@ const configuracoesFerramentas = {
 
   // Análise Descritiva (Gráficos)
   "Gráfico Sumario": ["Y"],
-  "Gráfico de Pareto": ["X", "Subgrupo"],
-  "Grafifo de barras": ["X", "Subgrupo"],
-  "Grafico de pizza": ["Y", "Subgrupo"],
-  "Grafico BoxPlot": ["Y", "Subgrupo"],
-  "Grafico de disperao": ["Y", "X"],
-  "Grafico de tendecias": ["Y", "X"],
-  "Graficos 3D": ["Y", "X", "Z"],
+  "Pareto simples": ["X", "Subgrupo"],
+  "Gráfifo de barras": ["X", "Subgrupo"],
+  "Gráfico de pizza": ["Y", "Subgrupo"],
+  "BoxPlot simples": ["Y", "Subgrupo"],
+  "Gráfico de disperao": ["Y", "X"],
+  "Gráfico de tendecias": ["Y", "X"],
+  "Gráficos de bolhas": ["Y", "X", "Z"],
 
   // Análise Inferencial
   "1 Sample T": ["Y", "Field"],
