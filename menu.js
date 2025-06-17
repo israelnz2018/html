@@ -19,8 +19,8 @@ const configuracoesAnalises = {
     { nome: "Barras" },
     { nome: " Setores(Pizza)" },
     { nome: "BoxPlot" },
-    { nome: "Disperao" },
-    { nome: "Tendecia" },
+    { nome: "Dispersão" },
+    { nome: "Tendência" },
     { nome: "Bolhas - 3D" },
     { nome: "Superficie - 3D" }
   ],
@@ -31,7 +31,7 @@ const configuracoesAnalises = {
     },
     {
       nome: "Análise de Medianas",
-      subitens: ["1 Wilcoxon", "1 Teste de Sinal", "2 Man Witney", "2 Wilcoxon", "Friedman"]
+      subitens: ["1 Wilcoxon", "1 Teste de Sinal", "1 Sample W", "1 Sample S", "2 Sample W", "2 Paired W", "Friedman"]
     },
     {
       nome: "Análise de Varianças",
