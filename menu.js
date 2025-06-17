@@ -2,36 +2,32 @@ const configuracoesAnalises = {
   "Análise Exploratória": [
     {
       nome: "Análise de variabilidade",
-      subitens: ["Gráfico Sumario", "Boxplot e outliers"]
+      subitens: ["Gráfico Sumario", "Análise de outliers"]
     },
     {
       nome: "Análise de correlação",
       subitens: ["Correlação de person", "Matrix de correlação"]
     },
     { nome: "Análise de estabilidade" },
-    { nome: "Análise de distribuição estatística" }
+    { nome: "Análise de distribuição estatística" },
+    { nome: "Análise de limpeza dos dados" }
+    
   ],
   "Análise Descritiva (Gráficos)": [
-    { nome: "Histograma simples" },
-    { nome: "Histograma com subgrupo" },
-    { nome: "Pareto simples" },
-    { nome: "Pareto com subgrupo" },
-    { nome: "Gráfifo de barras" },
-    { nome: "Gráfifo de barras com subgrupo" },
-    { nome: "Gráfico de pizza" },
-    { nome: "BoxPlot simples" },
-    { nome: "BoxPlot com subgrupo" },
-    { nome: "Gráfico de disperao" },
-    { nome: "Gráfico de disperao com subgrupo" },
-    { nome: "Gráfico de tendecias" },
-    { nome: "Gráfico de tendecias com subgrupo" },
-    { nome: "Gráficos de bolhas" },
-    { nome: "Gráficos de superficie" }
+    { nome: "Histograma" },
+    { nome: "Pareto" },
+    { nome: "Barras" },
+    { nome: " Setores(Pizza)" },
+    { nome: "BoxPlot" },
+    { nome: "Disperao" },
+    { nome: "Tendecia" },
+    { nome: "Bolhas - 3D" },
+    { nome: "Superficie - 3D" }
   ],
   "Análise Inferencial": [
     {
       nome: "Análise de Médias",
-      subitens: ["1 Sample T", "2 Sample T", "Paired Test", "One way ANOVA"]
+      subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"]
     },
     {
       nome: "Análise de Medianas",
@@ -39,7 +35,7 @@ const configuracoesAnalises = {
     },
     {
       nome: "Análise de Varianças",
-      subitens: ["Intervalo de Confianca", "F/Levene Test", "Bartlett"]
+      subitens: ["1 Intervalo de Confianca", " 2 Varianças", "Bartlett"]
     },
     {
       nome: "Análise de Proporção",
@@ -51,7 +47,7 @@ const configuracoesAnalises = {
     }
   ],
   "Análise Preditiva": [
-    { nome: "Análise de tipo de regressão" },
+    { nome: "Tipo de modelo de regressão" },
     { nome: "Regressão linear simples" },
     { nome: "Regressão linear múltipla" },
     { nome: "Regressão logística binária" },
@@ -62,25 +58,24 @@ const configuracoesAnalises = {
     { nome: "Carta IMR" },
     { nome: "Carta X-BarraR" },
     { nome: "Carta X-BarraS" },
+    { nome: "Carta P" },
+    { nome: "Carta NP" },
     { nome: "Carta C" },
-    { nome: "Carta U" },
-    { nome: "Carta N" },
-    { nome: "Carta NP" }
+    { nome: "Carta U" }
   ],
   "Análises de Capabilidade": [
     { nome: "Teste de normalidade" },
-    { nome: "Teste de estabilidade" },
+    { nome: "Análise de estabilidade" },
     { nome: "Análise de distribuição estatística" },
-    { nome: "Capabilidade para dados normais" },
-    { nome: "Capabilidade para dados normais com subgrupos" },
-    { nome: "Capabilidade para outras distribuições" },
-    { nome: "Capabilidade com dados transformados" },
-    { nome: "Capabilidade com dados discretizados" }
+    { nome: "Capabilidade - dados normais" },
+    { nome: "Capabilidade - outras distribuições" },
+    { nome: "Capabilidade - com dados transformados" },
+    { nome: "Capabilidade - com dados discretizados" }
   ],
   "Análises Diversas": [
     {
       nome: "Análise quantitativa",
-      subitens: ["Cálculo de probabilidade", "Análise de limpeza dos dados", "Análise Prescritiva inteligente"]
+      subitens: ["Cálculo de probabilidade", "Análise Prescritiva inteligente"]
     },
     {
       nome: "Análise qualitativa",
