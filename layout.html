@@ -146,24 +146,22 @@ function ativarLayout() {
         const data = new Uint8Array(e.target.result);
         workbookGlobal = XLSX.read(data, { type: 'array' });
 
-        abaEl.innerHTML = '';
+        if (!workbookGlobal || !workbookGlobal.SheetNames.length) {
+          console.warn("⚠ Nenhuma aba encontrada no arquivo.");
+          return;
+        }
 
+        abaEl.innerHTML = '';
         workbookGlobal.SheetNames.forEach((name, index) => {
           const opt = document.createElement('option');
           opt.value = name;
           opt.textContent = name;
           abaEl.appendChild(opt);
-          if (index === 0) {
-            abaEl.value = name;
-          }
+          if (index === 0) abaEl.value = name;
         });
 
         console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
-        mostrarPreview(abaEl.value);
-
-        if (ferramentaAtual) {
-          atualizarBoxAnalise(ferramentaAtual);
-        }
+        processarAbaSelecionada();
       };
       reader.readAsArrayBuffer(file);
     });
@@ -172,24 +170,33 @@ function ativarLayout() {
   }
 
   if (abaEl) {
-    abaEl.addEventListener('change', function() {
-      const aba = this.value;
-      console.log("Aba selecionada:", aba);
-      mostrarPreview(aba);
-      if (ferramentaAtual) {
-        atualizarBoxAnalise(ferramentaAtual);
-      }
-    });
+    abaEl.addEventListener('change', processarAbaSelecionada);
   } else {
     console.warn("⚠ aba_planilha não encontrado no DOM ao ativar layout.");
+  }
+}
+
+function processarAbaSelecionada() {
+  if (!workbookGlobal) {
+    console.warn("⚠ workbookGlobal ainda não carregado.");
+    return;
+  }
+  const aba = document.getElementById('aba_planilha').value;
+  mostrarPreview(aba);
+  if (ferramentaAtual) {
+    atualizarBoxAnalise(ferramentaAtual);
   }
 }
 
 function mostrarPreview(aba) {
   if (!workbookGlobal) return;
   const worksheet = workbookGlobal.Sheets[aba];
-  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+  if (!worksheet) {
+    console.warn(`⚠ Aba ${aba} não encontrada no workbook.`);
+    return;
+  }
 
+  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
@@ -228,6 +235,7 @@ atualizarBoxAnalise = function(ferramenta) {
 
 ativarLayout();
 </script>
+
 
 <script src="menu.js"></script>
 </body>
