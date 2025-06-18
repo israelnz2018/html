@@ -3,7 +3,7 @@ const configuracoesFerramentas = {
   "Gráfico Sumario": ["Y"],
   "Análise de outliers": ["Xs"],
   "Correlação de person": ["Y", "Xs"], 
-  "Matrix de correlação": ["Y", "Xs"],
+  "Matrix de dispersão": ["Y", "Xs"],
   "Analise de outliers": ["Y"],
   "Analise de estabilidade": ["Y"],
   "Analise de distribuição": ["Y"],
