@@ -63,32 +63,49 @@ function atualizarBoxAnalise(ferramenta) {
   }
 
   config.forEach(campo => {
-    if (["Y", "X", "Xs", "Subgrupo"].includes(campo)) {
+    const campoLimpo = campo.trim();
+
+    if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
       const label = document.createElement("label");
       label.className = "block font-medium mb-1";
-      label.textContent = `Variável ${campo}`;
+      label.textContent = `Variável ${campoLimpo}`;
       box.appendChild(label);
 
       const select = document.createElement("select");
-      select.id = `box_${campo.toLowerCase()}`;
+      select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
-      if (campo === "Xs") {
+      if (campoLimpo === "Xs") {
         select.multiple = true;
       }
       box.appendChild(select);
     }
 
-    if (campo.startsWith("Field")) {
+    if (campoLimpo.startsWith("Field")) {
       const label = document.createElement("label");
       label.className = "block font-medium mb-1";
-      label.textContent = campo.replace("Field_", "").replace("_", " ");
+      label.textContent = campoLimpo.replace("Field_", "").replace(/_/g, " ");
       box.appendChild(label);
 
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campo.toLowerCase()}`;
+      input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
+    }
+
+    if (campoLimpo.startsWith("FieldDuplo")) {
+      ["1", "2"].forEach(num => {
+        const label = document.createElement("label");
+        label.className = "block font-medium mb-1";
+        label.textContent = `${campoLimpo.replace("FieldDuplo_", "").replace(/_/g, " ")} ${num}`;
+        box.appendChild(label);
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.id = `box_${campoLimpo.toLowerCase()}_${num}`;
+        input.className = "border rounded p-1 mb-2 w-full";
+        box.appendChild(input);
+      });
     }
   });
 
@@ -104,7 +121,7 @@ function preencherBoxDropdowns() {
   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   const colunas = jsonData[0] || [];
 
-  ["box_y", "box_x", "box_subgrupo"].forEach(id => {
+  ["box_y", "box_x", "box_subgrupo", "box_xs"].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
       sel.innerHTML = '';
@@ -117,50 +134,3 @@ function preencherBoxDropdowns() {
     }
   });
 }
-
-function ativarEntradaDados() {
-  const abaEl = document.getElementById('aba_planilha');
-  const fileEl = document.getElementById('fileInput');
-
-  if (abaEl) {
-    abaEl.addEventListener('change', preencherBoxDropdowns);
-  } else {
-    console.warn("⚠ Elemento #aba_planilha não encontrado.");
-  }
-
-  if (fileEl) {
-    fileEl.addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        workbookGlobal = XLSX.read(data, { type: 'array' });
-
-        if (!abaEl) return;
-        abaEl.innerHTML = '';
-
-        workbookGlobal.SheetNames.forEach((name, index) => {
-          const opt = document.createElement('option');
-          opt.value = name;
-          opt.textContent = name;
-          abaEl.appendChild(opt);
-          if (index === 0) {
-            abaEl.value = name;
-          }
-        });
-
-        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
-        mostrarPreview(abaEl.value);
-        preencherBoxDropdowns();
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  } else {
-    console.warn("⚠ Elemento #fileInput não encontrado.");
-  }
-}
-
-
-
