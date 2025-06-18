@@ -73,10 +73,12 @@ function atualizarBoxAnalise(ferramenta) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
+      
       if (campoLimpo === "Xs") {
         select.setAttribute("multiple", "multiple");
-        select.multiple = true;  // Força múltiplo no DOM
+        select.multiple = true;
       }
+
       box.appendChild(select);
     }
 
@@ -99,7 +101,6 @@ function atualizarBoxAnalise(ferramenta) {
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         const colunas = jsonData[0] || [];
 
-        // Preencher cada select dinamicamente
         box.querySelectorAll("select").forEach(sel => {
           sel.innerHTML = '';
           colunas.forEach(t => {
@@ -108,6 +109,17 @@ function atualizarBoxAnalise(ferramenta) {
             opt.textContent = t;
             sel.appendChild(opt);
           });
+
+          // Se for múltiplo (Xs), ativa SlimSelect
+          if (sel.multiple) {
+            new SlimSelect({
+              select: `#${sel.id}`,
+              settings: {
+                placeholderText: 'Selecione as variáveis',
+                closeOnSelect: false
+              }
+            });
+          }
         });
       } else {
         console.warn(`⚠ Aba ${aba} não encontrada no workbook.`);
@@ -119,3 +131,4 @@ function atualizarBoxAnalise(ferramenta) {
     console.warn("⚠ workbookGlobal não está definido no momento de preencher os selects.");
   }
 }
+
