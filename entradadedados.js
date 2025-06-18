@@ -78,13 +78,6 @@ function atualizarBoxAnalise(ferramenta) {
         select.multiple = true;
       }
 
-      if (campoLimpo === "Subgrupo") {
-        const optVazio = document.createElement("option");
-        optVazio.value = "";
-        optVazio.textContent = "Nenhum";
-        select.appendChild(optVazio);
-      }
-
       box.appendChild(select);
     }
 
@@ -107,8 +100,10 @@ function atualizarBoxAnalise(ferramenta) {
         const colunas = jsonData[0] || [];
 
         box.querySelectorAll("select").forEach(sel => {
-          // Se não for múltiplo e não tiver o option vazio, adiciona
-          if (!sel.multiple && !sel.querySelector("option[value='']")) {
+          sel.innerHTML = '';
+
+          // Adiciona opção vazia para campos opcionais (não múltiplos)
+          if (!sel.multiple) {
             const optVazio = document.createElement("option");
             optVazio.value = "";
             optVazio.textContent = "Nenhum";
