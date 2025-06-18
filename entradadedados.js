@@ -67,6 +67,7 @@ function atualizarBoxAnalise(ferramenta) {
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
+    box.appendChild(label);
 
     if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
       const select = document.createElement("select");
@@ -74,8 +75,8 @@ function atualizarBoxAnalise(ferramenta) {
       select.className = "border rounded p-1 mb-2 w-full";
       if (campoLimpo === "Xs") {
         select.setAttribute("multiple", "multiple");
+        select.multiple = true;  // Força múltiplo no DOM
       }
-      box.appendChild(label);
       box.appendChild(select);
     }
 
@@ -84,10 +85,37 @@ function atualizarBoxAnalise(ferramenta) {
       input.type = "number";
       input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
-      box.appendChild(label);
       box.appendChild(input);
     }
   });
 
-  preencherBoxDropdowns();
+  // Preenche diretamente os dropdowns com as colunas do workbook
+  if (typeof workbookGlobal !== "undefined" && workbookGlobal) {
+    const abaEl = document.getElementById('aba_planilha');
+    if (abaEl) {
+      const aba = abaEl.value;
+      const worksheet = workbookGlobal.Sheets[aba];
+      if (worksheet) {
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const colunas = jsonData[0] || [];
+
+        // Preencher cada select dinamicamente
+        box.querySelectorAll("select").forEach(sel => {
+          sel.innerHTML = '';
+          colunas.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            sel.appendChild(opt);
+          });
+        });
+      } else {
+        console.warn(`⚠ Aba ${aba} não encontrada no workbook.`);
+      }
+    } else {
+      console.warn("⚠ Elemento #aba_planilha não encontrado.");
+    }
+  } else {
+    console.warn("⚠ workbookGlobal não está definido no momento de preencher os selects.");
+  }
 }
