@@ -44,12 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("🚀 Dropdown preenchido. Primeira aba:", abaSelect.value);
         mostrarPreview(abaSelect.value);
 
-        // ⚡ Atualizar o box automaticamente após novo upload
-        const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
-        if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
-          console.log("🔄 Atualizando box com nova planilha:", analiseSelecionada);
-          atualizarBoxAnalise(analiseSelecionada);
-        }
+        atualizarBoxSeExistir();
 
       } catch (err) {
         console.error("❌ Erro no XLSX.read:", err);
@@ -61,13 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
   abaSelect.addEventListener('change', function() {
     const aba = this.value;
     mostrarPreview(aba);
-
-    // ⚡ Atualizar o box ao trocar de aba
-    const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
-    if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
-      console.log("🔄 Atualizando box ao trocar aba:", analiseSelecionada);
-      atualizarBoxAnalise(analiseSelecionada);
-    }
+    atualizarBoxSeExistir();
   });
 
   function mostrarPreview(aba) {
@@ -110,6 +99,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     previewDiv.appendChild(table);
     console.log("✅ Preview atualizado.");
+  }
+
+  function atualizarBoxSeExistir() {
+    const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
+    if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
+      console.log("🔄 Atualizando box com análise existente:", analiseSelecionada);
+      atualizarBoxAnalise(analiseSelecionada);
+    } else {
+      console.warn("⚠ Nenhuma análise previamente selecionada para atualizar o box.");
+    }
   }
 });
 
