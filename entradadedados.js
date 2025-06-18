@@ -77,6 +77,12 @@ function atualizarBoxAnalise(ferramenta) {
         select.multiple = true;
       }
 
+      // Adiciona opção vazia
+      const optVazio = document.createElement('option');
+      optVazio.value = "";
+      optVazio.textContent = "-- Nenhum selecionado --";
+      select.appendChild(optVazio);
+
       box.appendChild(select);
     }
 
@@ -99,7 +105,12 @@ function atualizarBoxAnalise(ferramenta) {
         const colunas = jsonData[0] || [];
 
         box.querySelectorAll("select").forEach(sel => {
+          // Limpa mantendo o vazio
           sel.innerHTML = '';
+          const optVazio = document.createElement('option');
+          optVazio.value = "";
+          optVazio.textContent = "-- Nenhum selecionado --";
+          sel.appendChild(optVazio);
 
           colunas.forEach(t => {
             const opt = document.createElement('option');
@@ -108,25 +119,14 @@ function atualizarBoxAnalise(ferramenta) {
             sel.appendChild(opt);
           });
 
-          if (sel.multiple) {
-            new SlimSelect({
-              select: `#${sel.id}`,
-              settings: {
-                placeholderText: 'Selecione as variáveis',
-                closeOnSelect: false,
-                allowDeselectOption: true
-              }
-            });
-          } else {
-            // Para single select (ex: Subgrupo), SlimSelect com allowDeselect
-            new SlimSelect({
-              select: `#${sel.id}`,
-              settings: {
-                placeholderText: '-- Nenhum selecionado --',
-                allowDeselectOption: true
-              }
-            });
-          }
+          new SlimSelect({
+            select: `#${sel.id}`,
+            settings: {
+              placeholderText: '-- Nenhum selecionado --',
+              allowDeselectOption: true,
+              closeOnSelect: !sel.multiple
+            }
+          });
         });
       } else {
         console.warn(`⚠ Aba ${aba} não encontrada no workbook.`);
