@@ -59,35 +59,35 @@
     }
 
     carregarArquivos().then(() => {
+      // Carrega na ordem certa: entradadedados -> menu -> funcionalidade -> meu_script
       const s1 = document.createElement("script");
       s1.src = "entradadedados.js";
-      s1.defer = true;
       document.body.appendChild(s1);
 
       s1.onload = () => {
-        if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
+        console.log("✅ entradadedados.js carregado");
 
         const s2 = document.createElement("script");
         s2.src = "menu.js";
-        s2.defer = true;
         document.body.appendChild(s2);
 
         s2.onload = () => {
-          if (typeof gerarMenus === 'function') gerarMenus();
+          console.log("✅ menu.js carregado");
 
           const s3 = document.createElement("script");
           s3.src = "funcionalidade.js";
-          s3.defer = true;
           document.body.appendChild(s3);
 
           s3.onload = () => {
-            if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
+            console.log("✅ funcionalidade.js carregado");
 
-            // Por último, carrega o meu_script.js
             const s4 = document.createElement("script");
             s4.src = "meu_script.js";
-            s4.defer = true;
             document.body.appendChild(s4);
+
+            s4.onload = () => {
+              console.log("✅ meu_script.js carregado");
+            };
           };
         };
       };
@@ -96,8 +96,5 @@
 
 </body>
 </html>
-
-
-
 
 
