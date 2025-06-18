@@ -3,16 +3,12 @@ console.log("fileInput existe?", document.getElementById('fileInput'));
 console.log("aba_planilha existe?", document.getElementById('aba_planilha'));
 console.log("previewColunas existe?", document.getElementById('previewColunas'));
 
-// Inicialização correta
 window.workbookGlobal = window.workbookGlobal || null;
 
 document.addEventListener("DOMContentLoaded", function() {
-
   const fileInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
   const previewDiv = document.getElementById('previewColunas');
-  const ySelect = document.getElementById('coluna_y');
-  const xSelect = document.getElementById('colunas_x');
 
   if (!fileInput || !abaSelect || !previewDiv) {
     console.warn("⚠ Elementos necessários não encontrados no DOM.");
@@ -22,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
   fileInput.addEventListener('change', function(event) {
     console.log("📥 fileInput change disparado");
     const file = event.target.files[0];
-    console.log("📁 Arquivo selecionado:", file);
     if (!file) {
       console.warn("⚠ Nenhum arquivo selecionado");
       return;
@@ -30,12 +25,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const reader = new FileReader();
     reader.onload = function(e) {
-      console.log("📖 FileReader terminou leitura");
       const data = new Uint8Array(e.target.result);
       try {
         workbookGlobal = XLSX.read(data, { type: 'array' });
         console.log("✅ Workbook criado:", workbookGlobal);
-        console.log("📑 Abas encontradas:", workbookGlobal.SheetNames);
 
         abaSelect.innerHTML = '';
         workbookGlobal.SheetNames.forEach((name, index) => {
@@ -51,10 +44,10 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("🚀 Dropdown preenchido. Primeira aba:", abaSelect.value);
         mostrarPreview(abaSelect.value);
 
-        // 🔄 Atualiza o box de análise automaticamente após upload
+        // ⚡ Atualizar o box automaticamente após novo upload
         const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
         if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
-          console.log("🔄 Atualizando box com:", analiseSelecionada);
+          console.log("🔄 Atualizando box com nova planilha:", analiseSelecionada);
           atualizarBoxAnalise(analiseSelecionada);
         }
 
@@ -67,8 +60,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   abaSelect.addEventListener('change', function() {
     const aba = this.value;
-    console.log("🔄 Aba alterada:", aba);
     mostrarPreview(aba);
+
+    // ⚡ Atualizar o box ao trocar de aba
+    const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
+    if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
+      console.log("🔄 Atualizando box ao trocar aba:", analiseSelecionada);
+      atualizarBoxAnalise(analiseSelecionada);
+    }
   });
 
   function mostrarPreview(aba) {
@@ -86,37 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     const colunas = jsonData[0] || [];
     const primeiraLinha = jsonData[1] || [];
-
-    if (ySelect) {
-      ySelect.innerHTML = '';
-      const optEmpty = document.createElement('option');
-      optEmpty.value = '';
-      optEmpty.textContent = '-- Nenhum selecionado --';
-      ySelect.appendChild(optEmpty);
-    }
-
-    if (xSelect) {
-      xSelect.innerHTML = '';
-      const optEmpty = document.createElement('option');
-      optEmpty.value = '';
-      optEmpty.textContent = '-- Nenhum selecionado --';
-      xSelect.appendChild(optEmpty);
-    }
-
-    colunas.forEach(titulo => {
-      if (ySelect) {
-        const optY = document.createElement('option');
-        optY.value = titulo;
-        optY.textContent = titulo;
-        ySelect.appendChild(optY);
-      }
-      if (xSelect) {
-        const optX = document.createElement('option');
-        optX.value = titulo;
-        optX.textContent = titulo;
-        xSelect.appendChild(optX);
-      }
-    });
 
     previewDiv.innerHTML = '';
     const table = document.createElement('table');
@@ -144,6 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("✅ Preview atualizado.");
   }
 });
+
 
 
 
