@@ -6,7 +6,7 @@ const configuracoesAnalises = {
     },
     {
       nome: "Análise de correlação",
-      subitens: ["Correlação de person", "Matrix de correlação"]
+      subitens: ["Correlação de person", "Matrix de dispersão"]
     },
     { nome: "Análise de estabilidade" },
     { nome: "Análise de distribuição estatística" },
