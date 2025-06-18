@@ -1,120 +1,92 @@
-console.log("✅ meu_script.js rodando...");
-console.log("fileInput existe?", document.getElementById('fileInput'));
-console.log("aba_planilha existe?", document.getElementById('aba_planilha'));
-console.log("previewColunas existe?", document.getElementById('previewColunas'));
-
-window.workbookGlobal = window.workbookGlobal || null;
-
-document.addEventListener("DOMContentLoaded", function() {
-  const fileInput = document.getElementById('fileInput');
-  const abaSelect = document.getElementById('aba_planilha');
-  const previewDiv = document.getElementById('previewColunas');
-
-  if (!fileInput || !abaSelect || !previewDiv) {
-    console.warn("⚠ Elementos necessários não encontrados no DOM.");
+function atualizarBoxAnalise(ferramenta) {
+  const box = document.getElementById('boxAnalise');
+  if (!box) {
+    console.warn("⚠ Elemento #boxAnalise não encontrado.");
     return;
   }
 
-  fileInput.addEventListener('change', function(event) {
-    console.log("📥 fileInput change disparado");
-    const file = event.target.files[0];
-    if (!file) {
-      console.warn("⚠ Nenhum arquivo selecionado");
-      return;
+  box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramenta}</p>`;
+
+  const config = configuracoesFerramentas[ferramenta];
+  if (!config) {
+    console.warn(`⚠ Configuração não encontrada para: ${ferramenta}`);
+    return;
+  }
+
+  config.forEach(campo => {
+    const campoLimpo = campo.trim();
+    const label = document.createElement("label");
+    label.className = "block font-medium mb-1";
+    label.textContent = `Variável ${campoLimpo}`;
+    box.appendChild(label);
+
+    if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
+      const select = document.createElement("select");
+      select.id = `box_${campoLimpo.toLowerCase()}`;
+      select.className = "border rounded p-1 mb-2 w-full";
+      
+      if (campoLimpo === "Xs") {
+        select.setAttribute("multiple", "multiple");
+        select.multiple = true;
+      }
+
+      box.appendChild(select);
     }
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const data = new Uint8Array(e.target.result);
-      try {
-        workbookGlobal = XLSX.read(data, { type: 'array' });
-        console.log("✅ Workbook criado:", workbookGlobal);
+    if (campoLimpo.startsWith("Field")) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = `box_${campoLimpo.toLowerCase()}`;
+      input.className = "border rounded p-1 mb-2 w-full";
+      box.appendChild(input);
+    }
+  });
 
-        abaSelect.innerHTML = '';
-        workbookGlobal.SheetNames.forEach((name, index) => {
-          const opt = document.createElement('option');
-          opt.value = name;
-          opt.textContent = name;
-          abaSelect.appendChild(opt);
-          if (index === 0) {
-            abaSelect.value = name;
+  // Aguarda o workbook estar carregado para preencher os selects
+  if (window.workbookGlobal && workbookGlobal.SheetNames) {
+    const abaEl = document.getElementById('aba_planilha');
+    if (abaEl) {
+      const aba = abaEl.value;
+      const worksheet = workbookGlobal.Sheets[aba];
+      if (worksheet) {
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const colunas = jsonData[0] || [];
+
+        box.querySelectorAll("select").forEach(sel => {
+          sel.innerHTML = '';
+
+          // Adiciona opção vazia se for opcional (exemplo: Subgrupo)
+          const opcaoVazia = document.createElement('option');
+          opcaoVazia.value = '';
+          opcaoVazia.textContent = '(Nenhum)';
+          sel.appendChild(opcaoVazia);
+
+          colunas.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            sel.appendChild(opt);
+          });
+
+          // SlimSelect para múltiplos
+          if (sel.multiple) {
+            new SlimSelect({
+              select: `#${sel.id}`,
+              settings: {
+                placeholderText: 'Selecione as variáveis',
+                closeOnSelect: false
+              }
+            });
           }
         });
-
-        console.log("🚀 Dropdown preenchido. Primeira aba:", abaSelect.value);
-        mostrarPreview(abaSelect.value);
-
-        atualizarBoxSeExistir();
-
-      } catch (err) {
-        console.error("❌ Erro no XLSX.read:", err);
+      } else {
+        console.warn(`⚠ Aba ${aba} não encontrada no workbook.`);
       }
-    };
-    reader.readAsArrayBuffer(file);
-  });
-
-  abaSelect.addEventListener('change', function() {
-    const aba = this.value;
-    mostrarPreview(aba);
-    atualizarBoxSeExistir();
-  });
-
-  function mostrarPreview(aba) {
-    if (!workbookGlobal) {
-      console.warn("⚠ workbookGlobal não definido.");
-      return;
-    }
-
-    const worksheet = workbookGlobal.Sheets[aba];
-    if (!worksheet) {
-      console.warn("⚠ Worksheet não encontrado para aba:", aba);
-      return;
-    }
-
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    const colunas = jsonData[0] || [];
-    const primeiraLinha = jsonData[1] || [];
-
-    previewDiv.innerHTML = '';
-    const table = document.createElement('table');
-    table.className = 'min-w-full border';
-
-    const trHeader = document.createElement('tr');
-    colunas.forEach(t => {
-      const th = document.createElement('th');
-      th.className = 'border px-2 py-1 bg-gray-200';
-      th.textContent = t;
-      trHeader.appendChild(th);
-    });
-    table.appendChild(trHeader);
-
-    const trData = document.createElement('tr');
-    colunas.forEach((_, i) => {
-      const td = document.createElement('td');
-      td.className = 'border px-2 py-1';
-      td.textContent = primeiraLinha[i] !== undefined ? primeiraLinha[i] : '';
-      trData.appendChild(td);
-    });
-    table.appendChild(trData);
-
-    previewDiv.appendChild(table);
-    console.log("✅ Preview atualizado.");
-  }
-
-  function atualizarBoxSeExistir() {
-    if (!workbookGlobal) {
-      console.warn("⚠ workbookGlobal não carregado ainda. Aguardando upload completo antes de atualizar o box.");
-      return;
-    }
-    const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
-    if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
-      console.log("🔄 Atualizando box com análise existente:", analiseSelecionada);
-      atualizarBoxAnalise(analiseSelecionada);
     } else {
-      console.warn("⚠ Nenhuma análise previamente selecionada para atualizar o box.");
+      console.warn("⚠ Elemento #aba_planilha não encontrado.");
     }
+  } else {
+    console.warn("⚠ workbookGlobal ainda não carregado. O preenchimento será feito após o upload.");
   }
-});
-
-
+}
 
