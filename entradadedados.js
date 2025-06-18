@@ -2,14 +2,13 @@ const configuracoesFerramentas = {
   // Análise Exploratória
   "Gráfico Sumario": ["Y"],
   "Análise de outliers": ["Xs"],
-  "Correlação de person": ["Y", "Xs"], 
+  "Correlação de person": ["Y", "Xs"],
   "Matrix de dispersão": ["Y", "Xs"],
-  "Análise de estabilidade": ["Y", "Subgrupo"] // Subgrupo opcional — se vazio, use I-MR
+  "Análise de estabilidade": ["Y", "Subgrupo"], // Subgrupo opcional — se vazio, use I-MR
   "Analise de distribuição": ["Y"],
   "Analise de agrupamento": ["Xs"],
 
   // Análise Descritiva (Gráficos)
-  "Gráfico Sumario": ["Y"],
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "Gráfico de pizza": ["Y", "Subgrupo"],
@@ -45,6 +44,7 @@ const configuracoesFerramentas = {
   "Regressão logística nominal": ["Y", "Xs"],
   "Regressão logística ordinal": ["Y", "Xs"]
 };
+
 
 function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
