@@ -50,6 +50,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
         console.log("🚀 Dropdown preenchido. Primeira aba:", abaSelect.value);
         mostrarPreview(abaSelect.value);
+
+        // ✅ Atualiza o box de análise automaticamente
+        const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
+        if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
+          console.log("🔄 Atualizando box com:", analiseSelecionada);
+          atualizarBoxAnalise(analiseSelecionada);
+        } else {
+          console.warn("⚠ Nenhuma análise previamente selecionada para atualizar o box.");
+        }
+
       } catch (err) {
         console.error("❌ Erro no XLSX.read:", err);
       }
@@ -123,5 +133,6 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("✅ Preview atualizado.");
   }
 });
+
 
 
