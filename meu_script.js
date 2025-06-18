@@ -1,4 +1,9 @@
-console.log("meu_script.js carregado");
+
+console.log("✅ meu_script.js rodando...");
+console.log("fileInput existe?", document.getElementById('fileInput'));
+console.log("aba_planilha existe?", document.getElementById('aba_planilha'));
+console.log("previewColunas existe?", document.getElementById('previewColunas'));
+
 
 document.addEventListener("DOMContentLoaded", function() {
   let workbookGlobal = null;
