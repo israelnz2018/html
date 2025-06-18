@@ -102,6 +102,10 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function atualizarBoxSeExistir() {
+    if (!workbookGlobal) {
+      console.warn("⚠ workbookGlobal não carregado ainda. Aguardando upload completo antes de atualizar o box.");
+      return;
+    }
     const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
     if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
       console.log("🔄 Atualizando box com análise existente:", analiseSelecionada);
@@ -111,7 +115,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 });
-
 
 
 
