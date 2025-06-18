@@ -150,9 +150,21 @@ async function enviarAnaliseCompleta() {
   const arquivoInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
   const colunaY = document.getElementById('box_y')?.value || "";
-  const colunasX = Array.from(document.getElementById('box_x')?.selectedOptions || []).map(opt => opt.value).join(",");
+
+  // Captura X ou Xs — prioriza Xs se existir
+  let colunasX = "";
+  const elXs = document.getElementById('box_xs');
+  const elX = document.getElementById('box_x');
+
+  if (elXs) {
+    colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
+  } else if (elX) {
+    colunasX = elX.value || "";
+  }
+
   const prompt = document.getElementById('perguntaAluno')?.value.trim() || "";
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+
 
   let analise = "";
   let grafico = "";
