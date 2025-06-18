@@ -78,7 +78,13 @@ function atualizarBoxAnalise(ferramenta) {
         select.multiple = true;
       }
 
-      // Adiciona o select no box primeiro
+      if (campoLimpo === "Subgrupo") {
+        const optVazio = document.createElement("option");
+        optVazio.value = "";
+        optVazio.textContent = "Nenhum";
+        select.appendChild(optVazio);
+      }
+
       box.appendChild(select);
     }
 
@@ -91,7 +97,6 @@ function atualizarBoxAnalise(ferramenta) {
     }
   });
 
-  // Preenche diretamente os dropdowns com as colunas do workbook
   if (typeof workbookGlobal !== "undefined" && workbookGlobal) {
     const abaEl = document.getElementById('aba_planilha');
     if (abaEl) {
@@ -102,13 +107,11 @@ function atualizarBoxAnalise(ferramenta) {
         const colunas = jsonData[0] || [];
 
         box.querySelectorAll("select").forEach(sel => {
-          sel.innerHTML = '';
-
-          // Se for opcional (ex: Subgrupo), adiciona opção vazia
-          if (sel.id.includes("subgrupo")) {
+          // Se não for múltiplo e não tiver o option vazio, adiciona
+          if (!sel.multiple && !sel.querySelector("option[value='']")) {
             const optVazio = document.createElement("option");
             optVazio.value = "";
-            optVazio.textContent = "--- Nenhum ---";
+            optVazio.textContent = "Nenhum";
             sel.appendChild(optVazio);
           }
 
@@ -119,7 +122,6 @@ function atualizarBoxAnalise(ferramenta) {
             sel.appendChild(opt);
           });
 
-          // Ativa SlimSelect se múltiplo
           if (sel.multiple) {
             new SlimSelect({
               select: `#${sel.id}`,
@@ -140,4 +142,6 @@ function atualizarBoxAnalise(ferramenta) {
     console.warn("⚠ workbookGlobal não está definido no momento de preencher os selects.");
   }
 }
+
+
 
