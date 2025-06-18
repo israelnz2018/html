@@ -72,7 +72,7 @@ function atualizarBoxAnalise(ferramenta) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
-      
+
       if (campoLimpo === "Xs") {
         select.setAttribute("multiple", "multiple");
         select.multiple = true;
@@ -90,7 +90,6 @@ function atualizarBoxAnalise(ferramenta) {
     }
   });
 
-  // Preenche diretamente os dropdowns com as colunas do workbook
   if (typeof workbookGlobal !== "undefined" && workbookGlobal) {
     const abaEl = document.getElementById('aba_planilha');
     if (abaEl) {
@@ -109,15 +108,18 @@ function atualizarBoxAnalise(ferramenta) {
             sel.appendChild(opt);
           });
 
-          // Se for múltiplo (Xs), ativa SlimSelect
           if (sel.multiple) {
-            new SlimSelect({
+            if (sel.slim) {
+              sel.slim.destroy();
+            }
+            const slim = new SlimSelect({
               select: `#${sel.id}`,
               settings: {
                 placeholderText: 'Selecione as variáveis',
                 closeOnSelect: false
               }
             });
+            sel.slim = slim;
           }
         });
       } else {
@@ -131,3 +133,11 @@ function atualizarBoxAnalise(ferramenta) {
   }
 }
 
+// ⚠ Inclua no seu upload de arquivo após o mostrarPreview()
+function atualizarBoxDepoisDoUpload() {
+  const ultimaAnalise = document.querySelector("#boxAnalise p")?.innerText.replace("Análise selecionada: ", "").trim();
+  if (ultimaAnalise) {
+    console.log("🔄 Atualizando box após upload para:", ultimaAnalise);
+    atualizarBoxAnalise(ultimaAnalise);
+  }
+}
