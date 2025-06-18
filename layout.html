@@ -127,6 +127,7 @@
 
 <script>
 let workbookGlobal = null;
+let ferramentaAtual = "";
 
 function ativarLayout() {
   console.log("JS do layout ativado");
@@ -159,6 +160,10 @@ function ativarLayout() {
 
         console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
         mostrarPreview(abaEl.value);
+
+        if (ferramentaAtual) {
+          atualizarBoxAnalise(ferramentaAtual);
+        }
       };
       reader.readAsArrayBuffer(file);
     });
@@ -171,6 +176,9 @@ function ativarLayout() {
       const aba = this.value;
       console.log("Aba selecionada:", aba);
       mostrarPreview(aba);
+      if (ferramentaAtual) {
+        atualizarBoxAnalise(ferramentaAtual);
+      }
     });
   } else {
     console.warn("⚠ aba_planilha não encontrado no DOM ao ativar layout.");
@@ -211,17 +219,17 @@ function mostrarPreview(aba) {
 
   previewDiv.appendChild(table);
 }
-</script>
 
-  
-<script>
+const originalAtualizarBoxAnalise = atualizarBoxAnalise;
+atualizarBoxAnalise = function(ferramenta) {
+  ferramentaAtual = ferramenta;
+  originalAtualizarBoxAnalise(ferramenta);
+};
+
 ativarLayout();
 </script>
 
 <script src="menu.js"></script>
 </body>
 </html>
-
-
-
 
