@@ -162,6 +162,9 @@ function ativarLayout() {
 
         console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
         processarAbaSelecionada();
+        if (ferramentaAtual) {
+          atualizarBoxAnalise();
+        }
       };
       reader.readAsArrayBuffer(file);
     });
@@ -184,7 +187,7 @@ function processarAbaSelecionada() {
   const aba = document.getElementById('aba_planilha').value;
   mostrarPreview(aba);
   if (ferramentaAtual) {
-    atualizarBoxAnalise(ferramentaAtual);
+    atualizarBoxAnalise();
   }
 }
 
@@ -228,19 +231,21 @@ function mostrarPreview(aba) {
 
 const originalAtualizarBoxAnalise = atualizarBoxAnalise;
 atualizarBoxAnalise = function(ferramenta) {
-  ferramentaAtual = ferramenta;
+  if (ferramenta) {
+    ferramentaAtual = ferramenta;
+  }
   if (!workbookGlobal) {
     console.warn("⚠ workbookGlobal ainda não carregado. Aguarde o upload para preencher o box.");
     return;
   }
-  originalAtualizarBoxAnalise(ferramenta);
+  originalAtualizarBoxAnalise(ferramentaAtual);
 };
 
 ativarLayout();
 </script>
 
-
 <script src="menu.js"></script>
 </body>
+
 </html>
 
