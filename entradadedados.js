@@ -1,6 +1,6 @@
 const configuracoesFerramentas = {
   // Análise Exploratória
-  "Histograma simples": ["Y"],
+  "Gráfico Sumario": ["Y"],
   "Boxplots simples": ["Y"],
   "Correlacao de person": ["Y", "X"],
   "Matrix de correlacao": ["Xs"],
