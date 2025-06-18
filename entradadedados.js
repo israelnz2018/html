@@ -1,7 +1,7 @@
 const configuracoesFerramentas = {
   // Análise Exploratória
   "Gráfico Sumario": ["Y"],
-  "Boxplots simples": ["Y"],
+  "Análise de outliers": ["Xs"],
   "Correlacao de person": ["Y", "X"],
   "Matrix de correlacao": ["Xs"],
   "Analise de outliers": ["Y"],
