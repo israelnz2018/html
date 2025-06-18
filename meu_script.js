@@ -3,7 +3,7 @@ console.log("fileInput existe?", document.getElementById('fileInput'));
 console.log("aba_planilha existe?", document.getElementById('aba_planilha'));
 console.log("previewColunas existe?", document.getElementById('previewColunas'));
 
-// Corrigido: inicialização correta
+// Inicialização correta
 window.workbookGlobal = window.workbookGlobal || null;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -51,13 +51,11 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("🚀 Dropdown preenchido. Primeira aba:", abaSelect.value);
         mostrarPreview(abaSelect.value);
 
-        // ✅ Atualiza o box de análise automaticamente
+        // 🔄 Atualiza o box de análise automaticamente após upload
         const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText?.replace("Análise selecionada: ", "").trim();
         if (analiseSelecionada && typeof atualizarBoxAnalise === 'function') {
           console.log("🔄 Atualizando box com:", analiseSelecionada);
           atualizarBoxAnalise(analiseSelecionada);
-        } else {
-          console.warn("⚠ Nenhuma análise previamente selecionada para atualizar o box.");
         }
 
       } catch (err) {
@@ -89,8 +87,21 @@ document.addEventListener("DOMContentLoaded", function() {
     const colunas = jsonData[0] || [];
     const primeiraLinha = jsonData[1] || [];
 
-    if (ySelect) ySelect.innerHTML = '';
-    if (xSelect) xSelect.innerHTML = '';
+    if (ySelect) {
+      ySelect.innerHTML = '';
+      const optEmpty = document.createElement('option');
+      optEmpty.value = '';
+      optEmpty.textContent = '-- Nenhum selecionado --';
+      ySelect.appendChild(optEmpty);
+    }
+
+    if (xSelect) {
+      xSelect.innerHTML = '';
+      const optEmpty = document.createElement('option');
+      optEmpty.value = '';
+      optEmpty.textContent = '-- Nenhum selecionado --';
+      xSelect.appendChild(optEmpty);
+    }
 
     colunas.forEach(titulo => {
       if (ySelect) {
