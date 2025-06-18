@@ -27,72 +27,77 @@
   </div>
 
   <script>
-    const arquivos = [
-      "acesso_permissoes.html",
-      "layout.html",
-      "pokayoke.html"
-    ];
+  const arquivos = [
+    "acesso_permissoes.html",
+    "layout.html",
+    "pokayoke.html"
+  ];
 
-    async function carregarArquivos() {
-      for (const nome of arquivos) {
-        const resposta = await fetch(nome);
-        const conteudo = await resposta.text();
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = conteudo;
+  async function carregarArquivos() {
+    for (const nome of arquivos) {
+      const resposta = await fetch(nome);
+      const conteudo = await resposta.text();
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = conteudo;
 
-        Array.from(tempDiv.childNodes).forEach(node => {
-          if (node.tagName === "SCRIPT") {
-            const script = document.createElement("script");
-            script.textContent = node.textContent;
-            setTimeout(() => document.body.appendChild(script), 0);
-          } else if (node.tagName === "STYLE") {
-            document.head.appendChild(node);
+      Array.from(tempDiv.childNodes).forEach(node => {
+        if (node.tagName === "SCRIPT") {
+          const script = document.createElement("script");
+          script.textContent = node.textContent;
+          setTimeout(() => document.body.appendChild(script), 0);
+        } else if (node.tagName === "STYLE") {
+          document.head.appendChild(node);
+        } else {
+          if (nome === "acesso_permissoes.html") {
+            document.getElementById("login-container").appendChild(node);
           } else {
-            if (nome === "acesso_permissoes.html") {
-              document.getElementById("login-container").appendChild(node);
-            } else {
-              document.getElementById("app").appendChild(node);
-            }
+            document.getElementById("app").appendChild(node);
           }
-        });
-      }
+        }
+      });
     }
+  }
 
-    carregarArquivos().then(() => {
-      // Carrega na ordem certa: entradadedados -> menu -> funcionalidade -> meu_script
-      const s1 = document.createElement("script");
-      s1.src = "entradadedados.js";
-      document.body.appendChild(s1);
+  carregarArquivos().then(() => {
+    console.log("✅ Layout carregado");
 
-      s1.onload = () => {
-        console.log("✅ entradadedados.js carregado");
+    // Agora sim carregamos o menu.js após o layout existir
+    const s1 = document.createElement("script");
+    s1.src = "menu.js";
+    s1.onload = () => {
+      console.log("✅ menu.js carregado");
+      if (typeof gerarMenus === 'function') gerarMenus();
+    };
+    document.body.appendChild(s1);
 
-        const s2 = document.createElement("script");
-        s2.src = "menu.js";
-        document.body.appendChild(s2);
+    // Depois o entradadedados.js
+    const s2 = document.createElement("script");
+    s2.src = "entradadedados.js";
+    s2.onload = () => {
+      console.log("✅ entradadedados.js carregado");
+      if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
+    };
+    document.body.appendChild(s2);
 
-        s2.onload = () => {
-          console.log("✅ menu.js carregado");
+    // Depois o funcionalidade.js
+    const s3 = document.createElement("script");
+    s3.src = "funcionalidade.js";
+    s3.onload = () => {
+      console.log("✅ funcionalidade.js carregado");
+      if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
+    };
+    document.body.appendChild(s3);
 
-          const s3 = document.createElement("script");
-          s3.src = "funcionalidade.js";
-          document.body.appendChild(s3);
+    // Por último o meu_script.js
+    const s4 = document.createElement("script");
+    s4.src = "meu_script.js";
+    s4.onload = () => {
+      console.log("✅ meu_script.js carregado");
+    };
+    document.body.appendChild(s4);
+  });
+</script>
 
-          s3.onload = () => {
-            console.log("✅ funcionalidade.js carregado");
-
-            const s4 = document.createElement("script");
-            s4.src = "meu_script.js";
-            document.body.appendChild(s4);
-
-            s4.onload = () => {
-              console.log("✅ meu_script.js carregado");
-            };
-          };
-        };
-      };
-    });
-  </script>
 
 </body>
 </html>
