@@ -64,13 +64,12 @@ function atualizarBoxAnalise(ferramenta) {
 
   config.forEach(campo => {
     const campoLimpo = campo.trim();
+    const label = document.createElement("label");
+    label.className = "block font-medium mb-1";
+    label.textContent = `Variável ${campoLimpo}`;
+    box.appendChild(label);
 
     if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
-      const label = document.createElement("label");
-      label.className = "block font-medium mb-1";
-      label.textContent = `Variável ${campoLimpo}`;
-      box.appendChild(label);
-
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
@@ -81,31 +80,11 @@ function atualizarBoxAnalise(ferramenta) {
     }
 
     if (campoLimpo.startsWith("Field")) {
-      const label = document.createElement("label");
-      label.className = "block font-medium mb-1";
-      label.textContent = campoLimpo.replace("Field_", "").replace(/_/g, " ");
-      box.appendChild(label);
-
       const input = document.createElement("input");
       input.type = "number";
       input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
-    }
-
-    if (campoLimpo.startsWith("FieldDuplo")) {
-      ["1", "2"].forEach(num => {
-        const label = document.createElement("label");
-        label.className = "block font-medium mb-1";
-        label.textContent = `${campoLimpo.replace("FieldDuplo_", "").replace(/_/g, " ")} ${num}`;
-        box.appendChild(label);
-
-        const input = document.createElement("input");
-        input.type = "number";
-        input.id = `box_${campoLimpo.toLowerCase()}_${num}`;
-        input.className = "border rounded p-1 mb-2 w-full";
-        box.appendChild(input);
-      });
     }
   });
 
@@ -134,4 +113,3 @@ function preencherBoxDropdowns() {
     }
   });
 }
-
