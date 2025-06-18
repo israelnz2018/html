@@ -78,6 +78,7 @@ function atualizarBoxAnalise(ferramenta) {
         select.multiple = true;
       }
 
+      // Adiciona o select no box primeiro
       box.appendChild(select);
     }
 
@@ -90,6 +91,7 @@ function atualizarBoxAnalise(ferramenta) {
     }
   });
 
+  // Preenche diretamente os dropdowns com as colunas do workbook
   if (typeof workbookGlobal !== "undefined" && workbookGlobal) {
     const abaEl = document.getElementById('aba_planilha');
     if (abaEl) {
@@ -101,6 +103,15 @@ function atualizarBoxAnalise(ferramenta) {
 
         box.querySelectorAll("select").forEach(sel => {
           sel.innerHTML = '';
+
+          // Se for opcional (ex: Subgrupo), adiciona opção vazia
+          if (sel.id.includes("subgrupo")) {
+            const optVazio = document.createElement("option");
+            optVazio.value = "";
+            optVazio.textContent = "--- Nenhum ---";
+            sel.appendChild(optVazio);
+          }
+
           colunas.forEach(t => {
             const opt = document.createElement('option');
             opt.value = t;
@@ -108,18 +119,15 @@ function atualizarBoxAnalise(ferramenta) {
             sel.appendChild(opt);
           });
 
+          // Ativa SlimSelect se múltiplo
           if (sel.multiple) {
-            if (sel.slim) {
-              sel.slim.destroy();
-            }
-            const slim = new SlimSelect({
+            new SlimSelect({
               select: `#${sel.id}`,
               settings: {
                 placeholderText: 'Selecione as variáveis',
                 closeOnSelect: false
               }
             });
-            sel.slim = slim;
           }
         });
       } else {
@@ -133,11 +141,3 @@ function atualizarBoxAnalise(ferramenta) {
   }
 }
 
-// ⚠ Inclua no seu upload de arquivo após o mostrarPreview()
-function atualizarBoxDepoisDoUpload() {
-  const ultimaAnalise = document.querySelector("#boxAnalise p")?.innerText.replace("Análise selecionada: ", "").trim();
-  if (ultimaAnalise) {
-    console.log("🔄 Atualizando box após upload para:", ultimaAnalise);
-    atualizarBoxAnalise(ultimaAnalise);
-  }
-}
