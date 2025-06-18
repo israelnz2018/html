@@ -45,7 +45,6 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs"]
 };
 
-
 function atualizarBoxAnalise(ferramenta) {
   const box = document.getElementById('boxAnalise');
   if (!box) {
@@ -102,11 +101,11 @@ function atualizarBoxAnalise(ferramenta) {
         box.querySelectorAll("select").forEach(sel => {
           sel.innerHTML = '';
 
-          // Adiciona opção vazia para campos opcionais (não múltiplos)
+          // ✅ Sempre adiciona uma opção vazia para selects de um valor
           if (!sel.multiple) {
             const optVazio = document.createElement("option");
             optVazio.value = "";
-            optVazio.textContent = "Nenhum";
+            optVazio.textContent = "-- Nenhum selecionado --";
             sel.appendChild(optVazio);
           }
 
@@ -117,6 +116,7 @@ function atualizarBoxAnalise(ferramenta) {
             sel.appendChild(opt);
           });
 
+          // ✅ Se usar SlimSelect, reinicializa forçando placeholder
           if (sel.multiple) {
             new SlimSelect({
               select: `#${sel.id}`,
@@ -137,6 +137,5 @@ function atualizarBoxAnalise(ferramenta) {
     console.warn("⚠ workbookGlobal não está definido no momento de preencher os selects.");
   }
 }
-
 
 
