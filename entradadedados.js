@@ -101,14 +101,6 @@ function atualizarBoxAnalise(ferramenta) {
         box.querySelectorAll("select").forEach(sel => {
           sel.innerHTML = '';
 
-          // ✅ Sempre adiciona uma opção vazia para selects de um valor
-          if (!sel.multiple) {
-            const optVazio = document.createElement("option");
-            optVazio.value = "";
-            optVazio.textContent = "-- Nenhum selecionado --";
-            sel.appendChild(optVazio);
-          }
-
           colunas.forEach(t => {
             const opt = document.createElement('option');
             opt.value = t;
@@ -116,13 +108,22 @@ function atualizarBoxAnalise(ferramenta) {
             sel.appendChild(opt);
           });
 
-          // ✅ Se usar SlimSelect, reinicializa forçando placeholder
           if (sel.multiple) {
             new SlimSelect({
               select: `#${sel.id}`,
               settings: {
                 placeholderText: 'Selecione as variáveis',
-                closeOnSelect: false
+                closeOnSelect: false,
+                allowDeselectOption: true
+              }
+            });
+          } else {
+            // Para single select (ex: Subgrupo), SlimSelect com allowDeselect
+            new SlimSelect({
+              select: `#${sel.id}`,
+              settings: {
+                placeholderText: '-- Nenhum selecionado --',
+                allowDeselectOption: true
               }
             });
           }
