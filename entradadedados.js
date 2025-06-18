@@ -67,15 +67,15 @@ function atualizarBoxAnalise(ferramenta) {
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
-    box.appendChild(label);
 
     if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
       if (campoLimpo === "Xs") {
-        select.multiple = true;
+        select.setAttribute("multiple", "multiple");
       }
+      box.appendChild(label);
       box.appendChild(select);
     }
 
@@ -84,32 +84,10 @@ function atualizarBoxAnalise(ferramenta) {
       input.type = "number";
       input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
+      box.appendChild(label);
       box.appendChild(input);
     }
   });
 
   preencherBoxDropdowns();
-}
-
-function preencherBoxDropdowns() {
-  if (!workbookGlobal) return;
-  const abaEl = document.getElementById('aba_planilha');
-  if (!abaEl) return;
-  const aba = abaEl.value;
-  const worksheet = workbookGlobal.Sheets[aba];
-  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-  const colunas = jsonData[0] || [];
-
-  ["box_y", "box_x", "box_subgrupo", "box_xs"].forEach(id => {
-    const sel = document.getElementById(id);
-    if (sel) {
-      sel.innerHTML = '';
-      colunas.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t;
-        opt.textContent = t;
-        sel.appendChild(opt);
-      });
-    }
-  });
 }
