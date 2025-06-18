@@ -59,20 +59,23 @@
     }
 
     carregarArquivos().then(() => {
+      // Primeiro carrega o entradadedados.js
       const s1 = document.createElement("script");
-      s1.src = "menu.js";
+      s1.src = "entradadedados.js";
       s1.onload = () => {
-        if (typeof gerarMenus === 'function') gerarMenus();
+        if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
       };
       document.body.appendChild(s1);
 
+      // Depois carrega o menu.js (que depende do entradadedados.js)
       const s2 = document.createElement("script");
-      s2.src = "entradadedados.js";
+      s2.src = "menu.js";
       s2.onload = () => {
-        if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
+        if (typeof gerarMenus === 'function') gerarMenus();
       };
       document.body.appendChild(s2);
 
+      // Por fim carrega o funcionalidade.js
       const s3 = document.createElement("script");
       s3.src = "funcionalidade.js";
       s3.onload = () => {
@@ -84,6 +87,7 @@
 
 </body>
 </html>
+
 
 
 
