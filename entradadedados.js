@@ -4,7 +4,7 @@ const configuracoesFerramentas = {
   "Análise de outliers": ["Xs"],
   "Correlação de person": ["Y", "Xs"], 
   "Matrix de dispersão": ["Y", "Xs"],
-  "Analise de outliers": ["Y"],
+  "Análise de estabilidade": ["Y", "Subgrupo"] // Subgrupo opcional — se vazio, use I-MR
   "Analise de estabilidade": ["Y"],
   "Analise de distribuição": ["Y"],
   "Analise de agrupamento": ["Xs"],
