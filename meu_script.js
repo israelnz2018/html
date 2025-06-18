@@ -3,7 +3,8 @@ console.log("fileInput existe?", document.getElementById('fileInput'));
 console.log("aba_planilha existe?", document.getElementById('aba_planilha'));
 console.log("previewColunas existe?", document.getElementById('previewColunas'));
 
-workbookGlobal = ...
+// Corrigido: inicialização correta
+let workbookGlobal = null;
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -122,4 +123,5 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("✅ Preview atualizado.");
   }
 });
+
 
