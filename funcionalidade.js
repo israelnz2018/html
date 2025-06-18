@@ -157,24 +157,35 @@ async function enviarAnaliseCompleta() {
   let analise = "";
   let grafico = "";
 
+  console.log("🔍 Analise selecionada bruta:", analiseSelecionada);
+
   if (analiseSelecionada.toLowerCase().includes("grafico")) {
     grafico = analiseSelecionada.replace("Análise selecionada: ", "").trim();
   } else {
     analise = analiseSelecionada.replace("Análise selecionada: ", "").trim();
   }
 
+  console.log("📌 Analise definida:", analise);
+  console.log("📌 Gráfico definido:", grafico);
+  console.log("📌 Coluna Y:", colunaY);
+  console.log("📌 Colunas X:", colunasX);
+  console.log("📌 Aba selecionada:", abaSelect?.value);
+
   if (!arquivoInput?.files[0]) {
     exibirModalErro("⚠ Você precisa enviar um arquivo.");
+    console.warn("⚠ Nenhum arquivo foi selecionado para envio.");
     return;
   }
 
   if (!abaSelect?.value) {
     exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
+    console.warn("⚠ Nenhuma aba foi selecionada.");
     return;
   }
 
   if (!analise && !grafico) {
     exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
+    console.warn("⚠ Nenhuma análise ou gráfico selecionado.");
     return;
   }
 
@@ -199,6 +210,8 @@ async function enviarAnaliseCompleta() {
     });
 
     const respostaTexto = await resposta.text();
+    console.log("🟡 Resposta bruta recebida:", respostaTexto);
+    
     const json = JSON.parse(respostaTexto);
 
     if (json.analise) {
@@ -206,12 +219,14 @@ async function enviarAnaliseCompleta() {
         <div>${json.analise.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
+      console.log("✅ Análise exibida no containerAnalise.");
     }
 
     if (json.grafico_isolado_base64) {
       containerGrafico.innerHTML += `
         <img src="data:image/png;base64,${json.grafico_isolado_base64}" style="max-width:100%; margin-bottom:10px;" />
       `;
+      console.log("✅ Gráfico isolado exibido no containerGrafico.");
     }
 
   } catch (e) {
@@ -245,6 +260,7 @@ function iniciarFuncionalidade() {
   ativarBotaoEnviarAnalise();
   ativarBotaoPerguntar();
 }
+
 
 
 
