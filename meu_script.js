@@ -3,7 +3,7 @@ console.log("fileInput existe?", document.getElementById('fileInput'));
 console.log("aba_planilha existe?", document.getElementById('aba_planilha'));
 console.log("previewColunas existe?", document.getElementById('previewColunas'));
 
-let workbookGlobal = null; // GLOBAL para ser acessível fora do DOMContentLoaded
+workbookGlobal = ...
 
 document.addEventListener("DOMContentLoaded", function() {
 
