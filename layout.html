@@ -178,7 +178,7 @@ function ativarLayout() {
 
 function processarAbaSelecionada() {
   if (!workbookGlobal) {
-    console.warn("⚠ workbookGlobal ainda não carregado.");
+    console.warn("⚠ workbookGlobal ainda não carregado. O preenchimento será feito após o upload.");
     return;
   }
   const aba = document.getElementById('aba_planilha').value;
@@ -189,8 +189,7 @@ function processarAbaSelecionada() {
 }
 
 function mostrarPreview(aba) {
-  if (!workbookGlobal) return;
-  const worksheet = workbookGlobal.Sheets[aba];
+  const worksheet = workbookGlobal?.Sheets[aba];
   if (!worksheet) {
     console.warn(`⚠ Aba ${aba} não encontrada no workbook.`);
     return;
@@ -230,6 +229,10 @@ function mostrarPreview(aba) {
 const originalAtualizarBoxAnalise = atualizarBoxAnalise;
 atualizarBoxAnalise = function(ferramenta) {
   ferramentaAtual = ferramenta;
+  if (!workbookGlobal) {
+    console.warn("⚠ workbookGlobal ainda não carregado. Aguarde o upload para preencher o box.");
+    return;
+  }
   originalAtualizarBoxAnalise(ferramenta);
 };
 
