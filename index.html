@@ -59,31 +59,38 @@
     }
 
     carregarArquivos().then(() => {
+      // Carrega entradadedados.js primeiro
       const s1 = document.createElement("script");
-      s1.src = "menu.js";
-      s1.onload = () => {
-        if (typeof gerarMenus === 'function') gerarMenus();
-      };
+      s1.src = "entradadedados.js";
       document.body.appendChild(s1);
 
-      const s2 = document.createElement("script");
-      s2.src = "entradadedados.js";
-      s2.onload = () => {
+      s1.onload = () => {
         if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
-      };
-      document.body.appendChild(s2);
 
-      const s3 = document.createElement("script");
-      s3.src = "funcionalidade.js";
-      s3.onload = () => {
-        if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
+        // Depois carrega menu.js
+        const s2 = document.createElement("script");
+        s2.src = "menu.js";
+        document.body.appendChild(s2);
+
+        s2.onload = () => {
+          if (typeof gerarMenus === 'function') gerarMenus();
+
+          // Depois carrega funcionalidade.js
+          const s3 = document.createElement("script");
+          s3.src = "funcionalidade.js";
+          document.body.appendChild(s3);
+
+          s3.onload = () => {
+            if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
+          };
+        };
       };
-      document.body.appendChild(s3);
     });
   </script>
 
 </body>
 </html>
+
 
 
 
