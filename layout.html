@@ -5,14 +5,50 @@
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    nav button { font-size: 0.60rem; }
-    nav ul li a { font-size: 0.60rem; }
-    nav ul li ul { display: none; position: absolute; background-color: #1f2937; border: 1px solid #374151; border-radius: 0.25rem; z-index: 10; }
-    nav ul li ul li { position: relative; }
-    nav ul li ul ul { display: none; position: absolute; left: 100%; top: 0; margin-left: 0.25rem; background-color: #374151; border: 1px solid #4b5563; border-radius: 0.25rem; }
-    nav ul li ul li a { display: block; padding: 0.25rem 1rem; }
-    nav ul li.show > ul { display: block; }
-    nav ul li ul li.show > ul { display: block; }
+    nav button {
+      font-size: 0.60rem;
+    }
+
+    nav ul li a {
+      font-size: 0.60rem;
+    }
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      background-color: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 0.25rem;
+      z-index: 10;
+    }
+
+    nav ul li ul li {
+      position: relative;
+    }
+
+    nav ul li ul ul {
+      display: none;
+      position: absolute;
+      left: 100%;
+      top: 0;
+      margin-left: 0.25rem;
+      background-color: #374151;
+      border: 1px solid #4b5563;
+      border-radius: 0.25rem;
+    }
+
+    nav ul li ul li a {
+      display: block;
+      padding: 0.25rem 1rem;
+    }
+
+    nav ul li.show > ul {
+      display: block;
+    }
+
+    nav ul li ul li.show > ul {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -37,7 +73,25 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-    <div id="previewColunas" class="md:col-span-2 border rounded bg-gray-100 p-2 text-sm overflow-x-auto"></div>
+    <div id="previewColunas" class="md:col-span-2 border rounded bg-gray-100 p-2 text-sm overflow-x-auto">
+      <table class="min-w-full border">
+        <thead>
+          <tr>
+            <th class="border px-2 py-1 bg-gray-200">Coluna 1</th>
+            <th class="border px-2 py-1 bg-gray-200">Coluna 2</th>
+            <th class="border px-2 py-1 bg-gray-200">Coluna 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-2 py-1">Exemplo 1</td>
+            <td class="border px-2 py-1">Exemplo 2</td>
+            <td class="border px-2 py-1">Exemplo 3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div id="boxAnalise" class="border rounded bg-white shadow p-4 min-h-[100%]">
       <p class="text-sm text-gray-500">Escolha uma ferramenta para começar.</p>
     </div>
@@ -71,10 +125,126 @@
   </div>
 </div>
 
+<script>
+let workbookGlobal = null;
+let ferramentaAtual = "";
+
+function ativarLayout() {
+  console.log("JS do layout ativado");
+
+  const fileEl = document.getElementById('fileInput');
+  const abaEl = document.getElementById('aba_planilha');
+
+  if (fileEl) {
+    fileEl.addEventListener('change', function(event) {
+      console.log("Upload detectado");
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        workbookGlobal = XLSX.read(data, { type: 'array' });
+
+        if (!workbookGlobal || !workbookGlobal.SheetNames.length) {
+          console.warn("⚠ Nenhuma aba encontrada no arquivo.");
+          return;
+        }
+
+        abaEl.innerHTML = '';
+        workbookGlobal.SheetNames.forEach((name, index) => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          abaEl.appendChild(opt);
+          if (index === 0) abaEl.value = name;
+        });
+
+        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
+        processarAbaSelecionada();
+        if (ferramentaAtual) {
+          atualizarBoxAnalise();
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  } else {
+    console.warn("⚠ fileInput não encontrado no DOM ao ativar layout.");
+  }
+
+  if (abaEl) {
+    abaEl.addEventListener('change', processarAbaSelecionada);
+  } else {
+    console.warn("⚠ aba_planilha não encontrado no DOM ao ativar layout.");
+  }
+}
+
+function processarAbaSelecionada() {
+  if (!workbookGlobal) {
+    console.warn("⚠ workbookGlobal ainda não carregado. O preenchimento será feito após o upload.");
+    return;
+  }
+  const aba = document.getElementById('aba_planilha').value;
+  mostrarPreview(aba);
+  if (ferramentaAtual) {
+    atualizarBoxAnalise();
+  }
+}
+
+function mostrarPreview(aba) {
+  const worksheet = workbookGlobal?.Sheets[aba];
+  if (!worksheet) {
+    console.warn(⚠ Aba ${aba} não encontrada no workbook.);
+    return;
+  }
+
+  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+  const colunas = jsonData[0] || [];
+  const primeiraLinha = jsonData[1] || [];
+
+  const previewDiv = document.getElementById('previewColunas');
+  previewDiv.innerHTML = '';
+
+  const table = document.createElement('table');
+  table.className = 'min-w-full border';
+
+  const trHeader = document.createElement('tr');
+  colunas.forEach(t => {
+    const th = document.createElement('th');
+    th.className = 'border px-2 py-1 bg-gray-200';
+    th.textContent = t;
+    trHeader.appendChild(th);
+  });
+  table.appendChild(trHeader);
+
+  const trData = document.createElement('tr');
+  colunas.forEach((_, i) => {
+    const td = document.createElement('td');
+    td.className = 'border px-2 py-1';
+    td.textContent = primeiraLinha[i] !== undefined ? primeiraLinha[i] : '';
+    trData.appendChild(td);
+  });
+  table.appendChild(trData);
+
+  previewDiv.appendChild(table);
+}
+
+const originalAtualizarBoxAnalise = atualizarBoxAnalise;
+atualizarBoxAnalise = function(ferramenta) {
+  if (ferramenta) {
+    ferramentaAtual = ferramenta;
+  }
+  if (!workbookGlobal) {
+    console.warn("⚠ workbookGlobal ainda não carregado. Aguarde o upload para preencher o box.");
+    return;
+  }
+  originalAtualizarBoxAnalise(ferramentaAtual);
+};
+
+ativarLayout();
+</script>
+
 <script src="menu.js"></script>
-<script src="scripts.js"></script>
-<script>gerarMenus();</script>
-
 </body>
-</html>
 
+</html>
