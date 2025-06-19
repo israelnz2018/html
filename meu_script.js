@@ -137,6 +137,16 @@ function atualizarBoxAnalise(colunas) {
       });
 
       box.appendChild(select);
+
+      // Aplica SlimSelect no Xs
+      if (campoLimpo === "Xs") {
+        if (window.slimSelectInstance) {
+          window.slimSelectInstance.destroy();
+        }
+        window.slimSelectInstance = new SlimSelect({
+          select: `#box_xs`
+        });
+      }
     }
 
     if (campoLimpo.startsWith("Field")) {
@@ -155,6 +165,7 @@ function registrarFerramenta(ferramenta) {
 }
 
 document.addEventListener("DOMContentLoaded", inicializarEventos);
+
 
 
 
