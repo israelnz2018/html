@@ -64,6 +64,15 @@ function atualizarBoxAnalise(ferramenta) {
 
   config.forEach(campo => {
     const campoLimpo = campo.trim();
+
+    if (campoLimpo === "(nenhum)") {
+      const info = document.createElement("p");
+      info.className = "text-gray-500 text-sm";
+      info.textContent = "Esta análise não requer seleção de colunas.";
+      box.appendChild(info);
+      return; // pula o restante do loop para este campo
+    }
+
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
@@ -79,7 +88,6 @@ function atualizarBoxAnalise(ferramenta) {
         select.multiple = true;
       }
 
-      // Adiciona opção vazia
       const optVazio = document.createElement('option');
       optVazio.value = "";
       optVazio.textContent = "-- Nenhum selecionado --";
@@ -107,7 +115,6 @@ function atualizarBoxAnalise(ferramenta) {
         const colunas = jsonData[0] || [];
 
         box.querySelectorAll("select").forEach(sel => {
-          // Limpa mantendo o vazio
           sel.innerHTML = '';
           const optVazio = document.createElement('option');
           optVazio.value = "";
@@ -140,5 +147,3 @@ function atualizarBoxAnalise(ferramenta) {
     console.warn("⚠ workbookGlobal não está definido no momento de preencher os selects.");
   }
 }
-
-
