@@ -137,6 +137,13 @@ function atualizarBoxAnalise(colunas) {
       });
 
       box.appendChild(select);
+
+      if (campoLimpo === "Xs") {
+        // Aplique o SlimSelect
+        new SlimSelect({
+          select: `#${select.id}`
+        });
+      }
     }
 
     if (campoLimpo.startsWith("Field")) {
@@ -147,20 +154,8 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(input);
     }
   });
-
-  // Aplica SlimSelect no Xs com delay para garantir DOM pronto
-  setTimeout(() => {
-    const elXs = document.getElementById('box_xs');
-    if (elXs) {
-      if (window.slimSelectInstance) {
-        window.slimSelectInstance.destroy();
-      }
-      window.slimSelectInstance = new SlimSelect({
-        select: '#box_xs'
-      });
-    }
-  }, 0);
 }
+
 
 
 function registrarFerramenta(ferramenta) {
