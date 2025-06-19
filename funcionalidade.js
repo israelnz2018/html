@@ -63,7 +63,7 @@ function deslogar() {
 }
 
 async function enviarAnaliseCompleta() {
-  console.log("🚀 Botão Enviar Análise foi clicado."); // Adicionado para debug
+  console.log("🚀 Botão Enviar Análise foi clicado.");
   sessaoAtiva = true;
   resetarTimer();
 
@@ -130,16 +130,20 @@ async function enviarAnaliseCompleta() {
     const containerGrafico = document.getElementById('conteudoGrafico');
 
     if (json.analise) {
-      containerAnalise.innerHTML = `
+      const blocoAnalise = document.createElement('div');
+      blocoAnalise.className = 'mb-4';
+      blocoAnalise.innerHTML = `
         <div>${json.analise.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
+      containerAnalise.prepend(blocoAnalise);
     }
 
     if (json.grafico_isolado_base64) {
-      containerGrafico.innerHTML += `
-        <img src="data:image/png;base64,${json.grafico_isolado_base64}" style="max-width:100%; margin-bottom:10px;" />
-      `;
+      const imgGrafico = document.createElement('img');
+      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+      containerGrafico.prepend(imgGrafico);
     }
 
   } catch (e) {
@@ -159,6 +163,7 @@ function iniciarFuncionalidade() {
   iniciarMonitoramentoInatividade();
   ativarBotaoEnviarAnalise();
 }
+
 
 
 
