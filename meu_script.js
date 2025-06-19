@@ -5,26 +5,42 @@ function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
   const abaEl = document.getElementById('aba_planilha');
 
-  fileEl.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      workbookGlobal = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
-      abaEl.innerHTML = '';
-      workbookGlobal.SheetNames.forEach((name, index) => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        opt.textContent = name;
-        abaEl.appendChild(opt);
-        if (index === 0) abaEl.value = name;
-      });
-      atualizarInterface();
-    };
-    reader.readAsArrayBuffer(file);
-  });
+  if (fileEl) {
+    fileEl.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-  abaEl.addEventListener('change', atualizarInterface);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        workbookGlobal = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+
+        if (!workbookGlobal || !workbookGlobal.SheetNames.length) {
+          console.warn("⚠ Nenhuma aba encontrada no arquivo.");
+          return;
+        }
+
+        abaEl.innerHTML = '';
+        workbookGlobal.SheetNames.forEach((name, index) => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          abaEl.appendChild(opt);
+          if (index === 0) abaEl.value = name;
+        });
+
+        atualizarInterface();
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  } else {
+    console.warn("⚠ Elemento fileInput não encontrado.");
+  }
+
+  if (abaEl) {
+    abaEl.addEventListener('change', atualizarInterface);
+  } else {
+    console.warn("⚠ Elemento aba_planilha não encontrado.");
+  }
 }
 
 function atualizarInterface() {
@@ -36,7 +52,7 @@ function atualizarInterface() {
   const abaEl = document.getElementById('aba_planilha');
   const previewDiv = document.getElementById('previewColunas');
   if (!abaEl || !previewDiv) {
-    console.warn("⚠ Elementos do DOM não encontrados.");
+    console.warn("⚠ Elementos necessários não encontrados.");
     return;
   }
 
@@ -51,8 +67,8 @@ function atualizarInterface() {
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
+  // Renderiza o preview
   previewDiv.innerHTML = '';
-
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
@@ -76,15 +92,25 @@ function atualizarInterface() {
 
   previewDiv.appendChild(table);
 
+  // Atualiza o box
   atualizarBoxAnalise(colunas);
 }
 
-
 function atualizarBoxAnalise(colunas) {
   const box = document.getElementById('boxAnalise');
+  if (!box) {
+    console.warn("⚠ Elemento boxAnalise não encontrado.");
+    return;
+  }
+
   box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramentaAtual || 'Nenhuma'}</p>`;
 
   if (!ferramentaAtual) return;
+
+  if (typeof configuracoesFerramentas === 'undefined') {
+    console.error("❌ configuracoesFerramentas não está definido. Verifique se entradadedados.js foi carregado.");
+    return;
+  }
 
   const config = configuracoesFerramentas[ferramentaAtual] || [];
   config.forEach(campo => {
@@ -130,5 +156,6 @@ function registrarFerramenta(ferramenta) {
   atualizarInterface();
 }
 
-inicializarEventos();
+document.addEventListener("DOMContentLoaded", inicializarEventos);
+
 
