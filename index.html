@@ -60,37 +60,37 @@
 
     carregarArquivos().then(() => {
       console.log("✅ Layout carregado");
-
-      // Carregar scripts na ordem certa
-      carregarScript("menu.js", () => {
-        console.log("✅ menu.js carregado");
+      carregarScriptsNaOrdem([
+        { src: "menu.js", msg: "✅ menu.js carregado" },
+        { src: "entradadedados.js", msg: "✅ entradadedados.js carregado" },
+        { src: "meu_script.js", msg: "✅ meu_script.js carregado" },
+        { src: "funcionalidade.js", msg: "✅ funcionalidade.js carregado" }
+      ], () => {
         if (typeof gerarMenus === 'function') gerarMenus();
-
-        carregarScript("entradadedados.js", () => {
-          console.log("✅ entradadedados.js carregado");
-
-          carregarScript("meu_script.js", () => {
-            console.log("✅ meu_script.js carregado");
-
-            carregarScript("funcionalidade.js", () => {
-              console.log("✅ funcionalidade.js carregado");
-              if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
-            });
-          });
-        });
+        if (typeof inicializarEventos === 'function') inicializarEventos();
+        if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
       });
     });
 
-    function carregarScript(src, onload) {
-      const s = document.createElement("script");
-      s.src = src;
-      s.onload = onload;
-      document.body.appendChild(s);
+    function carregarScriptsNaOrdem(lista, callbackFinal) {
+      if (lista.length === 0) {
+        callbackFinal();
+        return;
+      }
+      const item = lista.shift();
+      const script = document.createElement("script");
+      script.src = item.src;
+      script.onload = () => {
+        console.log(item.msg);
+        carregarScriptsNaOrdem(lista, callbackFinal);
+      };
+      document.body.appendChild(script);
     }
   </script>
 
 </body>
 </html>
+
 
 
 
