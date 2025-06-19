@@ -4,13 +4,12 @@ const configuracoesFerramentas = {
   "Análise de outliers": ["Xs"],
   "Correlação de person": ["Y", "Xs"],
   "Matrix de dispersão": ["Y", "Xs"],
-  "Análise de estabilidade": ["Y", "Subgrupo"], // Subgrupo opcional — se vazio, use I-MR
+  "Análise de estabilidade": ["Y", "Subgrupo"],
   "Análise de distribuição estatística": ["Y"],
-  "Análise de limpeza dos dados": ["(nenhum)"]
-
+  "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
-  "Pareto": ["X", "X_subgrupo", "Y"]
+  "Pareto": ["X", "X_subgrupo", "Y"],
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "Gráfico de pizza": ["Y", "Subgrupo"],
@@ -61,7 +60,7 @@ function atualizarBoxAnalise(colunas) {
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
+    if (["Y", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
@@ -91,4 +90,5 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
+
 
