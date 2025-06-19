@@ -63,6 +63,7 @@ function deslogar() {
 }
 
 async function enviarAnaliseCompleta() {
+  console.log("🚀 Botão Enviar Análise foi clicado."); // Adicionado para debug
   sessaoAtiva = true;
   resetarTimer();
 
@@ -110,6 +111,14 @@ async function enviarAnaliseCompleta() {
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
 
+  console.log("📦 Dados do formData:", {
+    ferramenta: analise,
+    grafico: grafico,
+    coluna_y: colunaY,
+    colunas_x: colunasX,
+    aba: abaSelect.value
+  });
+
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
       method: 'POST',
@@ -150,6 +159,7 @@ function iniciarFuncionalidade() {
   iniciarMonitoramentoInatividade();
   ativarBotaoEnviarAnalise();
 }
+
 
 
 
