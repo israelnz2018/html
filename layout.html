@@ -74,22 +74,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
     <div id="previewColunas" class="md:col-span-2 border rounded bg-gray-100 p-2 text-sm overflow-x-auto">
-      <table class="min-w-full border">
-        <thead>
-          <tr>
-            <th class="border px-2 py-1 bg-gray-200">Coluna 1</th>
-            <th class="border px-2 py-1 bg-gray-200">Coluna 2</th>
-            <th class="border px-2 py-1 bg-gray-200">Coluna 3</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="border px-2 py-1">Exemplo 1</td>
-            <td class="border px-2 py-1">Exemplo 2</td>
-            <td class="border px-2 py-1">Exemplo 3</td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Tabela de preview será inserida aqui -->
     </div>
 
     <div id="boxAnalise" class="border rounded bg-white shadow p-4 min-h-[100%]">
@@ -129,15 +114,12 @@
 let workbookGlobal = null;
 let ferramentaAtual = "";
 
-function ativarLayout() {
-  console.log("JS do layout ativado");
-
+function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
   const abaEl = document.getElementById('aba_planilha');
 
   if (fileEl) {
-    fileEl.addEventListener('change', function(event) {
-      console.log("Upload detectado");
+    fileEl.addEventListener('change', (event) => {
       const file = event.target.files[0];
       if (!file) return;
 
@@ -160,41 +142,27 @@ function ativarLayout() {
           if (index === 0) abaEl.value = name;
         });
 
-        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
-        processarAbaSelecionada();
-        if (ferramentaAtual) {
-          atualizarBoxAnalise();
-        }
+        atualizarInterface();
       };
       reader.readAsArrayBuffer(file);
     });
-  } else {
-    console.warn("⚠ fileInput não encontrado no DOM ao ativar layout.");
   }
 
   if (abaEl) {
-    abaEl.addEventListener('change', processarAbaSelecionada);
-  } else {
-    console.warn("⚠ aba_planilha não encontrado no DOM ao ativar layout.");
+    abaEl.addEventListener('change', atualizarInterface);
   }
 }
 
-function processarAbaSelecionada() {
+function atualizarInterface() {
   if (!workbookGlobal) {
-    console.warn("⚠ workbookGlobal ainda não carregado. O preenchimento será feito após o upload.");
+    console.warn("⚠ Arquivo ainda não carregado.");
     return;
   }
-  const aba = document.getElementById('aba_planilha').value;
-  mostrarPreview(aba);
-  if (ferramentaAtual) {
-    atualizarBoxAnalise();
-  }
-}
 
-function mostrarPreview(aba) {
-  const worksheet = workbookGlobal?.Sheets[aba];
+  const aba = document.getElementById('aba_planilha').value;
+  const worksheet = workbookGlobal.Sheets[aba];
   if (!worksheet) {
-    console.warn(⚠ Aba ${aba} não encontrada no workbook.);
+    console.warn(`⚠ Aba ${aba} não encontrada.`);
     return;
   }
 
@@ -204,7 +172,6 @@ function mostrarPreview(aba) {
 
   const previewDiv = document.getElementById('previewColunas');
   previewDiv.innerHTML = '';
-
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
@@ -227,24 +194,63 @@ function mostrarPreview(aba) {
   table.appendChild(trData);
 
   previewDiv.appendChild(table);
+
+  atualizarBoxAnalise(colunas);
 }
 
-const originalAtualizarBoxAnalise = atualizarBoxAnalise;
-atualizarBoxAnalise = function(ferramenta) {
-  if (ferramenta) {
-    ferramentaAtual = ferramenta;
-  }
-  if (!workbookGlobal) {
-    console.warn("⚠ workbookGlobal ainda não carregado. Aguarde o upload para preencher o box.");
-    return;
-  }
-  originalAtualizarBoxAnalise(ferramentaAtual);
-};
+function atualizarBoxAnalise(colunas) {
+  const box = document.getElementById('boxAnalise');
+  box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramentaAtual || 'Nenhuma'}</p>`;
 
-ativarLayout();
+  if (!ferramentaAtual) return;
+
+  const config = configuracoesFerramentas[ferramentaAtual] || [];
+  config.forEach(campo => {
+    const campoLimpo = campo.trim();
+    const label = document.createElement("label");
+    label.className = "block font-medium mb-1";
+    label.textContent = `Variável ${campoLimpo}`;
+    box.appendChild(label);
+
+    if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
+      const select = document.createElement("select");
+      select.id = `box_${campoLimpo.toLowerCase()}`;
+      select.className = "border rounded p-1 mb-2 w-full";
+      if (campoLimpo === "Xs") select.multiple = true;
+
+      const opcaoVazia = document.createElement('option');
+      opcaoVazia.value = '';
+      opcaoVazia.textContent = '(Nenhum)';
+      select.appendChild(opcaoVazia);
+
+      colunas.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        select.appendChild(opt);
+      });
+
+      box.appendChild(select);
+    }
+
+    if (campoLimpo.startsWith("Field")) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.id = `box_${campoLimpo.toLowerCase()}`;
+      input.className = "border rounded p-1 mb-2 w-full";
+      box.appendChild(input);
+    }
+  });
+}
+
+function registrarFerramenta(ferramenta) {
+  ferramentaAtual = ferramenta;
+  atualizarInterface();
+}
+
+inicializarEventos();
 </script>
 
 <script src="menu.js"></script>
 </body>
-
 </html>
