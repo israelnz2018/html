@@ -53,6 +53,7 @@ function atualizarBoxAnalise(colunas) {
   if (!ferramentaAtual) return;
 
   const config = configuracoesFerramentas[ferramentaAtual] || [];
+
   config.forEach(campo => {
     const campoLimpo = campo.trim();
     const label = document.createElement("label");
@@ -64,15 +65,16 @@ function atualizarBoxAnalise(colunas) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
+
       if (campoLimpo === "Xs") select.multiple = true;
 
-      const opcaoVazia = document.createElement('option');
+      const opcaoVazia = document.createElement("option");
       opcaoVazia.value = '';
       opcaoVazia.textContent = '(Nenhum)';
       select.appendChild(opcaoVazia);
 
       colunas.forEach(t => {
-        const opt = document.createElement('option');
+        const opt = document.createElement("option");
         opt.value = t;
         opt.textContent = t;
         select.appendChild(opt);
