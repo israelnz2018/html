@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" /> 
   <title>Learning by Working</title> 
 
   <!-- Tailwind CSS -->
@@ -44,7 +44,7 @@
           if (node.tagName === "SCRIPT") {
             const script = document.createElement("script");
             script.textContent = node.textContent;
-            setTimeout(() => document.body.appendChild(script), 0);
+            document.body.appendChild(script);
           } else if (node.tagName === "STYLE") {
             document.head.appendChild(node);
           } else {
@@ -59,27 +59,33 @@
     }
 
     carregarArquivos().then(() => {
-      const s1 = document.createElement("script");
-      s1.src = "menu.js";
-      s1.onload = () => {
+      console.log("✅ Layout carregado");
+      carregarScriptsNaOrdem([
+        { src: "menu.js", msg: "✅ menu.js carregado" },
+        { src: "entradadedados.js", msg: "✅ entradadedados.js carregado" },
+        { src: "meu_script.js", msg: "✅ meu_script.js carregado" },
+        { src: "funcionalidade.js", msg: "✅ funcionalidade.js carregado" }
+      ], () => {
         if (typeof gerarMenus === 'function') gerarMenus();
-      };
-      document.body.appendChild(s1);
-
-      const s2 = document.createElement("script");
-      s2.src = "entradadedados.js";
-      s2.onload = () => {
-        if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
-      };
-      document.body.appendChild(s2);
-
-      const s3 = document.createElement("script");
-      s3.src = "funcionalidade.js";
-      s3.onload = () => {
+        if (typeof inicializarEventos === 'function') inicializarEventos();
         if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
-      };
-      document.body.appendChild(s3);
+      });
     });
+
+    function carregarScriptsNaOrdem(lista, callbackFinal) {
+      if (lista.length === 0) {
+        callbackFinal();
+        return;
+      }
+      const item = lista.shift();
+      const script = document.createElement("script");
+      script.src = item.src;
+      script.onload = () => {
+        console.log(item.msg);
+        carregarScriptsNaOrdem(lista, callbackFinal);
+      };
+      document.body.appendChild(script);
+    }
   </script>
 
 </body>
