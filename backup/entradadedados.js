@@ -1,16 +1,15 @@
 const configuracoesFerramentas = {
   // Análise Exploratória
-  "Histograma simples": ["Y"],
-  "Boxplots simples": ["Y"],
-  "Correlacao de person": ["Y", "X"],
-  "Matrix de correlacao": ["Xs"],
-  "Analise de outliers": ["Y"],
-  "Analise de estabilidade": ["Y"],
-  "Analise de distribuição": ["Y"],
-  "Analise de agrupamento": ["Xs"],
+  "Gráfico Sumario": ["Y"],
+  "Análise de outliers": ["Xs"],
+  "Correlação de person": ["Y", "Xs"],
+  "Matrix de dispersão": ["Y", "Xs"],
+  "Análise de estabilidade": ["Y", "Subgrupo"],
+  "Análise de distribuição estatística": ["Y"],
+  "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
-  "Gráfico Sumario": ["Y"],
+  "Pareto": ["X", "X_subgrupo", "Y"],
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "Gráfico de pizza": ["Y", "Subgrupo"],
@@ -47,117 +46,49 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs"]
 };
 
-function atualizarBoxAnalise(ferramenta) {
+function atualizarBoxAnalise(colunas) {
   const box = document.getElementById('boxAnalise');
-  if (!box) {
-    console.warn("⚠ Elemento #boxAnalise não encontrado.");
-    return;
-  }
+  box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramentaAtual || 'Nenhuma'}</p>`;
 
-  box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramenta}</p>`;
+  if (!ferramentaAtual) return;
 
-  const config = configuracoesFerramentas[ferramenta];
-  if (!config) {
-    console.warn(`⚠ Configuração não encontrada para: ${ferramenta}`);
-    return;
-  }
+  const config = configuracoesFerramentas[ferramentaAtual] || [];
 
   config.forEach(campo => {
-    if (["Y", "X", "Xs", "Subgrupo"].includes(campo)) {
-      const label = document.createElement("label");
-      label.className = "block font-medium mb-1";
-      label.textContent = `Variável ${campo}`;
-      box.appendChild(label);
+    const campoLimpo = campo.trim();
+    const label = document.createElement("label");
+    label.className = "block font-medium mb-1";
+    label.textContent = `Variável ${campoLimpo}`;
+    box.appendChild(label);
 
+    if (["Y", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
       const select = document.createElement("select");
-      select.id = `box_${campo.toLowerCase()}`;
+      select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
-      if (campo === "Xs") {
-        select.multiple = true;
-      }
+
+      if (campoLimpo === "Xs") select.multiple = true;
+
+      const opcaoVazia = document.createElement("option");
+      opcaoVazia.value = '';
+      opcaoVazia.textContent = '(Nenhum)';
+      select.appendChild(opcaoVazia);
+
+      colunas.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        select.appendChild(opt);
+      });
+
       box.appendChild(select);
     }
 
-    if (campo.startsWith("Field")) {
-      const label = document.createElement("label");
-      label.className = "block font-medium mb-1";
-      label.textContent = campo.replace("Field_", "").replace("_", " ");
-      box.appendChild(label);
-
+    if (campoLimpo.startsWith("Field")) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campo.toLowerCase()}`;
+      input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
-
-  preencherBoxDropdowns();
-}
-
-function preencherBoxDropdowns() {
-  if (!workbookGlobal) return;
-  const abaEl = document.getElementById('aba_planilha');
-  if (!abaEl) return;
-  const aba = abaEl.value;
-  const worksheet = workbookGlobal.Sheets[aba];
-  const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-  const colunas = jsonData[0] || [];
-
-  ["box_y", "box_x", "box_subgrupo"].forEach(id => {
-    const sel = document.getElementById(id);
-    if (sel) {
-      sel.innerHTML = '';
-      colunas.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t;
-        opt.textContent = t;
-        sel.appendChild(opt);
-      });
-    }
-  });
-}
-
-function ativarEntradaDados() {
-  const abaEl = document.getElementById('aba_planilha');
-  const fileEl = document.getElementById('fileInput');
-
-  if (abaEl) {
-    abaEl.addEventListener('change', preencherBoxDropdowns);
-  } else {
-    console.warn("⚠ Elemento #aba_planilha não encontrado.");
-  }
-
-  if (fileEl) {
-    fileEl.addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        workbookGlobal = XLSX.read(data, { type: 'array' });
-
-        if (!abaEl) return;
-        abaEl.innerHTML = '';
-
-        workbookGlobal.SheetNames.forEach((name, index) => {
-          const opt = document.createElement('option');
-          opt.value = name;
-          opt.textContent = name;
-          abaEl.appendChild(opt);
-          if (index === 0) {
-            abaEl.value = name;
-          }
-        });
-
-        console.log("Dropdown preenchido. Primeira aba:", abaEl.value);
-        mostrarPreview(abaEl.value);
-        preencherBoxDropdowns();
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  } else {
-    console.warn("⚠ Elemento #fileInput não encontrado.");
-  }
 }
