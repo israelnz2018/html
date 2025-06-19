@@ -5,7 +5,7 @@ const configuracoesFerramentas = {
   "Correlação de person": ["Y", "Xs"],
   "Matrix de dispersão": ["Y", "Xs"],
   "Análise de estabilidade": ["Y", "Subgrupo"], // Subgrupo opcional — se vazio, use I-MR
-  "Analise de distribuição": ["Y"],
+  "Análise de distribuição estatística": ["Y"],
   "Analise de agrupamento": ["Xs"],
 
   // Análise Descritiva (Gráficos)
