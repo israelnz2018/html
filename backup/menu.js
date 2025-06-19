@@ -1,13 +1,7 @@
 const configuracoesAnalises = {
   "Análise Exploratória": [
-    {
-      nome: "Análise de variabilidade",
-      subitens: ["Gráfico Sumario", "Análise de outliers"]
-    },
-    {
-      nome: "Análise de correlação",
-      subitens: ["Correlação de person", "Matrix de dispersão"]
-    },
+    { nome: "Análise de variabilidade", subitens: ["Gráfico Sumario", "Análise de outliers"] },
+    { nome: "Análise de correlação", subitens: ["Correlação de person", "Matrix de dispersão"] },
     { nome: "Análise de estabilidade" },
     { nome: "Análise de distribuição estatística" },
     { nome: "Análise de limpeza dos dados" }
@@ -24,26 +18,11 @@ const configuracoesAnalises = {
     { nome: "Superfície - 3D" }
   ],
   "Análise Inferencial": [
-    {
-      nome: "Análise de Médias",
-      subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"]
-    },
-    {
-      nome: "Análise de Medianas",
-      subitens: ["1 Wilcoxon", "1 Teste de Sinal", "1 Sample W", "1 Sample S", "2 Sample W", "2 Paired W", "Friedman"]
-    },
-    {
-      nome: "Análise de Varianças",
-      subitens: ["1 Intervalo de Confianca", "2 Varianças", "Bartlett"]
-    },
-    {
-      nome: "Análise de Proporção",
-      subitens: ["1 Proporção", "2 Proporções"]
-    },
-    {
-      nome: "Análise de Associação",
-      subitens: ["Qui- quadrado"]
-    }
+    { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"] },
+    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon", "1 Teste de Sinal", "1 Sample W", "1 Sample S", "2 Sample W", "2 Paired W", "Friedman"] },
+    { nome: "Análise de Varianças", subitens: ["1 Intervalo de Confianca", "2 Varianças", "Bartlett"] },
+    { nome: "Análise de Proporção", subitens: ["1 Proporção", "2 Proporções"] },
+    { nome: "Análise de Associação", subitens: ["Qui- quadrado"] }
   ],
   "Análise Preditiva": [
     { nome: "Tipo de modelo de regressão" },
@@ -72,14 +51,8 @@ const configuracoesAnalises = {
     { nome: "Capabilidade - com dados discretizados" }
   ],
   "Análises Diversas": [
-    {
-      nome: "Análise quantitativa",
-      subitens: ["Cálculo de probabilidade", "Análise Prescritiva inteligente"]
-    },
-    {
-      nome: "Análise qualitativa",
-      subitens: ["5 porquês", "Arvore de falhas", "Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização"]
-    }
+    { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade", "Análise Prescritiva inteligente"] },
+    { nome: "Análise qualitativa", subitens: ["5 porquês", "Árvore de falhas", "Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização"] }
   ]
 };
 
@@ -100,7 +73,7 @@ function gerarMenus() {
     buttonGrupo.className = "hover:bg-gray-700 px-2 py-1 rounded";
     buttonGrupo.textContent = grupo;
 
-    buttonGrupo.addEventListener("click", function (event) {
+    buttonGrupo.addEventListener("click", event => {
       event.preventDefault();
       liGrupo.classList.toggle("show");
     });
@@ -116,12 +89,10 @@ function gerarMenus() {
         const divItem = document.createElement("div");
         divItem.className = "block px-4 py-2 hover:bg-gray-700 cursor-pointer";
         divItem.textContent = item.nome;
-
-        divItem.addEventListener("click", function (event) {
+        divItem.addEventListener("click", event => {
           event.preventDefault();
           liItem.classList.toggle("show");
         });
-
         liItem.appendChild(divItem);
 
         const ulSubSub = document.createElement("ul");
@@ -133,9 +104,8 @@ function gerarMenus() {
           aSub.href = "#";
           aSub.textContent = sub;
           aSub.className = "block px-4 py-2 hover:bg-gray-600";
-          aSub.addEventListener("click", function (event) {
+          aSub.addEventListener("click", event => {
             event.preventDefault();
-            console.log("Análise escolhida:", sub);
             registrarFerramenta(sub);
             fecharTodosOsMenus();
           });
@@ -149,9 +119,8 @@ function gerarMenus() {
         aItem.href = "#";
         aItem.textContent = item.nome;
         aItem.className = "block px-4 py-2 hover:bg-gray-700";
-        aItem.addEventListener("click", function (event) {
+        aItem.addEventListener("click", event => {
           event.preventDefault();
-          console.log("Análise escolhida:", item.nome);
           registrarFerramenta(item.nome);
           fecharTodosOsMenus();
         });
@@ -166,16 +135,12 @@ function gerarMenus() {
     navUl.appendChild(liGrupo);
   });
 
-  document.addEventListener("click", function (event) {
+  document.addEventListener("click", event => {
     document.querySelectorAll("nav ul li.show").forEach(li => {
-      if (!li.contains(event.target)) {
-        li.classList.remove("show");
-      }
+      if (!li.contains(event.target)) li.classList.remove("show");
     });
     document.querySelectorAll("nav ul li ul li.show").forEach(li => {
-      if (!li.contains(event.target)) {
-        li.classList.remove("show");
-      }
+      if (!li.contains(event.target)) li.classList.remove("show");
     });
   });
 }
@@ -184,4 +149,3 @@ function fecharTodosOsMenus() {
   document.querySelectorAll("nav ul li.show").forEach(li => li.classList.remove("show"));
   document.querySelectorAll("nav ul li ul li.show").forEach(li => li.classList.remove("show"));
 }
-
