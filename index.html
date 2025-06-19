@@ -61,44 +61,37 @@
     carregarArquivos().then(() => {
       console.log("✅ Layout carregado");
 
-      // Carregar scripts externos na sequência correta
-      const s1 = document.createElement("script");
-      s1.src = "menu.js";
-      s1.onload = () => {
+      // Carregar scripts na ordem certa
+      carregarScript("menu.js", () => {
         console.log("✅ menu.js carregado");
-      };
-      document.body.appendChild(s1);
-
-      const s2 = document.createElement("script");
-      s2.src = "entradadedados.js";
-      s2.onload = () => {
-        console.log("✅ entradadedados.js carregado");
-      };
-      document.body.appendChild(s2);
-
-      const s3 = document.createElement("script");
-      s3.src = "funcionalidade.js";
-      s3.onload = () => {
-        console.log("✅ funcionalidade.js carregado");
-      };
-      document.body.appendChild(s3);
-
-      const s4 = document.createElement("script");
-      s4.src = "meu_script.js";
-      s4.onload = () => {
-        console.log("✅ meu_script.js carregado");
-        // Só chama tudo depois que os scripts estiverem carregados
         if (typeof gerarMenus === 'function') gerarMenus();
-        if (typeof ativarEntradaDados === 'function') ativarEntradaDados();
-        if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
-        if (typeof inicializarEventos === 'function') inicializarEventos();
-      };
-      document.body.appendChild(s4);
+
+        carregarScript("entradadedados.js", () => {
+          console.log("✅ entradadedados.js carregado");
+
+          carregarScript("meu_script.js", () => {
+            console.log("✅ meu_script.js carregado");
+
+            carregarScript("funcionalidade.js", () => {
+              console.log("✅ funcionalidade.js carregado");
+              if (typeof iniciarFuncionalidade === 'function') iniciarFuncionalidade();
+            });
+          });
+        });
+      });
     });
+
+    function carregarScript(src, onload) {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = onload;
+      document.body.appendChild(s);
+    }
   </script>
 
 </body>
 </html>
+
 
 
 
