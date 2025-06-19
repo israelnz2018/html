@@ -11,18 +11,17 @@ const configuracoesAnalises = {
     { nome: "Análise de estabilidade" },
     { nome: "Análise de distribuição estatística" },
     { nome: "Análise de limpeza dos dados" }
-    
   ],
   "Análise Descritiva (Gráficos)": [
     { nome: "Histograma" },
     { nome: "Pareto" },
     { nome: "Barras" },
-    { nome: " Setores(Pizza)" },
+    { nome: "Setores (Pizza)" },
     { nome: "BoxPlot" },
     { nome: "Dispersão" },
     { nome: "Tendência" },
     { nome: "Bolhas - 3D" },
-    { nome: "Superficie - 3D" }
+    { nome: "Superfície - 3D" }
   ],
   "Análise Inferencial": [
     {
@@ -35,7 +34,7 @@ const configuracoesAnalises = {
     },
     {
       nome: "Análise de Varianças",
-      subitens: ["1 Intervalo de Confianca", " 2 Varianças", "Bartlett"]
+      subitens: ["1 Intervalo de Confianca", "2 Varianças", "Bartlett"]
     },
     {
       nome: "Análise de Proporção",
@@ -84,7 +83,6 @@ const configuracoesAnalises = {
   ]
 };
 
-
 function gerarMenus() {
   const navUl = document.querySelector("nav ul");
   if (!navUl) {
@@ -102,7 +100,7 @@ function gerarMenus() {
     buttonGrupo.className = "hover:bg-gray-700 px-2 py-1 rounded";
     buttonGrupo.textContent = grupo;
 
-    buttonGrupo.addEventListener("click", function(event) {
+    buttonGrupo.addEventListener("click", function (event) {
       event.preventDefault();
       liGrupo.classList.toggle("show");
     });
@@ -112,7 +110,6 @@ function gerarMenus() {
 
     configuracoesAnalises[grupo].forEach(item => {
       if (item.oculto) return;
-
       const liItem = document.createElement("li");
 
       if (item.subitens) {
@@ -120,7 +117,7 @@ function gerarMenus() {
         divItem.className = "block px-4 py-2 hover:bg-gray-700 cursor-pointer";
         divItem.textContent = item.nome;
 
-        divItem.addEventListener("click", function(event) {
+        divItem.addEventListener("click", function (event) {
           event.preventDefault();
           liItem.classList.toggle("show");
         });
@@ -136,10 +133,10 @@ function gerarMenus() {
           aSub.href = "#";
           aSub.textContent = sub;
           aSub.className = "block px-4 py-2 hover:bg-gray-600";
-          aSub.addEventListener("click", function(event) {
+          aSub.addEventListener("click", function (event) {
             event.preventDefault();
             console.log("Análise escolhida:", sub);
-            atualizarBoxAnalise(sub);
+            registrarFerramenta(sub);
             fecharTodosOsMenus();
           });
           liSub.appendChild(aSub);
@@ -152,10 +149,10 @@ function gerarMenus() {
         aItem.href = "#";
         aItem.textContent = item.nome;
         aItem.className = "block px-4 py-2 hover:bg-gray-700";
-        aItem.addEventListener("click", function(event) {
+        aItem.addEventListener("click", function (event) {
           event.preventDefault();
           console.log("Análise escolhida:", item.nome);
-          atualizarBoxAnalise(item.nome);
+          registrarFerramenta(item.nome);
           fecharTodosOsMenus();
         });
         liItem.appendChild(aItem);
@@ -169,7 +166,7 @@ function gerarMenus() {
     navUl.appendChild(liGrupo);
   });
 
-  document.addEventListener("click", function(event) {
+  document.addEventListener("click", function (event) {
     document.querySelectorAll("nav ul li.show").forEach(li => {
       if (!li.contains(event.target)) {
         li.classList.remove("show");
@@ -187,3 +184,4 @@ function fecharTodosOsMenus() {
   document.querySelectorAll("nav ul li.show").forEach(li => li.classList.remove("show"));
   document.querySelectorAll("nav ul li ul li.show").forEach(li => li.classList.remove("show"));
 }
+
