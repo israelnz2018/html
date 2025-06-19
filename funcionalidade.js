@@ -87,6 +87,7 @@ async function enviarAnaliseCompleta() {
   // Lista dos gráficos isolados
   const GRAFICOS_LIST = [
     "Histograma",
+    "Pareto",
     "BoxPlot simples",
     "Gráfico de Pareto",
     "Gráfico de Dispersão",
