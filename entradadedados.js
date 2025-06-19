@@ -6,7 +6,8 @@ const configuracoesFerramentas = {
   "Matrix de dispersão": ["Y", "Xs"],
   "Análise de estabilidade": ["Y", "Subgrupo"], // Subgrupo opcional — se vazio, use I-MR
   "Análise de distribuição estatística": ["Y"],
-  "Analise de agrupamento": ["Xs"],
+  "Análise de limpeza dos dados": []
+
 
   // Análise Descritiva (Gráficos)
   "Pareto simples": ["X", "Subgrupo"],
