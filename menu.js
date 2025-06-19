@@ -1,3 +1,89 @@
+const configuracoesAnalises = {
+  "Análise Exploratória": [
+    {
+      nome: "Análise de variabilidade",
+      subitens: ["Gráfico Sumario", "Análise de outliers"]
+    },
+    {
+      nome: "Análise de correlação",
+      subitens: ["Correlação de person", "Matrix de dispersão"]
+    },
+    { nome: "Análise de estabilidade" },
+    { nome: "Análise de distribuição estatística" },
+    { nome: "Análise de limpeza dos dados" }
+    
+  ],
+  "Análise Descritiva (Gráficos)": [
+    { nome: "Histograma" },
+    { nome: "Pareto" },
+    { nome: "Barras" },
+    { nome: " Setores(Pizza)" },
+    { nome: "BoxPlot" },
+    { nome: "Dispersão" },
+    { nome: "Tendência" },
+    { nome: "Bolhas - 3D" },
+    { nome: "Superficie - 3D" }
+  ],
+  "Análise Inferencial": [
+    {
+      nome: "Análise de Médias",
+      subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"]
+    },
+    {
+      nome: "Análise de Medianas",
+      subitens: ["1 Wilcoxon", "1 Teste de Sinal", "1 Sample W", "1 Sample S", "2 Sample W", "2 Paired W", "Friedman"]
+    },
+    {
+      nome: "Análise de Varianças",
+      subitens: ["1 Intervalo de Confianca", " 2 Varianças", "Bartlett"]
+    },
+    {
+      nome: "Análise de Proporção",
+      subitens: ["1 Proporção", "2 Proporções"]
+    },
+    {
+      nome: "Análise de Associação",
+      subitens: ["Qui- quadrado"]
+    }
+  ],
+  "Análise Preditiva": [
+    { nome: "Tipo de modelo de regressão" },
+    { nome: "Regressão linear simples" },
+    { nome: "Regressão linear múltipla" },
+    { nome: "Regressão logística binária" },
+    { nome: "Regressão logística ordinal" },
+    { nome: "Regressão logística nominal" }
+  ],
+  "Análise de controle de processo": [
+    { nome: "Carta IMR" },
+    { nome: "Carta X-BarraR" },
+    { nome: "Carta X-BarraS" },
+    { nome: "Carta P" },
+    { nome: "Carta NP" },
+    { nome: "Carta C" },
+    { nome: "Carta U" }
+  ],
+  "Análises de Capabilidade": [
+    { nome: "Teste de normalidade" },
+    { nome: "Análise de estabilidade" },
+    { nome: "Análise de distribuição estatística" },
+    { nome: "Capabilidade - dados normais" },
+    { nome: "Capabilidade - outras distribuições" },
+    { nome: "Capabilidade - com dados transformados" },
+    { nome: "Capabilidade - com dados discretizados" }
+  ],
+  "Análises Diversas": [
+    {
+      nome: "Análise quantitativa",
+      subitens: ["Cálculo de probabilidade", "Análise Prescritiva inteligente"]
+    },
+    {
+      nome: "Análise qualitativa",
+      subitens: ["5 porquês", "Arvore de falhas", "Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização"]
+    }
+  ]
+};
+
 // ✅ menu.js ajustado para o fluxo unificado
 
 function gerarMenus() {
