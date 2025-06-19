@@ -98,9 +98,7 @@ async function enviarAnaliseCompleta() {
     "BoxPlot Múltiplo",
     "BoxPlot Empilhado",
     "Histograma Múltiplo",
-    "Gráfico de Pareto",
     "Gráfico de Tendência"
-    // Adicione outros gráficos isolados se necessário
   ];
 
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
@@ -132,12 +130,13 @@ async function enviarAnaliseCompleta() {
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
 
-  console.log("📦 Dados do formData:", {
-    ferramenta: analise,
-    grafico: grafico,
-    coluna_y: colunaY,
-    colunas_x: colunasX,
-    aba: abaSelect.value
+  console.log("📦 Envio para backend:", {
+    arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
+    aba: abaSelect?.value || "Nenhuma aba",
+    ferramenta: analise || "Nenhuma análise",
+    grafico: grafico || "Nenhum gráfico",
+    coluna_y: colunaY || "Nenhuma coluna Y",
+    colunas_x: colunasX || "Nenhuma coluna X"
   });
 
   try {
@@ -150,7 +149,6 @@ async function enviarAnaliseCompleta() {
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
 
-    // Acumula: adiciona novo bloco sem limpar os anteriores
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
       blocoAnalise.className = 'mb-4';
@@ -173,6 +171,19 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
+function ativarBotaoEnviarAnalise() {
+  const btn = document.getElementById('btnEnviarAnalise');
+  if (btn) {
+    btn.addEventListener('click', enviarAnaliseCompleta);
+  }
+}
+
+function iniciarFuncionalidade() {
+  iniciarMonitoramentoInatividade();
+  ativarBotaoEnviarAnalise();
+}
+
 
 
 
