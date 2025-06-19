@@ -33,7 +33,14 @@ function atualizarInterface() {
     return;
   }
 
-  const aba = document.getElementById('aba_planilha').value;
+  const abaEl = document.getElementById('aba_planilha');
+  const previewDiv = document.getElementById('previewColunas');
+  if (!abaEl || !previewDiv) {
+    console.warn("⚠ Elementos do DOM não encontrados.");
+    return;
+  }
+
+  const aba = abaEl.value;
   const worksheet = workbookGlobal.Sheets[aba];
   if (!worksheet) {
     console.warn(`⚠ Aba ${aba} não encontrada.`);
@@ -44,9 +51,8 @@ function atualizarInterface() {
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
-  // Atualiza preview
-  const previewDiv = document.getElementById('previewColunas');
   previewDiv.innerHTML = '';
+
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
@@ -72,6 +78,7 @@ function atualizarInterface() {
 
   atualizarBoxAnalise(colunas);
 }
+
 
 function atualizarBoxAnalise(colunas) {
   const box = document.getElementById('boxAnalise');
