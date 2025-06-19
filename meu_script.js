@@ -67,7 +67,6 @@ function atualizarInterface() {
   const colunas = jsonData[0] || [];
   const primeiraLinha = jsonData[1] || [];
 
-  // Renderiza o preview
   previewDiv.innerHTML = '';
   const table = document.createElement('table');
   table.className = 'min-w-full border';
@@ -92,7 +91,6 @@ function atualizarInterface() {
 
   previewDiv.appendChild(table);
 
-  // Atualiza o box
   atualizarBoxAnalise(colunas);
 }
 
@@ -108,7 +106,7 @@ function atualizarBoxAnalise(colunas) {
   if (!ferramentaAtual) return;
 
   if (typeof configuracoesFerramentas === 'undefined') {
-    console.error("❌ configuracoesFerramentas não está definido. Verifique se entradadedados.js foi carregado.");
+    console.error("❌ configuracoesFerramentas não está definido. Verifique se entradadedados.js foi carregado antes.");
     return;
   }
 
@@ -120,7 +118,7 @@ function atualizarBoxAnalise(colunas) {
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Subgrupo"].includes(campoLimpo)) {
+    if (["Y", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
@@ -157,5 +155,6 @@ function registrarFerramenta(ferramenta) {
 }
 
 document.addEventListener("DOMContentLoaded", inicializarEventos);
+
 
 
