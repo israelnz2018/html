@@ -10,6 +10,7 @@ const configuracoesFerramentas = {
 
 
   // Análise Descritiva (Gráficos)
+  "Pareto": ["X", "X_subgrupo", "Y"]
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "Gráfico de pizza": ["Y", "Subgrupo"],
