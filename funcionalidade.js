@@ -129,11 +129,12 @@ async function enviarAnaliseCompleta() {
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
 
-    if (json.analise) {
+    // Acumula: adiciona novo bloco sem limpar os anteriores
+    if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
       blocoAnalise.className = 'mb-4';
       blocoAnalise.innerHTML = `
-        <div>${json.analise.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
       containerAnalise.prepend(blocoAnalise);
