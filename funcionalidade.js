@@ -84,10 +84,30 @@ async function enviarAnaliseCompleta() {
   let analise = "";
   let grafico = "";
 
-  if (analiseSelecionada.toLowerCase().includes("grafico")) {
-    grafico = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  // Lista dos gráficos isolados
+  const GRAFICOS_LIST = [
+    "Histograma",
+    "BoxPlot simples",
+    "Gráfico de Pareto",
+    "Gráfico de Dispersão",
+    "Gráfico de Pizza",
+    "Gráfico de Linha",
+    "Gráfico de Bolhas",
+    "Gráfico Sumário",
+    "BoxPlot Múltiplo",
+    "BoxPlot Empilhado",
+    "Histograma Múltiplo",
+    "Gráfico de Pareto",
+    "Gráfico de Tendência"
+    // Adicione outros gráficos isolados se necessário
+  ];
+
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+
+  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
+    grafico = nomeFerramenta;
   } else {
-    analise = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+    analise = nomeFerramenta;
   }
 
   if (!arquivoInput?.files[0]) {
@@ -151,18 +171,6 @@ async function enviarAnaliseCompleta() {
     exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
     console.error("❌ Erro detalhado:", e);
   }
-}
-
-function ativarBotaoEnviarAnalise() {
-  const btn = document.getElementById('btnEnviarAnalise');
-  if (btn) {
-    btn.addEventListener('click', enviarAnaliseCompleta);
-  }
-}
-
-function iniciarFuncionalidade() {
-  iniciarMonitoramentoInatividade();
-  ativarBotaoEnviarAnalise();
 }
 
 
