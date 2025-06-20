@@ -11,7 +11,7 @@ const configuracoesFerramentas = {
   // Análise Descritiva (Gráficos)
   "Histograma": ["X", "Subgrupo"],
   "Pareto": ["X", "X_subgrupo", "Y"],
-  "Gráfico de pizza": ["X", "Y"]
+  "Gráfico de pizza": ["X", "Y"], 
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   
