@@ -16,7 +16,7 @@ const configuracoesFerramentas = {
   "BoxPlot simples": ["Y", "Subgrupo"],
   "Gráfico de disperao": ["Y", "X"],
   "Gráfico de tendecias": ["Y", "X"],
-  "Gráficos de bolhas": ["Y", "X", "Z"],
+  "Bolhas - 3D": ["Y", "X", "Z"],
 
   // Análise Inferencial
   "1 Sample T": ["Y", "Field"],
