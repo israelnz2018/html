@@ -118,11 +118,14 @@ function atualizarBoxAnalise(colunas) {
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
+    if (["Y", "Ys", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
-      if (campoLimpo === "Xs") select.multiple = true;
+
+      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
+        select.multiple = true;
+      }
 
       const opcaoVazia = document.createElement('option');
       opcaoVazia.value = '';
@@ -138,8 +141,7 @@ function atualizarBoxAnalise(colunas) {
 
       box.appendChild(select);
 
-      if (campoLimpo === "Xs") {
-        // Aplique o SlimSelect
+      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
         new SlimSelect({
           select: `#${select.id}`
         });
@@ -149,14 +151,12 @@ function atualizarBoxAnalise(colunas) {
     if (campoLimpo.startsWith("Field")) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campoLimpo.toLowerCase()}`;
+      input.id = `box_field`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
 }
-
-
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
@@ -164,7 +164,5 @@ function registrarFerramenta(ferramenta) {
 }
 
 document.addEventListener("DOMContentLoaded", inicializarEventos);
-
-
 
 
