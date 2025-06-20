@@ -62,20 +62,23 @@ async function enviarAnaliseCompleta() {
 
   const arquivoInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
-  const colunaY = document.getElementById('box_y')?.value || "";
-  const colunaZ = document.getElementById('box_z')?.value || "";
 
-  let colunasX = "";
-  const elXs = document.getElementById('box_xs');
-  const elX = document.getElementById('box_x');
-
-  if (elXs) {
-    colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
-  } else if (elX) {
-    colunasX = elX.value || "";
+  if (!arquivoInput?.files[0]) {
+    exibirModalErro("⚠ Você precisa enviar um arquivo.");
+    return;
+  }
+  if (!abaSelect?.value) {
+    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
+    return;
   }
 
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  if (!nomeFerramenta) {
+    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
+    return;
+  }
+
   let analise = "";
   let grafico = "";
 
@@ -87,58 +90,54 @@ async function enviarAnaliseCompleta() {
     "Gráfico de Tendência"
   ];
 
-  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
   if (GRAFICOS_LIST.includes(nomeFerramenta)) {
     grafico = nomeFerramenta;
   } else {
     analise = nomeFerramenta;
   }
 
-  if (!arquivoInput?.files[0]) {
-    exibirModalErro("⚠ Você precisa enviar um arquivo.");
-    return;
-  }
-  if (!abaSelect?.value) {
-    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
-    return;
-  }
-  if (!analise && !grafico) {
-    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
-    return;
-  }
-
+  const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
   formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
-  formData.append("coluna_y", colunaY);
-  formData.append("colunas_x", colunasX);
-  formData.append("coluna_z", colunaZ);
 
-  const field = document.getElementById('box_field')?.value || "";
-
-  // ⚠ Só envia field se não for Gráfico Sumario
-  if (field && analise !== "Gráfico Sumario") {
-    formData.append("field", field);
+  if (camposNecessarios.includes("Y")) {
+    const val = document.getElementById('box_y')?.value || "";
+    formData.append("coluna_y", val);
   }
 
-  console.log("🟣 Debug Z:", colunaZ);
+  if (camposNecessarios.includes("Ys")) {
+    const val = document.getElementById('box_ys')?.value || "";
+    formData.append("coluna_y", val);
+  }
 
+  if (camposNecessarios.includes("X")) {
+    const val = document.getElementById('box_x')?.value || "";
+    formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Xs")) {
+    const el = document.getElementById('box_xs');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Z")) {
+    const val = document.getElementById('box_z')?.value || "";
+    formData.append("coluna_z", val);
+  }
+
+  if (camposNecessarios.some(c => c.startsWith("Field"))) {
+    const val = document.getElementById('box_field')?.value || "";
+    formData.append("field", val);
+  }
+
+  console.log("📦 Envio para backend (objeto final):");
   for (const [key, value] of formData.entries()) {
-    console.log(`✅ FORM DATA REAL -> ${key}: ${value}`);
+    console.log(`✅ ${key}: ${value}`);
   }
-
-  console.log("📦 Envio para backend (objeto manual):", {
-    arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
-    aba: abaSelect?.value || "Nenhuma aba",
-    ferramenta: analise || "Nenhuma análise",
-    grafico: grafico || "Nenhum gráfico",
-    coluna_y: colunaY || "Nenhuma coluna Y",
-    colunas_x: colunasX || "Nenhuma coluna X",
-    coluna_z: colunaZ || "Nenhuma coluna Z",
-    field: field || "Nenhum field"
-  });
 
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
@@ -147,7 +146,6 @@ async function enviarAnaliseCompleta() {
     });
 
     console.log("🟢 Status do backend:", resposta.status);
-
     const json = await resposta.json();
     console.log("🟢 Resposta do backend:", json);
 
@@ -176,4 +174,3 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
-
