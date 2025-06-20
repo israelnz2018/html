@@ -114,11 +114,6 @@ async function enviarAnaliseCompleta() {
     return;
   }
 
-
-  for (const [key, value] of formData.entries()) {
-    console.log(`✅ formData -> ${key}: ${value}`);
-  }
-
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
@@ -127,6 +122,10 @@ async function enviarAnaliseCompleta() {
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
   formData.append("coluna_z", colunaZ);  // Envio isolado do Z
+
+  for (const [key, value] of formData.entries()) {
+    console.log(`✅ formData -> ${key}: ${value}`);
+  }
 
   console.log("📦 Envio para backend:", {
     arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
@@ -173,6 +172,8 @@ async function enviarAnaliseCompleta() {
     exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
     console.error("❌ Erro detalhado:", e);
   }
+}
+
 }
 
 
