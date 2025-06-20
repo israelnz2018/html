@@ -55,71 +55,125 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs"]
 };
 
-function atualizarBoxAnalise(colunas) {
-  const box = document.getElementById('boxAnalise');
-  if (!box) {
-    console.warn("⚠ Elemento boxAnalise não encontrado.");
+async function enviarAnaliseCompleta() {
+  console.log("🚀 Botão Enviar Análise foi clicado.");
+  sessaoAtiva = true;
+  resetarTimer();
+
+  const arquivoInput = document.getElementById('fileInput');
+  const abaSelect = document.getElementById('aba_planilha');
+  const colunaY = document.getElementById('box_y')?.value || "";
+  const colunaZ = document.getElementById('box_z')?.value || "";
+
+  let colunasX = "";
+  const elXs = document.getElementById('box_xs');
+  const elX = document.getElementById('box_x');
+
+  if (elXs) {
+    colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
+  } else if (elX) {
+    colunasX = elX.value || "";
+  }
+
+  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+  let analise = "";
+  let grafico = "";
+
+  const GRAFICOS_LIST = [
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
+    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumario",
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
+    "Gráfico de Tendência"
+  ];
+
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
+    grafico = nomeFerramenta;
+  } else {
+    analise = nomeFerramenta;
+  }
+
+  if (!arquivoInput?.files[0]) {
+    exibirModalErro("⚠ Você precisa enviar um arquivo.");
+    return;
+  }
+  if (!abaSelect?.value) {
+    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
+    return;
+  }
+  if (!analise && !grafico) {
+    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
     return;
   }
 
-  box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramentaAtual || 'Nenhuma'}</p>`;
+  const formData = new FormData();
+  formData.append("arquivo", arquivoInput.files[0]);
+  formData.append("aba", abaSelect.value);
+  formData.append("ferramenta", analise);
+  formData.append("grafico", grafico);
+  formData.append("coluna_y", colunaY);
+  formData.append("colunas_x", colunasX);
+  formData.append("coluna_z", colunaZ);
 
-  if (!ferramentaAtual) return;
+  const field = document.getElementById('box_field')?.value || "";
 
-  if (typeof configuracoesFerramentas === 'undefined') {
-    console.error("❌ configuracoesFerramentas não está definido. Verifique se entradadedados.js foi carregado antes.");
-    return;
+  // ⚠ Só envia field se não for Gráfico Sumario
+  if (field && analise !== "Gráfico Sumario") {
+    formData.append("field", field);
   }
 
-  const config = configuracoesFerramentas[ferramentaAtual] || [];
-  config.forEach(campo => {
-    const campoLimpo = campo.trim();
-    const campoComparado = campoLimpo.toLowerCase();
+  console.log("🟣 Debug Z:", colunaZ);
 
-    const label = document.createElement("label");
-    label.className = "block font-medium mb-1";
-    label.textContent = `Variável ${campoLimpo}`;
-    box.appendChild(label);
+  for (const [key, value] of formData.entries()) {
+    console.log(`✅ FORM DATA REAL -> ${key}: ${value}`);
+  }
 
-    if (["y", "x", "xs", "ys", "subgrupo", "x_subgrupo", "z"].includes(campoComparado)) {
-      const select = document.createElement("select");
-      select.id = `box_${campoLimpo.toLowerCase()}`;  // Mantém o padrão que seu envio espera
-      select.className = "border rounded p-1 mb-2 w-full";
-
-      if (campoComparado === "xs" || campoComparado === "ys") {
-        select.multiple = true;
-      }
-
-      const opcaoVazia = document.createElement('option');
-      opcaoVazia.value = '';
-      opcaoVazia.textContent = '(Nenhum)';
-      select.appendChild(opcaoVazia);
-
-      colunas.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t;
-        opt.textContent = t;
-        select.appendChild(opt);
-      });
-
-      box.appendChild(select);
-
-      if (campoComparado === "xs" || campoComparado === "ys") {
-        setTimeout(() => {
-          new SlimSelect({
-            select: `#${select.id}`
-          });
-        }, 0);
-      }
-    }
-
-    if (campoComparado.startsWith("field")) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.id = `box_${campoLimpo.toLowerCase()}`;
-      input.className = "border rounded p-1 mb-2 w-full";
-      box.appendChild(input);
-    }
+  console.log("📦 Envio para backend (objeto manual):", {
+    arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
+    aba: abaSelect?.value || "Nenhuma aba",
+    ferramenta: analise || "Nenhuma análise",
+    grafico: grafico || "Nenhum gráfico",
+    coluna_y: colunaY || "Nenhuma coluna Y",
+    colunas_x: colunasX || "Nenhuma coluna X",
+    coluna_z: colunaZ || "Nenhuma coluna Z",
+    field: field || "Nenhum field"
   });
+
+  try {
+    const resposta = await fetch('https://analises-production.up.railway.app/analise', {
+      method: 'POST',
+      body: formData
+    });
+
+    console.log("🟢 Status do backend:", resposta.status);
+
+    const json = await resposta.json();
+    console.log("🟢 Resposta do backend:", json);
+
+    const containerAnalise = document.getElementById('conteudoAnalise');
+    const containerGrafico = document.getElementById('conteudoGrafico');
+
+    if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
+      const blocoAnalise = document.createElement('div');
+      blocoAnalise.className = 'mb-4';
+      blocoAnalise.innerHTML = `
+        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
+      `;
+      containerAnalise.prepend(blocoAnalise);
+    }
+
+    if (json.grafico_isolado_base64) {
+      const imgGrafico = document.createElement('img');
+      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+      containerGrafico.prepend(imgGrafico);
+    }
+
+  } catch (e) {
+    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
+    console.error("❌ Erro detalhado:", e);
+  }
 }
 
