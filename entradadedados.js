@@ -70,12 +70,14 @@ function atualizarBoxAnalise(colunas) {
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
+    if (["Y", "X", "Xs", "Ys", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
 
-      if (campoLimpo === "Xs") select.multiple = true;
+      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
+        select.multiple = true;
+      }
 
       const opcaoVazia = document.createElement("option");
       opcaoVazia.value = '';
@@ -101,5 +103,3 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
-
-
