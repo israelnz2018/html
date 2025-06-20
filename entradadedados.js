@@ -85,7 +85,7 @@ async function enviarAnaliseCompleta() {
   const GRAFICOS_LIST = [
     "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
     "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
-    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumario",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
     "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
     "Gráfico de Tendência"
   ];
@@ -109,7 +109,8 @@ async function enviarAnaliseCompleta() {
   }
 
   if (camposNecessarios.includes("Ys")) {
-    const val = document.getElementById('box_ys')?.value || "";
+    const el = document.getElementById('box_ys');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
     formData.append("coluna_y", val);
   }
 
@@ -129,11 +130,25 @@ async function enviarAnaliseCompleta() {
     formData.append("coluna_z", val);
   }
 
-  if (camposNecessarios.some(c => c.startsWith("Field"))) {
-    const val = document.getElementById('box_field')?.value || "";
-    if (val !== "") {
-      formData.append("field", val);
-    }
+  if (camposNecessarios.includes("Subgrupo")) {
+    const val = document.getElementById('box_subgrupo')?.value || "";
+    formData.append("subgrupo", val);
+  }
+
+  if (camposNecessarios.includes("X_subgrupo")) {
+    const val = document.getElementById('box_x_subgrupo')?.value || "";
+    formData.append("x_subgrupo", val);
+  }
+
+  if (camposNecessarios.includes("Field") || camposNecessarios.some(c => c.startsWith("Field"))) {
+    const valField = document.getElementById('box_field')?.value || "";
+    if (valField !== "") formData.append("field", valField);
+
+    const valNivel = document.getElementById('box_field_nivelconfianca')?.value || "";
+    if (valNivel !== "") formData.append("field_nivelconfianca", valNivel);
+
+    const valValor = document.getElementById('box_field_valor')?.value || "";
+    if (valValor !== "") formData.append("field_valor", valValor);
   }
 
   console.log("📦 Envio para backend (objeto final):");
