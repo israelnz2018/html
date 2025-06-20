@@ -85,7 +85,7 @@ async function enviarAnaliseCompleta() {
   let grafico = "";
 
   const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)",  "Barras", "BoxPlot", "Dispersão", "Tendência", "Gráfico de Pareto",
+    "Histograma", "Pareto", "Setores (Pizza)",  "Barras", "BoxPlot", "Dispersão", "Tendência", "Bolhas - 3D", "Gráfico de Pareto",
     "Gráfico de Dispersão", "Gráfico de Linha",
     "Gráfico de Bolhas", "Gráfico Sumário", "BoxPlot Múltiplo",
     "BoxPlot Empilhado", "Histograma Múltiplo", "Gráfico de Tendência"
