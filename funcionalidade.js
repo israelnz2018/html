@@ -185,3 +185,5 @@ async function enviarAnaliseCompleta() {
   }
 }
 
+// ✅ Conexão do botão ao envio
+document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
