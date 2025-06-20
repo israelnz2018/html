@@ -63,7 +63,7 @@ function deslogar() {
 }
 
 async function enviarAnaliseCompleta() {
-  console.log("🚀 Botão Enviar Análise foi clicado."); // Adicionado para debug
+  console.log("🚀 Botão Enviar Análise foi clicado.");
   sessaoAtiva = true;
   resetarTimer();
 
@@ -84,10 +84,18 @@ async function enviarAnaliseCompleta() {
   let analise = "";
   let grafico = "";
 
-  if (analiseSelecionada.toLowerCase().includes("grafico")) {
-    grafico = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  const GRAFICOS_LIST = [
+    "Histograma", "Pareto", "Setores (Pizza)",  "Barras", "BoxPlot", "Dispersão", "Tendência", "Bolhas - 3D", "Gráfico de Pareto",
+    "Gráfico de Dispersão", "Gráfico de Linha",
+    "Gráfico de Bolhas", "Gráfico Sumário", "BoxPlot Múltiplo",
+    "BoxPlot Empilhado", "Histograma Múltiplo", "Gráfico de Tendência"
+  ];
+
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
+    grafico = nomeFerramenta;
   } else {
-    analise = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+    analise = nomeFerramenta;
   }
 
   if (!arquivoInput?.files[0]) {
@@ -111,12 +119,13 @@ async function enviarAnaliseCompleta() {
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
 
-  console.log("📦 Dados do formData:", {
-    ferramenta: analise,
-    grafico: grafico,
-    coluna_y: colunaY,
-    colunas_x: colunasX,
-    aba: abaSelect.value
+  console.log("📦 Envio para backend:", {
+    arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
+    aba: abaSelect?.value || "Nenhuma aba",
+    ferramenta: analise || "Nenhuma análise",
+    grafico: grafico || "Nenhum gráfico",
+    coluna_y: colunaY || "Nenhuma coluna Y",
+    colunas_x: colunasX || "Nenhuma coluna X"
   });
 
   try {
@@ -124,22 +133,30 @@ async function enviarAnaliseCompleta() {
       method: 'POST',
       body: formData
     });
+
+    console.log("🟢 Status do backend:", resposta.status);
+
     const json = await resposta.json();
+    console.log("🟢 Resposta do backend:", json);
 
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
 
-    if (json.analise) {
-      containerAnalise.innerHTML = `
-        <div>${json.analise.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+    if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
+      const blocoAnalise = document.createElement('div');
+      blocoAnalise.className = 'mb-4';
+      blocoAnalise.innerHTML = `
+        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
+      containerAnalise.prepend(blocoAnalise);
     }
 
     if (json.grafico_isolado_base64) {
-      containerGrafico.innerHTML += `
-        <img src="data:image/png;base64,${json.grafico_isolado_base64}" style="max-width:100%; margin-bottom:10px;" />
-      `;
+      const imgGrafico = document.createElement('img');
+      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+      containerGrafico.prepend(imgGrafico);
     }
 
   } catch (e) {
