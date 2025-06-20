@@ -114,6 +114,11 @@ async function enviarAnaliseCompleta() {
     return;
   }
 
+
+  for (const [key, value] of formData.entries()) {
+    console.log(`✅ formData -> ${key}: ${value}`);
+  }
+
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
