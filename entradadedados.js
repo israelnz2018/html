@@ -74,16 +74,21 @@ function atualizarBoxAnalise(colunas) {
   const config = configuracoesFerramentas[ferramentaAtual] || [];
   config.forEach(campo => {
     const campoLimpo = campo.trim();
+    const campoPadrao = campoLimpo.toLowerCase();
+
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Ys", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
+    if (["y", "x", "xs", "ys", "subgrupo", "x_subgrupo", "z"].includes(campoPadrao)) {
       const select = document.createElement("select");
-      select.id = `box_${campoLimpo.toLowerCase()}`;
+      select.id = `box_${campoPadrao}`;
       select.className = "border rounded p-1 mb-2 w-full";
-      if (campoLimpo === "Xs" || campoLimpo === "Ys") select.multiple = true;
+
+      if (["xs", "ys"].includes(campoPadrao)) {
+        select.multiple = true;
+      }
 
       const opcaoVazia = document.createElement('option');
       opcaoVazia.value = '';
@@ -99,7 +104,7 @@ function atualizarBoxAnalise(colunas) {
 
       box.appendChild(select);
 
-      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
+      if (["xs", "ys"].includes(campoPadrao)) {
         setTimeout(() => {
           new SlimSelect({
             select: `#${select.id}`
@@ -108,14 +113,12 @@ function atualizarBoxAnalise(colunas) {
       }
     }
 
-    if (campoLimpo.startsWith("Field")) {
+    if (campoPadrao.startsWith("field")) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campoLimpo.toLowerCase()}`;
+      input.id = `box_${campoPadrao}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
 }
-
-
