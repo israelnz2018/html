@@ -17,6 +17,7 @@ const configuracoesFerramentas = {
   "Dispersão": ["Y", "Xs", "Subgrupo"],
   "Tendência": ["Y", "X", "Subgrupo"],
   "Bolhas - 3D": ["X", "Y", "Z"],
+  "Superfície - 3D": ["X", "Y", "Z"],
 
   
   "Pareto simples": ["X", "Subgrupo"],
