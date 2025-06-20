@@ -70,14 +70,20 @@ async function enviarAnaliseCompleta() {
   const arquivoInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
   const colunaY = document.getElementById('box_y')?.value || "";
+  const colunaZ = document.getElementById('box_z')?.value || "";
 
   let colunasX = "";
   const elXs = document.getElementById('box_xs');
   const elX = document.getElementById('box_x');
+  
   if (elXs) {
     colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
   } else if (elX) {
     colunasX = elX.value || "";
+  }
+
+  if (colunaZ) {
+    colunasX = [colunasX, colunaZ].filter(Boolean).join(",");
   }
 
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
@@ -85,10 +91,11 @@ async function enviarAnaliseCompleta() {
   let grafico = "";
 
   const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)",  "Barras", "BoxPlot", "Dispersão", "Tendência", "Bolhas - 3D", "Gráfico de Pareto",
-    "Gráfico de Dispersão", "Gráfico de Linha",
-    "Gráfico de Bolhas", "Gráfico Sumário", "BoxPlot Múltiplo",
-    "BoxPlot Empilhado", "Histograma Múltiplo", "Gráfico de Tendência"
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão", 
+    "Tendência", "Bolhas - 3D", "Gráfico de Pareto", "Gráfico de Dispersão", 
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário", 
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo", 
+    "Gráfico de Tendência"
   ];
 
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
@@ -165,14 +172,3 @@ async function enviarAnaliseCompleta() {
   }
 }
 
-function ativarBotaoEnviarAnalise() {
-  const btn = document.getElementById('btnEnviarAnalise');
-  if (btn) {
-    btn.addEventListener('click', enviarAnaliseCompleta);
-  }
-}
-
-function iniciarFuncionalidade() {
-  iniciarMonitoramentoInatividade();
-  ativarBotaoEnviarAnalise();
-}
