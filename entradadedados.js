@@ -9,11 +9,12 @@ const configuracoesFerramentas = {
   "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
-  "Histograma": ["Y", "X", "Subgrupo"],
+  "Histograma": ["X", "Subgrupo"],
   "Pareto": ["X", "X_subgrupo", "Y"],
+  "Gráfico de pizza": ["X", "Y"]
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
-  "Gráfico de pizza": ["Y", "Subgrupo"],
+  
   "BoxPlot simples": ["Y", "Subgrupo"],
   "Gráfico de disperao": ["Y", "X"],
   "Gráfico de tendecias": ["Y", "X"],
