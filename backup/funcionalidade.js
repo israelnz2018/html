@@ -75,15 +75,11 @@ async function enviarAnaliseCompleta() {
   let colunasX = "";
   const elXs = document.getElementById('box_xs');
   const elX = document.getElementById('box_x');
-  
+
   if (elXs) {
     colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
   } else if (elX) {
     colunasX = elX.value || "";
-  }
-
-  if (colunaZ) {
-    colunasX = [colunasX, colunaZ].filter(Boolean).join(",");
   }
 
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
@@ -91,10 +87,10 @@ async function enviarAnaliseCompleta() {
   let grafico = "";
 
   const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão", 
-    "Tendência", "Bolhas - 3D", "Gráfico de Pareto", "Gráfico de Dispersão", 
-    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário", 
-    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo", 
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
+    "Tendência", "Bolhas - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
     "Gráfico de Tendência"
   ];
 
@@ -125,6 +121,7 @@ async function enviarAnaliseCompleta() {
   formData.append("grafico", grafico);
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
+  formData.append("coluna_z", colunaZ);  // Envio isolado do Z
 
   console.log("📦 Envio para backend:", {
     arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
@@ -132,7 +129,8 @@ async function enviarAnaliseCompleta() {
     ferramenta: analise || "Nenhuma análise",
     grafico: grafico || "Nenhum gráfico",
     coluna_y: colunaY || "Nenhuma coluna Y",
-    colunas_x: colunasX || "Nenhuma coluna X"
+    colunas_x: colunasX || "Nenhuma coluna X",
+    coluna_z: colunaZ || "Nenhuma coluna Z"
   });
 
   try {
@@ -171,4 +169,5 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
