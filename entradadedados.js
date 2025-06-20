@@ -12,9 +12,9 @@ const configuracoesFerramentas = {
   "Histograma": ["X", "Subgrupo"],
   "Pareto": ["X", "X_subgrupo", "Y"],
   "Setores (Pizza)": ["X", "Y"], 
+  "Barras": ["X", "Y", "Subgrupo"],
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
-  
   "BoxPlot simples": ["Y", "Subgrupo"],
   "Gráfico de disperao": ["Y", "X"],
   "Gráfico de tendecias": ["Y", "X"],
