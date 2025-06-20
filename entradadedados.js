@@ -65,6 +65,8 @@ function atualizarBoxAnalise(colunas) {
 
   config.forEach(campo => {
     const campoLimpo = campo.trim();
+    console.log(`Criando campo: [${campoLimpo}]`);  // Debug opcional
+
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
