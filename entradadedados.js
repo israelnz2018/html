@@ -18,8 +18,6 @@ const configuracoesFerramentas = {
   "Tendência": ["Y", "X", "Subgrupo"],
   "Bolhas - 3D": ["X", "Y", "Z"],
   "Superfície - 3D": ["X", "Y", "Z"],
-
-  
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "BoxPlot simples": ["Y", "Subgrupo"],
@@ -29,7 +27,8 @@ const configuracoesFerramentas = {
 
   // Análise Inferencial
  "1 Sample T": ["Y", "Field"],
- "2 Sample T": ["Y", "Ys"],
+ "2 Sample T": ["Ys"],
+
 
   "Paired Test": ["Xs"],
   "One way ANOVA": ["Y", "Xs"],
