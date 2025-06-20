@@ -28,7 +28,7 @@ const configuracoesFerramentas = {
   "Gráficos de bolhas": ["Y", "X", "Z"],
 
   // Análise Inferencial
-  "1 Sample T": ["Y", "Field"],
+ "1 Sample T": ["Y", "Field"],
   "2 Sample T": ["Y", "Xs"],
   "Paired Test": ["Xs"],
   "One way ANOVA": ["Y", "Xs"],
