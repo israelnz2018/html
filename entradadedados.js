@@ -98,11 +98,13 @@ function atualizarBoxAnalise(colunas) {
 
       box.appendChild(select);
 
-      // 🚀 Aplica SlimSelect no múltiplo de Ys (ou Xs se quiser)
+      // Limpa SlimSelect antigo se existir
       if (campoPadrao === "Ys" || campoPadrao === "Xs") {
-        new SlimSelect({
-          select: `#${select.id}`
-        });
+        setTimeout(() => {
+          new SlimSelect({
+            select: `#${select.id}`
+          });
+        }, 0);
       }
     }
 
@@ -115,4 +117,5 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
+
 
