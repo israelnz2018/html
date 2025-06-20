@@ -15,6 +15,8 @@ const configuracoesFerramentas = {
   "Barras": ["X", "Y", "Subgrupo"],
   "BoxPlot": ["Xs", "Subgrupo"],
   "Dispersão": ["Y", "Xs", "Subgrupo"],
+  "Tendência": ["Y", "X", "Subgrupo"],
+  
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "BoxPlot simples": ["Y", "Subgrupo"],
