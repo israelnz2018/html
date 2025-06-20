@@ -131,7 +131,9 @@ async function enviarAnaliseCompleta() {
 
   if (camposNecessarios.some(c => c.startsWith("Field"))) {
     const val = document.getElementById('box_field')?.value || "";
-    formData.append("field", val);
+    if (val !== "") {
+      formData.append("field", val);
+    }
   }
 
   console.log("📦 Envio para backend (objeto final):");
