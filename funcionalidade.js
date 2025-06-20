@@ -176,6 +176,7 @@ async function enviarAnaliseCompleta() {
   }
 }
 
-
+// Conecta o botão ao envio sem alterar HTML
+document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 
 
