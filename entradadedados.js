@@ -96,6 +96,8 @@ function atualizarBoxAnalise(colunas) {
         select.appendChild(opt);
       });
 
+      console.log("👉 Select gerado:", select.outerHTML);  // <-- LOG ADICIONADO
+
       box.appendChild(select);
     }
 
