@@ -121,7 +121,9 @@ async function enviarAnaliseCompleta() {
   formData.append("grafico", grafico);
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
-  formData.append("coluna_z", colunaZ);  // Envio isolado do Z
+  formData.append("coluna_z", colunaZ);
+
+  console.log("🟣 Debug Z:", colunaZ);
 
   for (const [key, value] of formData.entries()) {
     console.log(`✅ formData -> ${key}: ${value}`);
@@ -174,6 +176,5 @@ async function enviarAnaliseCompleta() {
   }
 }
 
-}
 
 
