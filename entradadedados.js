@@ -57,40 +57,41 @@ const configuracoesFerramentas = {
 
 function atualizarBoxAnalise(colunas) {
   const box = document.getElementById('boxAnalise');
+  if (!box) {
+    console.warn("⚠ Elemento boxAnalise não encontrado.");
+    return;
+  }
+
   box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramentaAtual || 'Nenhuma'}</p>`;
 
   if (!ferramentaAtual) return;
 
-  const config = configuracoesFerramentas[ferramentaAtual] || [];
+  if (typeof configuracoesFerramentas === 'undefined') {
+    console.error("❌ configuracoesFerramentas não está definido. Verifique se entradadedados.js foi carregado antes.");
+    return;
+  }
 
+  const config = configuracoesFerramentas[ferramentaAtual] || [];
   config.forEach(campo => {
     const campoLimpo = campo.trim();
-    const campoPadrao = campoLimpo.replace(/\s+/g, '');
-    console.log(`Campo original: [${campo}]`);
-    console.log(`Campo limpo: [${campoLimpo}]`);
-    console.log(`Campo padrao: [${campoPadrao}]`);
-
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
-    label.textContent = `Variável ${campoPadrao}`;
+    label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Ys", "Subgrupo", "X_subgrupo", "Z"].includes(campoPadrao)) {
+    if (["Y", "X", "Xs", "Ys", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
       const select = document.createElement("select");
-      select.id = `box_${campoPadrao.toLowerCase()}`;
+      select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
+      if (campoLimpo === "Xs" || campoLimpo === "Ys") select.multiple = true;
 
-      if (campoPadrao === "Xs" || campoPadrao === "Ys") {
-        select.multiple = true;
-      }
-
-      const opcaoVazia = document.createElement("option");
+      const opcaoVazia = document.createElement('option');
       opcaoVazia.value = '';
       opcaoVazia.textContent = '(Nenhum)';
       select.appendChild(opcaoVazia);
 
       colunas.forEach(t => {
-        const opt = document.createElement("option");
+        const opt = document.createElement('option');
         opt.value = t;
         opt.textContent = t;
         select.appendChild(opt);
@@ -98,8 +99,7 @@ function atualizarBoxAnalise(colunas) {
 
       box.appendChild(select);
 
-      // Limpa SlimSelect antigo se existir
-      if (campoPadrao === "Ys" || campoPadrao === "Xs") {
+      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
         setTimeout(() => {
           new SlimSelect({
             select: `#${select.id}`
@@ -108,10 +108,10 @@ function atualizarBoxAnalise(colunas) {
       }
     }
 
-    if (campoPadrao.startsWith("Field")) {
+    if (campoLimpo.startsWith("Field")) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campoPadrao.toLowerCase()}`;
+      input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
