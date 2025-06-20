@@ -126,10 +126,10 @@ async function enviarAnaliseCompleta() {
   console.log("🟣 Debug Z:", colunaZ);
 
   for (const [key, value] of formData.entries()) {
-    console.log(`✅ formData -> ${key}: ${value}`);
+    console.log(`✅ FORM DATA REAL -> ${key}: ${value}`);
   }
 
-  console.log("📦 Envio para backend:", {
+  console.log("📦 Envio para backend (objeto manual):", {
     arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
     aba: abaSelect?.value || "Nenhuma aba",
     ferramenta: analise || "Nenhuma análise",
@@ -175,6 +175,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 
