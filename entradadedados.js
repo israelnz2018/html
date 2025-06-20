@@ -74,19 +74,19 @@ function atualizarBoxAnalise(colunas) {
   const config = configuracoesFerramentas[ferramentaAtual] || [];
   config.forEach(campo => {
     const campoLimpo = campo.trim();
-    const campoPadrao = campoLimpo.toLowerCase();
+    const campoComparado = campoLimpo.toLowerCase();
 
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["y", "x", "xs", "ys", "subgrupo", "x_subgrupo", "z"].includes(campoPadrao)) {
+    if (["y", "x", "xs", "ys", "subgrupo", "x_subgrupo", "z"].includes(campoComparado)) {
       const select = document.createElement("select");
-      select.id = `box_${campoPadrao}`;
+      select.id = `box_${campoLimpo.toLowerCase()}`;  // Mantém o padrão que seu envio espera
       select.className = "border rounded p-1 mb-2 w-full";
 
-      if (["xs", "ys"].includes(campoPadrao)) {
+      if (campoComparado === "xs" || campoComparado === "ys") {
         select.multiple = true;
       }
 
@@ -104,7 +104,7 @@ function atualizarBoxAnalise(colunas) {
 
       box.appendChild(select);
 
-      if (["xs", "ys"].includes(campoPadrao)) {
+      if (campoComparado === "xs" || campoComparado === "ys") {
         setTimeout(() => {
           new SlimSelect({
             select: `#${select.id}`
@@ -113,12 +113,13 @@ function atualizarBoxAnalise(colunas) {
       }
     }
 
-    if (campoPadrao.startsWith("field")) {
+    if (campoComparado.startsWith("field")) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campoPadrao}`;
+      input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
 }
+
