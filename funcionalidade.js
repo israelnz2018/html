@@ -123,6 +123,10 @@ async function enviarAnaliseCompleta() {
   formData.append("colunas_x", colunasX);
   formData.append("coluna_z", colunaZ);
 
+  // Novo: captura e envia o field
+  const field = document.getElementById('box_field')?.value || "";
+  formData.append("field", field);
+
   console.log("🟣 Debug Z:", colunaZ);
 
   for (const [key, value] of formData.entries()) {
@@ -136,7 +140,8 @@ async function enviarAnaliseCompleta() {
     grafico: grafico || "Nenhum gráfico",
     coluna_y: colunaY || "Nenhuma coluna Y",
     colunas_x: colunasX || "Nenhuma coluna X",
-    coluna_z: colunaZ || "Nenhuma coluna Z"
+    coluna_z: colunaZ || "Nenhuma coluna Z",
+    field: field || "Nenhum field"
   });
 
   try {
@@ -178,5 +183,6 @@ async function enviarAnaliseCompleta() {
 
 // Conecta o botão ao envio sem alterar HTML
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+
 
 
