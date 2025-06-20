@@ -65,20 +65,22 @@ function atualizarBoxAnalise(colunas) {
 
   config.forEach(campo => {
     const campoLimpo = campo.trim();
-    console.log(`CampoLimpo=[${campoLimpo}]`);
-    console.log(`Comparação com Ys: ${campoLimpo === 'Ys'}`);
+    const campoPadrao = campoLimpo.replace(/\s+/g, '');
+    console.log(`Campo original: [${campo}]`);
+    console.log(`Campo limpo: [${campoLimpo}]`);
+    console.log(`Campo padrao: [${campoPadrao}]`);
 
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
-    label.textContent = `Variável ${campoLimpo}`;
+    label.textContent = `Variável ${campoPadrao}`;
     box.appendChild(label);
 
-    if (["Y", "X", "Xs", "Ys", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
+    if (["Y", "X", "Xs", "Ys", "Subgrupo", "X_subgrupo", "Z"].includes(campoPadrao)) {
       const select = document.createElement("select");
-      select.id = `box_${campoLimpo.toLowerCase()}`;
+      select.id = `box_${campoPadrao.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
 
-      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
+      if (campoPadrao === "Xs" || campoPadrao === "Ys") {
         select.multiple = true;
       }
 
@@ -97,12 +99,13 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(select);
     }
 
-    if (campoLimpo.startsWith("Field")) {
+    if (campoPadrao.startsWith("Field")) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campoLimpo.toLowerCase()}`;
+      input.id = `box_${campoPadrao.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
 }
+
