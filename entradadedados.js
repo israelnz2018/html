@@ -29,7 +29,8 @@ const configuracoesFerramentas = {
 
   // Análise Inferencial
  "1 Sample T": ["Y", "Field"],
-  "2 Sample T": ["Y", "Xs"],
+ "2 Sample T": ["Y", "Ys"],
+
   "Paired Test": ["Xs"],
   "One way ANOVA": ["Y", "Xs"],
   "1 Wilcoxon": ["Y", "Field"],
