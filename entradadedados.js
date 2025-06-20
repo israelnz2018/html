@@ -13,6 +13,7 @@ const configuracoesFerramentas = {
   "Pareto": ["X", "X_subgrupo", "Y"],
   "Setores (Pizza)": ["X", "Y"], 
   "Barras": ["X", "Y", "Subgrupo"],
+  "BoxPlot": ["Xs", "Subgrupo"],
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
   "BoxPlot simples": ["Y", "Subgrupo"],
