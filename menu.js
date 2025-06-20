@@ -9,8 +9,8 @@ const configuracoesAnalises = {
   "Análise Descritiva (Gráficos)": [
     { nome: "Histograma" },
     { nome: "Pareto" },
-    { nome: "Barras" },
     { nome: "Setores (Pizza)" },
+    { nome: "Barras" },
     { nome: "BoxPlot" },
     { nome: "Dispersão" },
     { nome: "Tendência" },
