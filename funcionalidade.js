@@ -70,10 +70,12 @@ async function enviarAnaliseCompleta() {
   const arquivoInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
   const colunaY = document.getElementById('box_y')?.value || "";
+  const colunaZ = document.getElementById('box_z')?.value || "";
 
   let colunasX = "";
   const elXs = document.getElementById('box_xs');
   const elX = document.getElementById('box_x');
+
   if (elXs) {
     colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
   } else if (elX) {
@@ -85,10 +87,11 @@ async function enviarAnaliseCompleta() {
   let grafico = "";
 
   const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)",  "Barras", "BoxPlot", "Dispersão", "Tendência", "Bolhas - 3D", "Gráfico de Pareto",
-    "Gráfico de Dispersão", "Gráfico de Linha",
-    "Gráfico de Bolhas", "Gráfico Sumário", "BoxPlot Múltiplo",
-    "BoxPlot Empilhado", "Histograma Múltiplo", "Gráfico de Tendência"
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
+    "Tendência", "Bolhas - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
+    "Gráfico de Tendência"
   ];
 
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
@@ -118,14 +121,22 @@ async function enviarAnaliseCompleta() {
   formData.append("grafico", grafico);
   formData.append("coluna_y", colunaY);
   formData.append("colunas_x", colunasX);
+  formData.append("coluna_z", colunaZ);
 
-  console.log("📦 Envio para backend:", {
+  console.log("🟣 Debug Z:", colunaZ);
+
+  for (const [key, value] of formData.entries()) {
+    console.log(`✅ FORM DATA REAL -> ${key}: ${value}`);
+  }
+
+  console.log("📦 Envio para backend (objeto manual):", {
     arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
     aba: abaSelect?.value || "Nenhuma aba",
     ferramenta: analise || "Nenhuma análise",
     grafico: grafico || "Nenhum gráfico",
     coluna_y: colunaY || "Nenhuma coluna Y",
-    colunas_x: colunasX || "Nenhuma coluna X"
+    colunas_x: colunasX || "Nenhuma coluna X",
+    coluna_z: colunaZ || "Nenhuma coluna Z"
   });
 
   try {
@@ -164,19 +175,6 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
-
-function ativarBotaoEnviarAnalise() {
-  const btn = document.getElementById('btnEnviarAnalise');
-  if (btn) {
-    btn.addEventListener('click', enviarAnaliseCompleta);
-  }
-}
-
-function iniciarFuncionalidade() {
-  iniciarMonitoramentoInatividade();
-  ativarBotaoEnviarAnalise();
-}
-
 
 
 
