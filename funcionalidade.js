@@ -84,25 +84,14 @@ async function enviarAnaliseCompleta() {
   let analise = "";
   let grafico = "";
 
-  // Lista dos gráficos isolados
   const GRAFICOS_LIST = [
-    "Histograma",
-    "Pareto",
-    "BoxPlot simples",
-    "Gráfico de Pareto",
-    "Gráfico de Dispersão",
-    "Gráfico de Pizza",
-    "Gráfico de Linha",
-    "Gráfico de Bolhas",
-    "Gráfico Sumário",
-    "BoxPlot Múltiplo",
-    "BoxPlot Empilhado",
-    "Histograma Múltiplo",
-    "Gráfico de Tendência"
+    "Histograma", "Pareto", "BoxPlot simples", "Gráfico de Pareto",
+    "Gráfico de Dispersão", "Gráfico de Pizza", "Gráfico de Linha",
+    "Gráfico de Bolhas", "Gráfico Sumário", "BoxPlot Múltiplo",
+    "BoxPlot Empilhado", "Histograma Múltiplo", "Gráfico de Tendência"
   ];
 
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
-
   if (GRAFICOS_LIST.includes(nomeFerramenta)) {
     grafico = nomeFerramenta;
   } else {
@@ -144,7 +133,11 @@ async function enviarAnaliseCompleta() {
       method: 'POST',
       body: formData
     });
+
+    console.log("🟢 Status do backend:", resposta.status);
+
     const json = await resposta.json();
+    console.log("🟢 Resposta do backend:", json);
 
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
@@ -183,9 +176,6 @@ function iniciarFuncionalidade() {
   iniciarMonitoramentoInatividade();
   ativarBotaoEnviarAnalise();
 }
-
-
-
 
 
 
