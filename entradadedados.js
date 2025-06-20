@@ -96,9 +96,14 @@ function atualizarBoxAnalise(colunas) {
         select.appendChild(opt);
       });
 
-      console.log("👉 Select gerado:", select.outerHTML);  // <-- LOG ADICIONADO
-
       box.appendChild(select);
+
+      // 🚀 Aplica SlimSelect no múltiplo de Ys (ou Xs se quiser)
+      if (campoPadrao === "Ys" || campoPadrao === "Xs") {
+        new SlimSelect({
+          select: `#${select.id}`
+        });
+      }
     }
 
     if (campoPadrao.startsWith("Field")) {
