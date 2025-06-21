@@ -60,6 +60,7 @@ function deslogar() {
   });
   document.getElementById('conteudoAnalise').innerHTML = '';
   document.getElementById('conteudoGrafico').innerHTML = '';
+  document.getElementById('boxAnalise').innerHTML = '';
 }
 
 async function enviarAnaliseCompleta() {
@@ -69,37 +70,6 @@ async function enviarAnaliseCompleta() {
 
   const arquivoInput = document.getElementById('fileInput');
   const abaSelect = document.getElementById('aba_planilha');
-  const colunaY = document.getElementById('box_y')?.value || "";
-  const colunaZ = document.getElementById('box_z')?.value || "";
-
-  let colunasX = "";
-  const elXs = document.getElementById('box_xs');
-  const elX = document.getElementById('box_x');
-
-  if (elXs) {
-    colunasX = Array.from(elXs.selectedOptions || []).map(opt => opt.value).join(",");
-  } else if (elX) {
-    colunasX = elX.value || "";
-  }
-
-  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
-  let analise = "";
-  let grafico = "";
-
-  const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
-    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
-    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
-    "Gráfico de Tendência"
-  ];
-
-  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
-  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
-    grafico = nomeFerramenta;
-  } else {
-    analise = nomeFerramenta;
-  }
 
   if (!arquivoInput?.files[0]) {
     exibirModalErro("⚠ Você precisa enviar um arquivo.");
@@ -109,35 +79,87 @@ async function enviarAnaliseCompleta() {
     exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
     return;
   }
-  if (!analise && !grafico) {
+
+  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  if (!nomeFerramenta) {
     exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
     return;
   }
 
+  let analise = "";
+  let grafico = "";
+
+  const GRAFICOS_LIST = [
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
+    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
+    "Gráfico de Tendência"
+  ];
+
+  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
+    grafico = nomeFerramenta;
+  } else {
+    analise = nomeFerramenta;
+  }
+
+  const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
   formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
-  formData.append("coluna_y", colunaY);
-  formData.append("colunas_x", colunasX);
-  formData.append("coluna_z", colunaZ);
 
-  console.log("🟣 Debug Z:", colunaZ);
+  let yVal = "", xVal = "", zVal = "", fieldVal = "";
 
-  for (const [key, value] of formData.entries()) {
-    console.log(`✅ FORM DATA REAL -> ${key}: ${value}`);
+  if (camposNecessarios.includes("Y")) {
+    yVal = document.getElementById('box_y')?.value || "";
+    formData.append("coluna_y", yVal);
   }
 
-  console.log("📦 Envio para backend (objeto manual):", {
-    arquivo: arquivoInput?.files[0]?.name || "Nenhum arquivo",
-    aba: abaSelect?.value || "Nenhuma aba",
-    ferramenta: analise || "Nenhuma análise",
-    grafico: grafico || "Nenhum gráfico",
-    coluna_y: colunaY || "Nenhuma coluna Y",
-    colunas_x: colunasX || "Nenhuma coluna X",
-    coluna_z: colunaZ || "Nenhuma coluna Z"
-  });
+  if (camposNecessarios.includes("Ys")) {
+    const el = document.getElementById('box_ys');
+    yVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("coluna_y", yVal);
+  }
+
+  if (camposNecessarios.includes("X")) {
+    xVal = document.getElementById('box_x')?.value || "";
+    formData.append("colunas_x", xVal);
+  }
+
+  if (camposNecessarios.includes("Xs")) {
+    const el = document.getElementById('box_xs');
+    xVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x", xVal);
+  }
+
+  if (camposNecessarios.includes("Z")) {
+    zVal = document.getElementById('box_z')?.value || "";
+    formData.append("coluna_z", zVal);
+  }
+
+  if (camposNecessarios.some(c => c.startsWith("Field"))) {
+    fieldVal = document.getElementById('box_field')?.value || "";
+    if (fieldVal !== "") {
+      formData.append("field", fieldVal);
+    }
+  }
+
+  // Atualiza o box com as informações completas
+  document.getElementById("boxAnalise").innerHTML = 
+    <p class="text-sm text-gray-500 mb-2">Análise selecionada: ${nomeFerramenta}</p>
+    <p class="text-sm text-gray-500 mb-2">Y: ${yVal || "Nenhum"}</p>
+    <p class="text-sm text-gray-500 mb-2">X: ${xVal || "Nenhum"}</p>
+    <p class="text-sm text-gray-500 mb-2">Z: ${zVal || "Nenhum"}</p>
+    <p class="text-sm text-gray-500 mb-2">Field: ${fieldVal || "Nenhum"}</p>
+  ;
+
+  console.log("📦 Envio para backend (objeto final):");
+  for (const [key, value] of formData.entries()) {
+    console.log(✅ ${key}: ${value});
+  }
 
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
@@ -146,7 +168,6 @@ async function enviarAnaliseCompleta() {
     });
 
     console.log("🟢 Status do backend:", resposta.status);
-
     const json = await resposta.json();
     console.log("🟢 Resposta do backend:", json);
 
@@ -156,26 +177,24 @@ async function enviarAnaliseCompleta() {
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
       blocoAnalise.className = 'mb-4';
-      blocoAnalise.innerHTML = `
+      blocoAnalise.innerHTML = 
         <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
-        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
-      `;
+        ${json.grafico_base64 ? <img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" /> : ""}
+      ;
       containerAnalise.prepend(blocoAnalise);
     }
 
     if (json.grafico_isolado_base64) {
       const imgGrafico = document.createElement('img');
-      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      imgGrafico.src = data:image/png;base64,${json.grafico_isolado_base64};
       imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
       containerGrafico.prepend(imgGrafico);
     }
 
   } catch (e) {
-    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
+    exibirModalErro(❌ Erro ao enviar: ${e.message});
     console.error("❌ Erro detalhado:", e);
   }
 }
 
-
-
-
+document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
