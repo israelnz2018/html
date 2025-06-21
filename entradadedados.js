@@ -53,7 +53,9 @@ const configuracoesFerramentas = {
   "Tipo de modelo de regressão": ["Y", "X"],
   "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística binária": ["Y", "Xs", "Xs_discreto"]
+  "Regressão logística binária": ["Y", "Xs", "Xs_discreto"],
+  "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"]
+
 
 
  
