@@ -150,34 +150,92 @@ async function enviarAnaliseCompleta() {
     }
   }
 
-  // Atualiza ou cria os textos informativos sem mexer nos campos
+async function enviarAnaliseCompleta() {
+  console.log("🚀 Botão Enviar Análise foi clicado.");
+  sessaoAtiva = true;
+  resetarTimer();
+
+  const arquivoInput = document.getElementById('fileInput');
+  const abaSelect = document.getElementById('aba_planilha');
+
+  if (!arquivoInput?.files[0]) {
+    exibirModalErro("⚠ Você precisa enviar um arquivo.");
+    return;
+  }
+  if (!abaSelect?.value) {
+    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
+    return;
+  }
+
+  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  if (!nomeFerramenta) {
+    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
+    return;
+  }
+
+  let analise = "";
+  let grafico = "";
+
+  const GRAFICOS_LIST = [
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
+    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
+    "Gráfico de Tendência"
+  ];
+
+  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
+    grafico = nomeFerramenta;
+  } else {
+    analise = nomeFerramenta;
+  }
+
+  const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
+  const formData = new FormData();
+  formData.append("arquivo", arquivoInput.files[0]);
+  formData.append("aba", abaSelect.value);
+  formData.append("ferramenta", analise);
+  formData.append("grafico", grafico);
+
+  if (camposNecessarios.includes("Y")) {
+    const val = document.getElementById('box_y')?.value || "";
+    formData.append("coluna_y", val);
+  }
+
+  if (camposNecessarios.includes("Ys")) {
+    const el = document.getElementById('box_ys');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("coluna_y", val);
+  }
+
+  if (camposNecessarios.includes("X")) {
+    const val = document.getElementById('box_x')?.value || "";
+    formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Xs")) {
+    const el = document.getElementById('box_xs');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Z")) {
+    const val = document.getElementById('box_z')?.value || "";
+    formData.append("coluna_z", val);
+  }
+
+  if (camposNecessarios.some(c => c.startsWith("Field"))) {
+    const val = document.getElementById('box_field')?.value || "";
+    if (val !== "") {
+      formData.append("field", val);
+    }
+  }
+
+  // Remove os textos extras abaixo do dropdown, se existirem
   const box = document.getElementById("boxAnalise");
-  box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
-
-  const pAnalise = document.createElement("p");
-  pAnalise.className = "info-analise text-sm text-gray-500 mb-2";
-  pAnalise.innerText = `Análise selecionada: ${nomeFerramenta}`;
-  box.appendChild(pAnalise);
-
-  const pY = document.createElement("p");
-  pY.className = "info-y text-sm text-gray-500 mb-2";
-  pY.innerText = `Y: ${yVal || "Nenhum"}`;
-  box.appendChild(pY);
-
-  const pX = document.createElement("p");
-  pX.className = "info-x text-sm text-gray-500 mb-2";
-  pX.innerText = `X: ${xVal || "Nenhum"}`;
-  box.appendChild(pX);
-
-  const pZ = document.createElement("p");
-  pZ.className = "info-z text-sm text-gray-500 mb-2";
-  pZ.innerText = `Z: ${zVal || "Nenhum"}`;
-  box.appendChild(pZ);
-
-  const pField = document.createElement("p");
-  pField.className = "info-field text-sm text-gray-500 mb-2";
-  pField.innerText = `Field: ${fieldVal || "Nenhum"}`;
-  box.appendChild(pField);
+  Array.from(box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field"))
+    .forEach(el => el.remove());
 
   console.log("📦 Envio para backend (objeto final):");
   for (const [key, value] of formData.entries()) {
@@ -221,3 +279,4 @@ async function enviarAnaliseCompleta() {
 }
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+
