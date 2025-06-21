@@ -43,7 +43,9 @@ const configuracoesFerramentas = {
   "1 Intervalo de Confianca Variancia": ["Y", "Field"],
   "1 Proporcao": ["Y", "Field"],
   "2 Proporcoes": ["Ys", "Field"],
-  "K Proporcoes": ["Ys"]
+  "K Proporcoes": ["Ys"],
+  "Analise de Associacao": ["Y", "X"]
+
 
 
 
