@@ -29,7 +29,8 @@ const configuracoesFerramentas = {
  "1 Sample T": ["Y", "Field"],
  "2 Sample T": ["Ys"],
  "2 Paired Test" : ["Ys"],
-  "One way ANOVA" : ["Ys"],
+ "One way ANOVA": ["Y", "X"],
+
 
   
 
