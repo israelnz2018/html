@@ -65,6 +65,7 @@ const configuracoesFerramentas = {
   // Análise Capabilidade
 
   "Teste de normalidade": ["Y"],
+  "Análise de estabilidade" : ["Y"],
 
   "Tipo de modelo de regressão": ["Y", "X"],
   "Regressão linear simples": ["Y", "X"],
