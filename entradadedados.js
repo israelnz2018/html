@@ -38,7 +38,9 @@ const configuracoesFerramentas = {
   "1 Intervalo Interquartilico": ["Y"],
   "2 Variancas": ["Ys"],
   "2 Variancas Brown-Forsythe": ["Ys"],
-  "Bartlett": ["Ys"]
+  "Bartlett": ["Ys"],
+  "Brown-Forsythe": ["Ys"]
+
 
 
 
