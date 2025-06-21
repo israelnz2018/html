@@ -69,10 +69,8 @@ const configuracoesFerramentas = {
   "Análise de distribuição estatística": ["Y"],
   "Capabilidade - dados normais": ["Y", "Field_LSL", "Field_USL"],
   "Capabilidade - outras distribuições": ["Y", "Field_LSL", "Field_USL", "Field_Distribuicao"],
-  "Capabilidade - com dados transformados": ["Y", "Field_LSL", "Field_USL"]
-
-
- 
+  "Capabilidade - com dados transformados": ["Y", "Field_LSL", "Field_USL"],
+   "Capabilidade - com dados discretizados": ["Y", "Field_LSL", "Field_USL"]
 
 };
 
