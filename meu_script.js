@@ -148,7 +148,33 @@ function atualizarBoxAnalise(colunas) {
       }
     }
 
-    if (campoLimpo.startsWith("Field")) {
+    if (campoLimpo === "Field_Distribuicao") {
+      const labelDist = document.createElement("label");
+      labelDist.className = "block font-medium mb-1";
+      labelDist.textContent = "Distribuição:";
+      box.appendChild(labelDist);
+
+      const selectDist = document.createElement("select");
+      selectDist.id = "box_field_distribuicao";
+      selectDist.className = "border rounded p-1 mb-2 w-full";
+
+      const distribs = [
+        "Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p",
+        "Weibull", "Weibull 3p", "Smallest Extreme Value", "Largest Extreme Value",
+        "Gamma", "Gamma 3p", "Logistic", "Loglogística", "Loglogística 3p"
+      ];
+
+      distribs.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        selectDist.appendChild(opt);
+      });
+
+      box.appendChild(selectDist);
+    }
+
+    if (campoLimpo.startsWith("Field") && campoLimpo !== "Field_Distribuicao") {
       const input = document.createElement("input");
       input.type = "number";
       input.id = `box_field`;
@@ -157,12 +183,4 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
-
-function registrarFerramenta(ferramenta) {
-  ferramentaAtual = ferramenta;
-  atualizarInterface();
-}
-
-document.addEventListener("DOMContentLoaded", inicializarEventos);
-
 
