@@ -60,7 +60,9 @@ function deslogar() {
   });
   document.getElementById('conteudoAnalise').innerHTML = '';
   document.getElementById('conteudoGrafico').innerHTML = '';
-  document.getElementById('boxAnalise').innerHTML = '';
+
+  const box = document.getElementById('boxAnalise');
+  box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
 
 async function enviarAnaliseCompleta() {
@@ -147,18 +149,21 @@ async function enviarAnaliseCompleta() {
     }
   }
 
-  // Atualiza o box com as informações completas
-  document.getElementById("boxAnalise").innerHTML = 
-    <p class="text-sm text-gray-500 mb-2">Análise selecionada: ${nomeFerramenta}</p>
-    <p class="text-sm text-gray-500 mb-2">Y: ${yVal || "Nenhum"}</p>
-    <p class="text-sm text-gray-500 mb-2">X: ${xVal || "Nenhum"}</p>
-    <p class="text-sm text-gray-500 mb-2">Z: ${zVal || "Nenhum"}</p>
-    <p class="text-sm text-gray-500 mb-2">Field: ${fieldVal || "Nenhum"}</p>
-  ;
+  const box = document.getElementById("boxAnalise");
+  if (box) {
+    const textosExtras = box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field");
+    textosExtras.forEach(el => {
+      try {
+        el.remove();
+      } catch (err) {
+        console.warn("⚠ Erro ao tentar remover elemento:", el, err);
+      }
+    });
+  }
 
   console.log("📦 Envio para backend (objeto final):");
   for (const [key, value] of formData.entries()) {
-    console.log(✅ ${key}: ${value});
+    console.log(`✅ ${key}: ${value}`);
   }
 
   try {
@@ -177,22 +182,22 @@ async function enviarAnaliseCompleta() {
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
       blocoAnalise.className = 'mb-4';
-      blocoAnalise.innerHTML = 
+      blocoAnalise.innerHTML = `
         <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
-        ${json.grafico_base64 ? <img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" /> : ""}
-      ;
+        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
+      `;
       containerAnalise.prepend(blocoAnalise);
     }
 
     if (json.grafico_isolado_base64) {
       const imgGrafico = document.createElement('img');
-      imgGrafico.src = data:image/png;base64,${json.grafico_isolado_base64};
+      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
       containerGrafico.prepend(imgGrafico);
     }
 
   } catch (e) {
-    exibirModalErro(❌ Erro ao enviar: ${e.message});
+    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
     console.error("❌ Erro detalhado:", e);
   }
 }
