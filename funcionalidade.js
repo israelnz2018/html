@@ -60,8 +60,7 @@ function deslogar() {
   });
   document.getElementById('conteudoAnalise').innerHTML = '';
   document.getElementById('conteudoGrafico').innerHTML = '';
-  
-  // Apenas limpa os textos informativos (não os dropdowns ou campos)
+
   const box = document.getElementById('boxAnalise');
   box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
@@ -150,91 +149,6 @@ async function enviarAnaliseCompleta() {
     }
   }
 
-async function enviarAnaliseCompleta() {
-  console.log("🚀 Botão Enviar Análise foi clicado.");
-  sessaoAtiva = true;
-  resetarTimer();
-
-  const arquivoInput = document.getElementById('fileInput');
-  const abaSelect = document.getElementById('aba_planilha');
-
-  if (!arquivoInput?.files[0]) {
-    exibirModalErro("⚠ Você precisa enviar um arquivo.");
-    return;
-  }
-  if (!abaSelect?.value) {
-    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
-    return;
-  }
-
-  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
-  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
-  if (!nomeFerramenta) {
-    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
-    return;
-  }
-
-  let analise = "";
-  let grafico = "";
-
-  const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
-    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
-    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
-    "Gráfico de Tendência"
-  ];
-
-  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
-    grafico = nomeFerramenta;
-  } else {
-    analise = nomeFerramenta;
-  }
-
-  const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
-  const formData = new FormData();
-  formData.append("arquivo", arquivoInput.files[0]);
-  formData.append("aba", abaSelect.value);
-  formData.append("ferramenta", analise);
-  formData.append("grafico", grafico);
-
-  let yVal = "", xVal = "", zVal = "", fieldVal = "";
-
-  if (camposNecessarios.includes("Y")) {
-    yVal = document.getElementById('box_y')?.value || "";
-    formData.append("coluna_y", yVal);
-  }
-
-  if (camposNecessarios.includes("Ys")) {
-    const el = document.getElementById('box_ys');
-    yVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("coluna_y", yVal);
-  }
-
-  if (camposNecessarios.includes("X")) {
-    xVal = document.getElementById('box_x')?.value || "";
-    formData.append("colunas_x", xVal);
-  }
-
-  if (camposNecessarios.includes("Xs")) {
-    const el = document.getElementById('box_xs');
-    xVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x", xVal);
-  }
-
-  if (camposNecessarios.includes("Z")) {
-    zVal = document.getElementById('box_z')?.value || "";
-    formData.append("coluna_z", zVal);
-  }
-
-  if (camposNecessarios.some(c => c.startsWith("Field"))) {
-    fieldVal = document.getElementById('box_field')?.value || "";
-    if (fieldVal !== "") {
-      formData.append("field", fieldVal);
-    }
-  }
-
-  // Remove os textos extras abaixo do dropdown, se existirem
   const box = document.getElementById("boxAnalise");
   if (box) {
     const textosExtras = box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field");
@@ -289,5 +203,3 @@ async function enviarAnaliseCompleta() {
 }
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
-
-
