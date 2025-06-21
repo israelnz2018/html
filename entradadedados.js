@@ -29,9 +29,10 @@ const configuracoesFerramentas = {
  "1 Sample T": ["Y", "Field"],
  "2 Sample T": ["Ys"],
  "2 Paired Test" : ["Ys"],
- "One way ANOVA": ["Ys", "X"],
+ "One way ANOVA": ["Ys", "Subgrupo"],
   "1 Wilcoxon": ["Y", "Field"],
   "2 Mann-Whitney": ["Ys"],
+  "Kruskal-Wallis: ["Ys", "Subgrupo"],
 
 
 
