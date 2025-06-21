@@ -18,9 +18,9 @@ const configuracoesAnalises = {
     { nome: "Superfície - 3D" }
   ],
   "Análise Inferencial": [
-    { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"] },
-    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Kruskal-Wallis", "Friedman Pareado"] },
-    { nome: "Análise de Varianças", subitens: ["1 Intervalo de Confianca", "2 Varianças", "Bartlett"] },
+    { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA", "1 Intervalo de Confianca"] },
+    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Kruskal-Wallis", "Friedman Pareado", "Intervalo Interquartilico"] },
+    { nome: "Análise de Varianças", subitens: ["2 Varianças", "Bartlett"] },
     { nome: "Análise de Proporção", subitens: ["1 Proporção", "2 Proporções"] },
     { nome: "Análise de Associação", subitens: ["Qui- quadrado"] }
   ],
