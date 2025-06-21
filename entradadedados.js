@@ -36,6 +36,8 @@ const configuracoesFerramentas = {
   "Friedman Pareado": ["Ys", "Subgrupo"], 
   "1 Intervalo de Confianca": ["Y", "Field"],
   "1 Intervalo Interquartilico": ["Y"],
+  "2 Variancas": ["Ys"]
+
 
 
 
