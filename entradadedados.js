@@ -34,7 +34,9 @@ const configuracoesFerramentas = {
   "2 Mann-Whitney": ["Ys"],
   "Kruskal-Wallis: ["Ys", "Subgrupo"],
   "Friedman Pareado": ["Ys", "Subgrupo"], 
-  "1 Intervalo de Confianca": ["Y", "Field"]
+  "1 Intervalo de Confianca": ["Y", "Field"],
+  "1 Intervalo Interquartilico": ["Y"],
+
 
 
 
