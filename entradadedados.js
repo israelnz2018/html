@@ -68,6 +68,8 @@ const configuracoesFerramentas = {
   "Análise de estabilidade" : ["Y"],
   "Análise de distribuição estatística": ["Y"],
   "Capabilidade - dados normais": ["Y", "Field_LSL", "Field_USL"],
+  "Capabilidade - outras distribuições": ["Y", "Field_LSL", "Field_USL", "Field_Distribuicao"],
+
  
 
 
