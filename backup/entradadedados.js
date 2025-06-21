@@ -9,18 +9,27 @@ const configuracoesFerramentas = {
   "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
+  "Histograma": ["X", "Subgrupo"],
   "Pareto": ["X", "X_subgrupo", "Y"],
+  "Setores (Pizza)": ["X", "Y"], 
+  "Barras": ["X", "Y", "Subgrupo"],
+  "BoxPlot": ["Xs", "Subgrupo"],
+  "Dispersão": ["Y", "Xs", "Subgrupo"],
+  "Tendência": ["Y", "X", "Subgrupo"],
+  "Bolhas - 3D": ["X", "Y", "Z"],
+  "Superfície - 3D": ["X", "Y", "Z"],
   "Pareto simples": ["X", "Subgrupo"],
   "Gráfifo de barras": ["X", "Subgrupo"],
-  "Gráfico de pizza": ["Y", "Subgrupo"],
   "BoxPlot simples": ["Y", "Subgrupo"],
   "Gráfico de disperao": ["Y", "X"],
   "Gráfico de tendecias": ["Y", "X"],
-  "Bolhas - 3D": ["Y", "X", "Z"],
+  "Gráficos de bolhas": ["Y", "X", "Z"],
 
   // Análise Inferencial
-  "1 Sample T": ["Y", "Field"],
-  "2 Sample T": ["Y", "Xs"],
+ "1 Sample T": ["Y", "Field"],
+ "2 Sample T": ["Ys"],
+
+
   "Paired Test": ["Xs"],
   "One way ANOVA": ["Y", "Xs"],
   "1 Wilcoxon": ["Y", "Field"],
@@ -46,49 +55,140 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs"]
 };
 
-function atualizarBoxAnalise(colunas) {
-  const box = document.getElementById('boxAnalise');
-  box.innerHTML = `<p class="text-sm text-gray-500 mb-2">Análise selecionada: ${ferramentaAtual || 'Nenhuma'}</p>`;
+async function enviarAnaliseCompleta() {
+  console.log("🚀 Botão Enviar Análise foi clicado.");
+  sessaoAtiva = true;
+  resetarTimer();
 
-  if (!ferramentaAtual) return;
+  const arquivoInput = document.getElementById('fileInput');
+  const abaSelect = document.getElementById('aba_planilha');
 
-  const config = configuracoesFerramentas[ferramentaAtual] || [];
+  if (!arquivoInput?.files[0]) {
+    exibirModalErro("⚠ Você precisa enviar um arquivo.");
+    return;
+  }
+  if (!abaSelect?.value) {
+    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
+    return;
+  }
 
-  config.forEach(campo => {
-    const campoLimpo = campo.trim();
-    const label = document.createElement("label");
-    label.className = "block font-medium mb-1";
-    label.textContent = `Variável ${campoLimpo}`;
-    box.appendChild(label);
+  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
+  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+  if (!nomeFerramenta) {
+    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
+    return;
+  }
 
-    if (["Y", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
-      const select = document.createElement("select");
-      select.id = `box_${campoLimpo.toLowerCase()}`;
-      select.className = "border rounded p-1 mb-2 w-full";
+  let analise = "";
+  let grafico = "";
 
-      if (campoLimpo === "Xs") select.multiple = true;
+  const GRAFICOS_LIST = [
+    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
+    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
+    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
+    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
+    "Gráfico de Tendência"
+  ];
 
-      const opcaoVazia = document.createElement("option");
-      opcaoVazia.value = '';
-      opcaoVazia.textContent = '(Nenhum)';
-      select.appendChild(opcaoVazia);
+  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
+    grafico = nomeFerramenta;
+  } else {
+    analise = nomeFerramenta;
+  }
 
-      colunas.forEach(t => {
-        const opt = document.createElement("option");
-        opt.value = t;
-        opt.textContent = t;
-        select.appendChild(opt);
-      });
+  const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
+  const formData = new FormData();
+  formData.append("arquivo", arquivoInput.files[0]);
+  formData.append("aba", abaSelect.value);
+  formData.append("ferramenta", analise);
+  formData.append("grafico", grafico);
 
-      box.appendChild(select);
+  if (camposNecessarios.includes("Y")) {
+    const val = document.getElementById('box_y')?.value || "";
+    formData.append("coluna_y", val);
+  }
+
+  if (camposNecessarios.includes("Ys")) {
+    const el = document.getElementById('box_ys');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("coluna_y", val);
+
+  }
+
+  if (camposNecessarios.includes("X")) {
+    const val = document.getElementById('box_x')?.value || "";
+    formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Xs")) {
+    const el = document.getElementById('box_xs');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Z")) {
+    const val = document.getElementById('box_z')?.value || "";
+    formData.append("coluna_z", val);
+  }
+
+  if (camposNecessarios.includes("Subgrupo")) {
+    const val = document.getElementById('box_subgrupo')?.value || "";
+    formData.append("subgrupo", val);
+  }
+
+  if (camposNecessarios.includes("X_subgrupo")) {
+    const val = document.getElementById('box_x_subgrupo')?.value || "";
+    formData.append("x_subgrupo", val);
+  }
+
+  if (camposNecessarios.includes("Field") || camposNecessarios.some(c => c.startsWith("Field"))) {
+    const valField = document.getElementById('box_field')?.value || "";
+    if (valField !== "") formData.append("field", valField);
+
+    const valNivel = document.getElementById('box_field_nivelconfianca')?.value || "";
+    if (valNivel !== "") formData.append("field_nivelconfianca", valNivel);
+
+    const valValor = document.getElementById('box_field_valor')?.value || "";
+    if (valValor !== "") formData.append("field_valor", valValor);
+  }
+
+  console.log("📦 Envio para backend (objeto final):");
+  for (const [key, value] of formData.entries()) {
+    console.log(`✅ ${key}: ${value}`);
+  }
+
+  try {
+    const resposta = await fetch('https://analises-production.up.railway.app/analise', {
+      method: 'POST',
+      body: formData
+    });
+
+    console.log("🟢 Status do backend:", resposta.status);
+    const json = await resposta.json();
+    console.log("🟢 Resposta do backend:", json);
+
+    const containerAnalise = document.getElementById('conteudoAnalise');
+    const containerGrafico = document.getElementById('conteudoGrafico');
+
+    if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
+      const blocoAnalise = document.createElement('div');
+      blocoAnalise.className = 'mb-4';
+      blocoAnalise.innerHTML = `
+        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
+      `;
+      containerAnalise.prepend(blocoAnalise);
     }
 
-    if (campoLimpo.startsWith("Field")) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.id = `box_${campoLimpo.toLowerCase()}`;
-      input.className = "border rounded p-1 mb-2 w-full";
-      box.appendChild(input);
+    if (json.grafico_isolado_base64) {
+      const imgGrafico = document.createElement('img');
+      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+      containerGrafico.prepend(imgGrafico);
     }
-  });
+
+  } catch (e) {
+    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
+    console.error("❌ Erro detalhado:", e);
+  }
 }
