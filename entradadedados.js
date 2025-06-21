@@ -67,6 +67,8 @@ const configuracoesFerramentas = {
   "Teste de normalidade": ["Y"],
   "Análise de estabilidade" : ["Y"],
   "Análise de distribuição estatística": ["Y"],
+  "Capabilidade - dados normais": ["Y", "Field_LSL", "Field_USL"],
+ 
 
 
   "Tipo de modelo de regressão": ["Y", "X"],
