@@ -69,20 +69,10 @@ const configuracoesFerramentas = {
   "Análise de distribuição estatística": ["Y"],
   "Capabilidade - dados normais": ["Y", "Field_LSL", "Field_USL"],
   "Capabilidade - outras distribuições": ["Y", "Field_LSL", "Field_USL", "Field_Distribuicao"],
+  "Capabilidade - com dados transformados": ["Y", "Field_LSL", "Field_USL"]
+
 
  
-
-
-  "Tipo de modelo de regressão": ["Y", "X"],
-  "Regressão linear simples": ["Y", "X"],
-  "Regressão linear múltipla": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística binária": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística nominal": ["Y", "Xs", "Xs_discreto"],
-  "Árvore de decisão": ["Y", "Xs", "Xs_discreto"],
-  "Random Forest": ["Y", "Xs", "Xs_discreto"],
-  "ARIMA": ["Y", "Field"],
-  "Holt-Winters": ["Y", "Field"]
 
 };
 
