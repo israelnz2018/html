@@ -19,7 +19,7 @@ const configuracoesAnalises = {
   ],
   "Análise Inferencial": [
     { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"] },
-    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon", "1 Teste de Sinal", "1 Sample W", "1 Sample S", "2 Sample W", "2 Paired W", "Friedman"] },
+    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Friedman"] },
     { nome: "Análise de Varianças", subitens: ["1 Intervalo de Confianca", "2 Varianças", "Bartlett"] },
     { nome: "Análise de Proporção", subitens: ["1 Proporção", "2 Proporções"] },
     { nome: "Análise de Associação", subitens: ["Qui- quadrado"] }
