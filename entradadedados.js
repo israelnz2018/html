@@ -140,6 +140,11 @@ async function enviarAnaliseCompleta() {
     const val = document.getElementById('box_y')?.value || "";
     formData.append("coluna_y", val);
   }
+ 
+  if (camposNecessarios.includes("Field_Distribuicao")) {
+    const val = document.getElementById('box_field_distribuicao')?.value || "";
+  if (val !== "") formData.append("Field_Distribuicao", val);
+  }
 
   if (camposNecessarios.includes("Ys")) {
     const el = document.getElementById('box_ys');
