@@ -64,6 +64,16 @@ const configuracoesFerramentas = {
 };
   // Análise Capabilidade
 
+  "Carta I-MR": ["Y"],
+  "Carta X-Barra R": ["Y", "Subgrupo"],
+  "Carta X-Barra S": ["Y", "Subgrupo"], 
+  "Carta P": ["Y", "Subgrupo"],
+  "Carta NP": ["Y", "Subgrupo"],
+  "Carta C": ["Y"],
+  "Carta U": ["Y", "Subgrupo"]
+
+
+
   "Teste de normalidade": ["Y"],
   "Análise de estabilidade" : ["Y"],
   "Análise de distribuição estatística": ["Y"],
