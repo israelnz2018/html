@@ -33,6 +33,8 @@ const configuracoesFerramentas = {
   "1 Wilcoxon": ["Y", "Field"],
   "2 Mann-Whitney": ["Ys"],
   "Kruskal-Wallis: ["Ys", "Subgrupo"],
+  "Friedman Pareado": ["Ys", "Subgrupo"], 
+
 
 
 
