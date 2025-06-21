@@ -29,12 +29,11 @@ const configuracoesFerramentas = {
  "1 Sample T": ["Y", "Field"],
  "2 Sample T": ["Ys"],
  "2 Paired Test" : ["Ys"],
+  "One way ANOVA" : ["Ys"],
 
   
 
 
-  "Paired Test": ["Xs"],
-  "One way ANOVA": ["Y", "Xs"],
   "1 Wilcoxon": ["Y", "Field"],
   "1 Teste de Sinal": ["Y", "Field"],
   "2 Man Witney": ["Xs"],
