@@ -60,7 +60,10 @@ function deslogar() {
   });
   document.getElementById('conteudoAnalise').innerHTML = '';
   document.getElementById('conteudoGrafico').innerHTML = '';
-  document.getElementById('boxAnalise').innerHTML = '';
+  
+  // Apenas limpa os textos informativos (não os dropdowns ou campos)
+  const box = document.getElementById('boxAnalise');
+  box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
 
 async function enviarAnaliseCompleta() {
@@ -147,51 +150,74 @@ async function enviarAnaliseCompleta() {
     }
   }
 
-  // Atualiza apenas os textos sem sobrescrever os dropdowns
-const box = document.getElementById("boxAnalise");
+  // Atualiza ou cria os textos informativos sem mexer nos campos
+  const box = document.getElementById("boxAnalise");
+  box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 
-// Atualiza ou cria o parágrafo da análise selecionada
-let pAnalise = box.querySelector(".info-analise");
-if (!pAnalise) {
-  pAnalise = document.createElement("p");
+  const pAnalise = document.createElement("p");
   pAnalise.className = "info-analise text-sm text-gray-500 mb-2";
-  box.prepend(pAnalise);
-}
-pAnalise.innerText = `Análise selecionada: ${nomeFerramenta}`;
+  pAnalise.innerText = `Análise selecionada: ${nomeFerramenta}`;
+  box.appendChild(pAnalise);
 
-// Atualiza ou cria o parágrafo do Y
-let pY = box.querySelector(".info-y");
-if (!pY) {
-  pY = document.createElement("p");
+  const pY = document.createElement("p");
   pY.className = "info-y text-sm text-gray-500 mb-2";
+  pY.innerText = `Y: ${yVal || "Nenhum"}`;
   box.appendChild(pY);
-}
-pY.innerText = `Y: ${yVal || "Nenhum"}`;
 
-// Atualiza ou cria o parágrafo do X
-let pX = box.querySelector(".info-x");
-if (!pX) {
-  pX = document.createElement("p");
+  const pX = document.createElement("p");
   pX.className = "info-x text-sm text-gray-500 mb-2";
+  pX.innerText = `X: ${xVal || "Nenhum"}`;
   box.appendChild(pX);
-}
-pX.innerText = `X: ${xVal || "Nenhum"}`;
 
-// Atualiza ou cria o parágrafo do Z
-let pZ = box.querySelector(".info-z");
-if (!pZ) {
-  pZ = document.createElement("p");
+  const pZ = document.createElement("p");
   pZ.className = "info-z text-sm text-gray-500 mb-2";
+  pZ.innerText = `Z: ${zVal || "Nenhum"}`;
   box.appendChild(pZ);
-}
-pZ.innerText = `Z: ${zVal || "Nenhum"}`;
 
-// Atualiza ou cria o parágrafo do Field
-let pField = box.querySelector(".info-field");
-if (!pField) {
-  pField = document.createElement("p");
+  const pField = document.createElement("p");
   pField.className = "info-field text-sm text-gray-500 mb-2";
+  pField.innerText = `Field: ${fieldVal || "Nenhum"}`;
   box.appendChild(pField);
-}
-pField.innerText = `Field: ${fieldVal || "Nenhum"}`;
 
+  console.log("📦 Envio para backend (objeto final):");
+  for (const [key, value] of formData.entries()) {
+    console.log(`✅ ${key}: ${value}`);
+  }
+
+  try {
+    const resposta = await fetch('https://analises-production.up.railway.app/analise', {
+      method: 'POST',
+      body: formData
+    });
+
+    console.log("🟢 Status do backend:", resposta.status);
+    const json = await resposta.json();
+    console.log("🟢 Resposta do backend:", json);
+
+    const containerAnalise = document.getElementById('conteudoAnalise');
+    const containerGrafico = document.getElementById('conteudoGrafico');
+
+    if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
+      const blocoAnalise = document.createElement('div');
+      blocoAnalise.className = 'mb-4';
+      blocoAnalise.innerHTML = `
+        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
+      `;
+      containerAnalise.prepend(blocoAnalise);
+    }
+
+    if (json.grafico_isolado_base64) {
+      const imgGrafico = document.createElement('img');
+      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+      containerGrafico.prepend(imgGrafico);
+    }
+
+  } catch (e) {
+    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
+    console.error("❌ Erro detalhado:", e);
+  }
+}
+
+document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
