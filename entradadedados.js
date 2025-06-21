@@ -32,7 +32,7 @@ const configuracoesFerramentas = {
  "One way ANOVA": ["Ys", "Subgrupo"],
   "1 Wilcoxon": ["Y", "Field"],
   "2 Mann-Whitney": ["Ys"],
-  "Kruskal-Wallis: ["Ys", "Subgrupo"],
+  "Kruskal-Wallis": ["Ys", "Subgrupo"],
   "Friedman Pareado": ["Ys", "Subgrupo"], 
   "1 Intervalo de Confianca": ["Y", "Field"],
   "1 Intervalo Interquartilico": ["Y"],
@@ -44,37 +44,9 @@ const configuracoesFerramentas = {
   "1 Proporcao": ["Y", "Field"],
   "2 Proporcoes": ["Ys", "Field"],
   "K Proporcoes": ["Ys"],
-  "Qui-quadrado": ["Y", "X"]
+  "Qui-quadrado": ["Y", "X"],
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
- 
-  "1 Teste de Sinal": ["Y", "Field"],
-  "2 Man Witney": ["Xs"],
-  "2 Wilcoxon": ["Xs"],
-  "Friedman": ["Xs"],
-  "Intervalo de Confianca": ["Y", "Field_NivelConfiança", "Field_Valor"],
-  "F/Levene Test": ["Xs"],
-  "Bartlett": ["Xs"],
-  "1 Proporcao": ["Y", "Field"],
-  "2 Proporcoes": ["Xs"],
-  "Qui- quadrado": ["Xs"],
 
   // Análise Preditiva
   "Analise de correlacao": ["Y", "X"],
