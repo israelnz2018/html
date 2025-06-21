@@ -21,7 +21,7 @@ const configuracoesAnalises = {
     { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA", "1 Intervalo de Confianca"] },
     { nome: "Análise de Medianas", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Kruskal-Wallis", "Friedman Pareado", "1 Intervalo Interquartilico"] },
     { nome: "Análise de Varianças", subitens: ["2 Varianças", "2 Variancas Brown-Forsythe", "Bartlett", "Brown-Forsythe", "1 Intervalo de Confianca Variancia"] },
-    { nome: "Análise de Proporção", subitens: ["1 Proporcao", "2 Proporções"] },
+    { nome: "Análise de Proporção", subitens: ["1 Proporcao", "2 Proporções", "K Proporcoes"] },
     { nome: "Análise de Associação", subitens: ["Qui- quadrado"] }
   ],
   "Análise Preditiva": [
