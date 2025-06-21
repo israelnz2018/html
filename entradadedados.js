@@ -41,7 +41,9 @@ const configuracoesFerramentas = {
   "Bartlett": ["Ys"],
   "Brown-Forsythe": ["Ys"],
   "1 Intervalo de Confianca Variancia": ["Y", "Field"],
-  "1 Proporcao": ["Y", "Field"]
+  "1 Proporcao": ["Y", "Field"],
+  "2 Proporcoes": ["Ys", "Field"]
+
 
 
 
