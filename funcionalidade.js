@@ -60,6 +60,7 @@ function deslogar() {
   });
   document.getElementById('conteudoAnalise').innerHTML = '';
   document.getElementById('conteudoGrafico').innerHTML = '';
+  document.getElementById('boxAnalise').innerHTML = '';
 }
 
 async function enviarAnaliseCompleta() {
@@ -110,39 +111,50 @@ async function enviarAnaliseCompleta() {
   formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
 
+  let yVal = "", xVal = "", zVal = "", fieldVal = "";
+
   if (camposNecessarios.includes("Y")) {
-    const val = document.getElementById('box_y')?.value || "";
-    formData.append("coluna_y", val);
+    yVal = document.getElementById('box_y')?.value || "";
+    formData.append("coluna_y", yVal);
   }
 
   if (camposNecessarios.includes("Ys")) {
     const el = document.getElementById('box_ys');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("coluna_y", val);
+    yVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("coluna_y", yVal);
   }
 
   if (camposNecessarios.includes("X")) {
-    const val = document.getElementById('box_x')?.value || "";
-    formData.append("colunas_x", val);
+    xVal = document.getElementById('box_x')?.value || "";
+    formData.append("colunas_x", xVal);
   }
 
   if (camposNecessarios.includes("Xs")) {
     const el = document.getElementById('box_xs');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x", val);
+    xVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x", xVal);
   }
 
   if (camposNecessarios.includes("Z")) {
-    const val = document.getElementById('box_z')?.value || "";
-    formData.append("coluna_z", val);
+    zVal = document.getElementById('box_z')?.value || "";
+    formData.append("coluna_z", zVal);
   }
 
   if (camposNecessarios.some(c => c.startsWith("Field"))) {
-    const val = document.getElementById('box_field')?.value || "";
-    if (val !== "") {
-      formData.append("field", val);
+    fieldVal = document.getElementById('box_field')?.value || "";
+    if (fieldVal !== "") {
+      formData.append("field", fieldVal);
     }
   }
+
+  // Atualiza o box com as informações completas
+  document.getElementById("boxAnalise").innerHTML = `
+    <p class="text-sm text-gray-500 mb-2">Análise selecionada: ${nomeFerramenta}</p>
+    <p class="text-sm text-gray-500 mb-2">Y: ${yVal || "Nenhum"}</p>
+    <p class="text-sm text-gray-500 mb-2">X: ${xVal || "Nenhum"}</p>
+    <p class="text-sm text-gray-500 mb-2">Z: ${zVal || "Nenhum"}</p>
+    <p class="text-sm text-gray-500 mb-2">Field: ${fieldVal || "Nenhum"}</p>
+  `;
 
   console.log("📦 Envio para backend (objeto final):");
   for (const [key, value] of formData.entries()) {
@@ -185,5 +197,5 @@ async function enviarAnaliseCompleta() {
   }
 }
 
-// ✅ Conexão do botão ao envio
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+
