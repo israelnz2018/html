@@ -112,6 +112,11 @@ async function enviarAnaliseCompleta() {
     const el = document.getElementById('box_ys');
     const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
     formData.append("coluna_y", val);
+
+    const el = document.getElementById('box_ys');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("coluna_y", val);
+
   }
 
   if (camposNecessarios.includes("X")) {
