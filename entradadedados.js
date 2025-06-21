@@ -56,23 +56,10 @@ const configuracoesFerramentas = {
   "Regressão logística binária": ["Y", "Xs", "Xs_discreto"],
   "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"],
   "Regressão logística nominal": ["Y", "Xs", "Xs_discreto"],
-  "Árvore de decisão": ["Y", "Xs", "Xs_discreto"]
+  "Árvore de decisão": ["Y", "Xs", "Xs_discreto"],
+  "Random Forest": ["Y", "Xs", "Xs_discreto"]
 
 
-
-
-
- 
-
-
-
-  "Analise de correlacao": ["Y", "X"],
-  "Grafico de disperao": ["Y", "X"],
-  "Grafico de tendencias": ["Y", "X"],
-  "Regressão linear múltipla": ["Y", "Xs"],
-  "Regressão logística binária": ["Y", "Xs"],
-  "Regressão logística nominal": ["Y", "Xs"],
-  "Regressão logística ordinal": ["Y", "Xs"]
 };
 
 async function enviarAnaliseCompleta() {
