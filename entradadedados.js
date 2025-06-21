@@ -51,7 +51,11 @@ const configuracoesFerramentas = {
   // Análise Preditiva
 
   "Tipo de modelo de regressão": ["Y", "X"],
-  "Regressão linear simples": ["Y", "X"]
+  "Regressão linear simples": ["Y", "X"],
+  "Regressão linear múltipla": ["Y", "Xs", "Xs_discreto"]
+
+ 
+
 
 
   "Analise de correlacao": ["Y", "X"],
@@ -120,7 +124,6 @@ async function enviarAnaliseCompleta() {
     const el = document.getElementById('box_ys');
     const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
     formData.append("coluna_y", val);
-
   }
 
   if (camposNecessarios.includes("X")) {
@@ -132,6 +135,12 @@ async function enviarAnaliseCompleta() {
     const el = document.getElementById('box_xs');
     const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
     formData.append("colunas_x", val);
+  }
+
+  if (camposNecessarios.includes("Xs_discreto")) {
+    const el = document.getElementById('box_xs_discreto');
+    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x_discreto", val);
   }
 
   if (camposNecessarios.includes("Z")) {
