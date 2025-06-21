@@ -30,7 +30,9 @@ const configuracoesAnalises = {
     { nome: "Regressão linear múltipla" },
     { nome: "Regressão logística binária" },
     { nome: "Regressão logística ordinal" },
-    { nome: "Regressão logística nominal" }
+    { nome: "Regressão logística nominal" },
+    { nome: ""Árvore de decisão"" },
+    { nome: ""Random Forest" }
   ],
   "Análise de controle de processo": [
     { nome: "Carta IMR" },
