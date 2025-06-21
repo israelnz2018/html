@@ -54,7 +54,9 @@ const configuracoesFerramentas = {
   "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs", "Xs_discreto"],
   "Regressão logística binária": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"]
+  "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"],
+  "Regressão logística nominal": ["Y", "Xs", "Xs_discreto"]
+
 
 
 
