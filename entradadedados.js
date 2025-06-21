@@ -39,7 +39,9 @@ const configuracoesFerramentas = {
   "2 Variancas": ["Ys"],
   "2 Variancas Brown-Forsythe": ["Ys"],
   "Bartlett": ["Ys"],
-  "Brown-Forsythe": ["Ys"]
+  "Brown-Forsythe": ["Ys"],
+  "1 Intervalo de Confianca Variancia": ["Y", "Field"]
+
 
 
 
