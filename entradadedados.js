@@ -57,8 +57,9 @@ const configuracoesFerramentas = {
   "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"],
   "Regressão logística nominal": ["Y", "Xs", "Xs_discreto"],
   "Árvore de decisão": ["Y", "Xs", "Xs_discreto"],
-  "Random Forest": ["Y", "Xs", "Xs_discreto"]
-
+  "Random Forest": ["Y", "Xs", "Xs_discreto"],
+  "ARIMA": ["Y", "Field"],
+  "Holt-Winters": ["Y", "Field"]
 
 };
 
