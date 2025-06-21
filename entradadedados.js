@@ -51,11 +51,12 @@ const configuracoesFerramentas = {
   // Análise Preditiva
 
   "Tipo de modelo de regressão": ["Y", "X"],
+  "Regressão linear simples": ["Y", "X"]
+
 
   "Analise de correlacao": ["Y", "X"],
   "Grafico de disperao": ["Y", "X"],
   "Grafico de tendencias": ["Y", "X"],
-  "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs"],
   "Regressão logística binária": ["Y", "Xs"],
   "Regressão logística nominal": ["Y", "Xs"],
