@@ -31,6 +31,7 @@ const configuracoesFerramentas = {
  "2 Paired Test" : ["Ys"],
  "One way ANOVA": ["Ys", "X"],
   "1 Wilcoxon": ["Y", "Field"],
+  "2 Mann-Whitney": ["Ys"],
 
 
 
