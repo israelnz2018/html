@@ -198,44 +198,54 @@ async function enviarAnaliseCompleta() {
   formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
 
+  let yVal = "", xVal = "", zVal = "", fieldVal = "";
+
   if (camposNecessarios.includes("Y")) {
-    const val = document.getElementById('box_y')?.value || "";
-    formData.append("coluna_y", val);
+    yVal = document.getElementById('box_y')?.value || "";
+    formData.append("coluna_y", yVal);
   }
 
   if (camposNecessarios.includes("Ys")) {
     const el = document.getElementById('box_ys');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("coluna_y", val);
+    yVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("coluna_y", yVal);
   }
 
   if (camposNecessarios.includes("X")) {
-    const val = document.getElementById('box_x')?.value || "";
-    formData.append("colunas_x", val);
+    xVal = document.getElementById('box_x')?.value || "";
+    formData.append("colunas_x", xVal);
   }
 
   if (camposNecessarios.includes("Xs")) {
     const el = document.getElementById('box_xs');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x", val);
+    xVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
+    formData.append("colunas_x", xVal);
   }
 
   if (camposNecessarios.includes("Z")) {
-    const val = document.getElementById('box_z')?.value || "";
-    formData.append("coluna_z", val);
+    zVal = document.getElementById('box_z')?.value || "";
+    formData.append("coluna_z", zVal);
   }
 
   if (camposNecessarios.some(c => c.startsWith("Field"))) {
-    const val = document.getElementById('box_field')?.value || "";
-    if (val !== "") {
-      formData.append("field", val);
+    fieldVal = document.getElementById('box_field')?.value || "";
+    if (fieldVal !== "") {
+      formData.append("field", fieldVal);
     }
   }
 
   // Remove os textos extras abaixo do dropdown, se existirem
   const box = document.getElementById("boxAnalise");
-  Array.from(box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field"))
-    .forEach(el => el.remove());
+  if (box) {
+    const textosExtras = box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field");
+    textosExtras.forEach(el => {
+      try {
+        el.remove();
+      } catch (err) {
+        console.warn("⚠ Erro ao tentar remover elemento:", el, err);
+      }
+    });
+  }
 
   console.log("📦 Envio para backend (objeto final):");
   for (const [key, value] of formData.entries()) {
@@ -279,4 +289,5 @@ async function enviarAnaliseCompleta() {
 }
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+
 
