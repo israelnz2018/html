@@ -28,6 +28,9 @@ const configuracoesFerramentas = {
   // Análise Inferencial
  "1 Sample T": ["Y", "Field"],
  "2 Sample T": ["Ys"],
+ "2 Paired Test" : ["Ys"],
+
+  
 
 
   "Paired Test": ["Xs"],
