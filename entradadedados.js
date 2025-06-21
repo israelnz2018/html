@@ -44,7 +44,8 @@ const configuracoesFerramentas = {
   "1 Proporcao": ["Y", "Field"],
   "2 Proporcoes": ["Ys", "Field"],
   "K Proporcoes": ["Ys"],
-  "Analise de Associacao": ["Y", "X"]
+  "Qui-quadrado": ["Y", "X"]
+
 
 
 
