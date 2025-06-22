@@ -80,7 +80,9 @@ function gerarMenus() {
 
     buttonGrupo.addEventListener("click", event => {
       event.preventDefault();
+      fecharTodosOsMenus();
       liGrupo.classList.toggle("show");
+      liGrupo.querySelector("ul").classList.toggle("hidden");
     });
 
     const ulSub = document.createElement("ul");
@@ -97,6 +99,7 @@ function gerarMenus() {
         divItem.addEventListener("click", event => {
           event.preventDefault();
           liItem.classList.toggle("show");
+          liItem.querySelector("ul").classList.toggle("hidden");
         });
         liItem.appendChild(divItem);
 
@@ -142,16 +145,21 @@ function gerarMenus() {
 
   document.addEventListener("click", event => {
     document.querySelectorAll("nav ul li.show").forEach(li => {
-      if (!li.contains(event.target)) li.classList.remove("show");
-    });
-    document.querySelectorAll("nav ul li ul li.show").forEach(li => {
-      if (!li.contains(event.target)) li.classList.remove("show");
+      if (!li.contains(event.target)) {
+        li.classList.remove("show");
+        const submenu = li.querySelector("ul");
+        if (submenu) submenu.classList.add("hidden");
+      }
     });
   });
 }
 
 function fecharTodosOsMenus() {
-  document.querySelectorAll("nav ul li.show").forEach(li => li.classList.remove("show"));
-  document.querySelectorAll("nav ul li ul li.show").forEach(li => li.classList.remove("show"));
+  document.querySelectorAll("nav ul li.show").forEach(li => {
+    li.classList.remove("show");
+    const submenu = li.querySelector("ul");
+    if (submenu) submenu.classList.add("hidden");
+  });
 }
+
 
