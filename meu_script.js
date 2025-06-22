@@ -184,3 +184,9 @@ function atualizarBoxAnalise(colunas) {
   });
 }
 
+function registrarFerramenta(ferramenta) {
+  ferramentaAtual = ferramenta;
+  atualizarInterface();
+}
+
+document.addEventListener("DOMContentLoaded", inicializarEventos);
