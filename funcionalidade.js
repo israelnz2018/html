@@ -82,6 +82,8 @@ async function enviarAnaliseCompleta() {
     return;
   }
 
+  console.log("📌 DEBUG: Novo arquivo sendo enviado:", arquivoInput.files[0]);
+
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
   if (!nomeFerramenta) {
@@ -166,7 +168,6 @@ async function enviarAnaliseCompleta() {
     console.log(`👉 ${key}: "${value}"`);
   }
 
-
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
       method: 'POST',
@@ -205,6 +206,7 @@ async function enviarAnaliseCompleta() {
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
+
 
 
 async function perguntarIA() {
