@@ -272,3 +272,4 @@ async function perguntarIA() {
   }
 }
 
+document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
