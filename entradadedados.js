@@ -9,8 +9,8 @@ const configuracoesFerramentas = {
 
   // Análise Descritiva (Gráficos)
   "Histograma": ["X", "Subgrupo"],
-  "Pareto": ["X", "X_subgrupo", "Y"],
-  "Setores (Pizza)": ["X", "Y"], 
+  "Pareto": ["Y", "X", "X_subgrupo"],
+  "Setores (Pizza)": ["Y", "X"], 
   "Barras": ["X", "Y", "Subgrupo"],
   "BoxPlot": ["Xs", "Subgrupo"],
   "Dispersão": ["Y", "Xs", "Subgrupo"],
@@ -25,9 +25,9 @@ const configuracoesFerramentas = {
   "Gráficos de bolhas": ["Y", "X", "Z"],
 
   // Análise Inferencial
-  "1 Sample T": ["Y", "Field"],
-  "2 Sample T": ["Ys"],
-  "2 Paired Test" : ["Ys"],
+  "1 Sample T": ["Y", "Field", "field"],
+  "2 Sample T": ["Ys", "Field"],
+  "2 Paired Test" : ["Ys, ,"Field""],
   "One way ANOVA": ["Ys", "Subgrupo"],
   "1 Wilcoxon": ["Y", "Field"],
   "2 Mann-Whitney": ["Ys"],
