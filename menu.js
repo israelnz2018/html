@@ -38,7 +38,6 @@ const configuracoesAnalises = {
   ],
   "Análise de controle de processo": [
     { nome: "Carta I-MR": },
-
     { nome: "Carta X-BarraR" },
     { nome: "Carta X-BarraS" },
     { nome: "Carta P" },
