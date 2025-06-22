@@ -209,9 +209,17 @@ document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 async function perguntarIA() {
   alert('▶️ perguntarIA foi acionado');
 
-  const promptInput = document.getElementById('prompt');
+  const promptInput = document.getElementById('perguntaAluno');  // Corrigido o ID
+  if (!promptInput) {
+    alert("❌ Campo de pergunta não encontrado no HTML.");
+    return;
+  }
+
   const pergunta = promptInput.value.trim();
-  if (!pergunta) return;
+  if (!pergunta) {
+    alert("⚠️ Você precisa digitar uma pergunta.");
+    return;
+  }
 
   const ultima = document.querySelector('.analise-completa .analise-texto');
   if (!ultima || !ultima.innerText) {
@@ -273,4 +281,3 @@ async function perguntarIA() {
     blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
   }
 }
-
