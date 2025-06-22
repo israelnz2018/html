@@ -161,10 +161,11 @@ async function enviarAnaliseCompleta() {
     });
   }
 
-  console.log("📦 Envio para backend (objeto final):");
+  console.log("📌 DEBUG: Valores realmente enviados ao backend:");
   for (const [key, value] of formData.entries()) {
-    console.log(`✅ ${key}: ${value}`);
+    console.log(`👉 ${key}: "${value}"`);
   }
+
 
   try {
     const resposta = await fetch('https://analises-production.up.railway.app/analise', {
