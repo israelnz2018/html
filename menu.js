@@ -55,8 +55,9 @@ const configuracoesAnalises = {
     { nome: "Capabilidade - com dados discretizados" }
   ],
   "Análises Diversas": [
-    { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade", "Análise Prescritiva inteligente"] },
-    { nome: "Análise qualitativa", subitens: ["5 porquês", "Árvore de falhas", "Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização"] }
+    { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade"] },
+    { nome: "Análise qualitativa", subitens: ["Análise de cluster (mista)"] },
+    { nome: "Análise Inteligente" }
   ]
 };
 
