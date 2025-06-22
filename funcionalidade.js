@@ -181,9 +181,9 @@ async function enviarAnaliseCompleta() {
 
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
-      blocoAnalise.className = 'mb-4';
+      blocoAnalise.className = 'mb-4 analise-completa';
       blocoAnalise.innerHTML = `
-        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        <div class="analise-texto">${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
       containerAnalise.prepend(blocoAnalise);
@@ -203,3 +203,72 @@ async function enviarAnaliseCompleta() {
 }
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+
+async function perguntarIA() {
+  alert('▶️ perguntarIA foi acionado');
+
+  const promptInput = document.getElementById('prompt');
+  const pergunta = promptInput.value.trim();
+  if (!pergunta) return;
+
+  const ultima = document.querySelector('.analise-completa .analise-texto');
+  if (!ultima || !ultima.innerText) {
+    alert('⚠️ Nenhuma análise encontrada.');
+    return;
+  }
+
+  const textoPlano = ultima.innerText.trim();
+  console.log("🔍 Última análise capturada:", textoPlano);
+
+  const payload = {
+    analise: textoPlano,
+    prompt: pergunta
+  };
+
+  const blocoPergunta = document.createElement('div');
+  blocoPergunta.className = 'pergunta-resposta';
+  blocoPergunta.style.marginBottom = '24px';
+  blocoPergunta.style.border = '1px solid #007bff';
+  blocoPergunta.style.padding = '12px';
+  blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
+  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+
+  try {
+    const response = await fetch(
+      'https://primary-production-1d53.up.railway.app/webhook/perguntar-ia',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await response.json();
+    console.log("🟡 Resposta bruta recebida do agente:", data);
+
+    let respostaFinal = "";
+
+    try {
+      if (typeof data === "string") {
+        respostaFinal = data;
+      } else if (data?.analise) {
+        respostaFinal = data.analise;
+      } else {
+        console.warn("⚠️ Nenhum campo 'analise' encontrado em 'data'.", data);
+        respostaFinal = JSON.stringify(data);
+      }
+
+      respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+    } catch (erro) {
+      console.error("❌ Erro ao formatar resultado:", erro);
+      console.log("🧪 Resultado recebido:", data);
+      respostaFinal = data?.analise || "❌ Nenhuma resposta formatável recebida.";
+    }
+
+    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+  } catch (e) {
+    console.error("❌ Erro no fetch ou no processamento:", e);
+    blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
+  }
+}
+
