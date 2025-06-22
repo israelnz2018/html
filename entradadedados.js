@@ -26,10 +26,10 @@ const configuracoesFerramentas = {
   "Gráficos de bolhas": ["Y", "X", "Z"],
 
   // Análise Inferencial
- "1 Sample T": ["Y", "Field"],
- "2 Sample T": ["Ys"],
- "2 Paired Test" : ["Ys"],
- "One way ANOVA": ["Ys", "Subgrupo"],
+  "1 Sample T": ["Y", "Field"],
+  "2 Sample T": ["Ys"],
+  "2 Paired Test" : ["Ys"],
+  "One way ANOVA": ["Ys", "Subgrupo"],
   "1 Wilcoxon": ["Y", "Field"],
   "2 Mann-Whitney": ["Ys"],
   "Kruskal-Wallis": ["Ys", "Subgrupo"],
@@ -56,34 +56,31 @@ const configuracoesFerramentas = {
   "Árvore de decisão": ["Y", "Xs", "Xs_discreto"],
   "Random Forest": ["Y", "Xs", "Xs_discreto"],
   "ARIMA": ["Y", "Field"],
-  "Holt-Winters": ["Y", "Field"]
+  "Holt-Winters": ["Y", "Field"],
 
-};
-   // Análise Controle de Processo
+  // Análise Controle de Processo
   "Carta I-MR": ["Y"],
   "Carta X-Barra R": ["Y", "Subgrupo"],
   "Carta X-Barra S": ["Y", "Subgrupo"], 
   "Carta P": ["Y", "Subgrupo"],
   "Carta NP": ["Y", "Subgrupo"],
   "Carta C": ["Y"],
-  "Carta U": ["Y", "Subgrupo"]
+  "Carta U": ["Y", "Subgrupo"],
 
- // Análise de Capabilidade
+  // Análise de Capabilidade
   "Teste de normalidade": ["Y"],
-  "Análise de estabilidade" : ["Y"],
+  "Análise de estabilidade": ["Y"],
   "Análise de distribuição estatística": ["Y"],
   "Capabilidade - dados normais": ["Y", "Field", "Field"],
   "Capabilidade - outras distribuições": ["Y", "Field", "Field", "Field_Distribuicao"],
   "Capabilidade - com dados transformados": ["Y", "Field", "Field"],
-   "Capabilidade - com dados discretizados": ["Y", "Field", "Field"]
-
-};
+  "Capabilidade - com dados discretizados": ["Y", "Field", "Field"],
 
   // Outras Análises
   "Cálculo de Probabilidade": ["Y", "Field", "Field", "Field", "Field"],
   "Análise de Cluster (mista)": ["Xs", "Xs_discreto"]
-
 };
+
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
   sessaoAtiva = true;
