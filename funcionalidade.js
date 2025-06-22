@@ -203,6 +203,8 @@ async function enviarAnaliseCompleta() {
 }
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
+
 
 async function perguntarIA() {
   alert('▶️ perguntarIA foi acionado');
@@ -272,4 +274,3 @@ async function perguntarIA() {
   }
 }
 
-document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
