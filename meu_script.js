@@ -184,9 +184,19 @@ function atualizarBoxAnalise(colunas) {
   });
 }
 
+
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
   atualizarInterface();
 }
 
-document.addEventListener("DOMContentLoaded", inicializarEventos);
+// Garante que os eventos só sejam registrados após o DOM estar pronto
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarEventos?.();  // Chama inicializarEventos se existir
+
+  document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+  document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
+});
+
+
+
