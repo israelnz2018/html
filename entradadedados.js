@@ -46,10 +46,7 @@ const configuracoesFerramentas = {
   "K Proporcoes": ["Ys"],
   "Qui-quadrado": ["Y", "X"],
 
-
-
   // Análise Preditiva
-
   "Tipo de modelo de regressão": ["Y", "X"],
   "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs", "Xs_discreto"],
@@ -62,8 +59,7 @@ const configuracoesFerramentas = {
   "Holt-Winters": ["Y", "Field"]
 
 };
-  // Análise Capabilidade
-
+   // Análise Controle de Processo
   "Carta I-MR": ["Y"],
   "Carta X-Barra R": ["Y", "Subgrupo"],
   "Carta X-Barra S": ["Y", "Subgrupo"], 
@@ -72,30 +68,20 @@ const configuracoesFerramentas = {
   "Carta C": ["Y"],
   "Carta U": ["Y", "Subgrupo"]
 
-
-
+ // Análise de Capabilidade
   "Teste de normalidade": ["Y"],
   "Análise de estabilidade" : ["Y"],
   "Análise de distribuição estatística": ["Y"],
-  "Capabilidade - dados normais": ["Y", "Field_LSL", "Field_USL"],
-  "Capabilidade - outras distribuições": ["Y", "Field_LSL", "Field_USL", "Field_Distribuicao"],
-  "Capabilidade - com dados transformados": ["Y", "Field_LSL", "Field_USL"],
-   "Capabilidade - com dados discretizados": ["Y", "Field_LSL", "Field_USL"]
+  "Capabilidade - dados normais": ["Y", "Field", "Field"],
+  "Capabilidade - outras distribuições": ["Y", "Field", "Field", "Field_Distribuicao"],
+  "Capabilidade - com dados transformados": ["Y", "Field", "Field"],
+   "Capabilidade - com dados discretizados": ["Y", "Field", "Field"]
 
 };
 
-  // Análise Controle de Processo
-
-  "Tipo de modelo de regressão": ["Y", "X"],
-  "Regressão linear simples": ["Y", "X"],
-  "Regressão linear múltipla": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística binária": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística ordinal": ["Y", "Xs", "Xs_discreto"],
-  "Regressão logística nominal": ["Y", "Xs", "Xs_discreto"],
-  "Árvore de decisão": ["Y", "Xs", "Xs_discreto"],
-  "Random Forest": ["Y", "Xs", "Xs_discreto"],
-  "ARIMA": ["Y", "Field"],
-  "Holt-Winters": ["Y", "Field"]
+  // Outras Análises
+  "Cálculo de Probabilidade": ["Y", "Field", "Field", "Field", "Field"],
+  "Análise de Cluster (mista)": ["Xs", "Xs_discreto"]
 
 };
 async function enviarAnaliseCompleta() {
