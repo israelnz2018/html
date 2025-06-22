@@ -10,7 +10,7 @@ const configuracoesFerramentas = {
   // Análise Descritiva (Gráficos)
   "Histograma": ["X", "Subgrupo"],
   "Pareto": ["Y", "X", "X_subgrupo"],
-  "Setores (Pizza)": ["Y", "X"], 
+  "Setores (Pizza)": ["Y", "X"],
   "Barras": ["X", "Y", "Subgrupo"],
   "BoxPlot": ["Xs", "Subgrupo"],
   "Dispersão": ["Y", "Xs", "Subgrupo"],
@@ -18,21 +18,21 @@ const configuracoesFerramentas = {
   "Bolhas - 3D": ["X", "Y", "Z"],
   "Superfície - 3D": ["X", "Y", "Z"],
   "Pareto simples": ["X", "Subgrupo"],
-  "Gráfifo de barras": ["X", "Subgrupo"],
+  "Gráfico de barras": ["X", "Subgrupo"],
   "BoxPlot simples": ["Y", "Subgrupo"],
-  "Gráfico de disperao": ["Y", "X"],
-  "Gráfico de tendecias": ["Y", "X"],
+  "Gráfico de dispersão": ["Y", "X"],
+  "Gráfico de tendências": ["Y", "X"],
   "Gráficos de bolhas": ["Y", "X", "Z"],
 
   // Análise Inferencial
-  "1 Sample T": ["Y", "Field", "field"],
+  "1 Sample T": ["Y", "Field", "Field_conf"],
   "2 Sample T": ["Ys", "Field"],
-  "2 Paired Test" : ["Ys, ,"Field""],
+  "2 Paired Test": ["Ys", "Field"],
   "One way ANOVA": ["Ys", "Subgrupo"],
   "1 Wilcoxon": ["Y", "Field"],
   "2 Mann-Whitney": ["Ys"],
   "Kruskal-Wallis": ["Ys", "Subgrupo"],
-  "Friedman Pareado": ["Ys", "Subgrupo"], 
+  "Friedman Pareado": ["Ys", "Subgrupo"],
   "1 Intervalo de Confianca": ["Y", "Field"],
   "1 Intervalo Interquartilico": ["Y"],
   "2 Variancas": ["Ys"],
@@ -60,7 +60,7 @@ const configuracoesFerramentas = {
   // Análise Controle de Processo
   "Carta I-MR": ["Y"],
   "Carta X-Barra R": ["Y", "Subgrupo"],
-  "Carta X-Barra S": ["Y", "Subgrupo"], 
+  "Carta X-Barra S": ["Y", "Subgrupo"],
   "Carta P": ["Y", "Subgrupo"],
   "Carta NP": ["Y", "Subgrupo"],
   "Carta C": ["Y"],
@@ -79,6 +79,7 @@ const configuracoesFerramentas = {
   "Cálculo de Probabilidade": ["Y", "Field", "Field", "Field", "Field"],
   "Análise de Cluster (mista)": ["Xs", "Xs_discreto"]
 };
+
 
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
