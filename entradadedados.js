@@ -1,11 +1,10 @@
 const configuracoesFerramentas = {
   // Análise Exploratória
   "Gráfico Sumario": ["Y"],
-  "Análise de outliers": ["Xs"],
+  "Análise de outliers": ["Ys"],
   "Correlação de person": ["Y", "Xs"],
   "Matrix de dispersão": ["Y", "Xs"],
   "Análise de estabilidade": ["Y", "Subgrupo"],
-  "Análise de distribuição estatística": ["Y"],
   "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
