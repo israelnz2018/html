@@ -179,7 +179,6 @@ async function enviarAnaliseCompleta() {
     console.log("🟢 Resposta do backend:", json);
     window._ultimaRespostaAnalise = json;
 
-
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
 
@@ -194,10 +193,18 @@ async function enviarAnaliseCompleta() {
     }
 
     if (json.grafico_isolado_base64) {
-      const imgGrafico = document.createElement('img');
-      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
-      containerGrafico.prepend(imgGrafico);
+      let base64 = Array.isArray(json.grafico_isolado_base64)
+        ? json.grafico_isolado_base64.find(v => v && v.length > 50)
+        : json.grafico_isolado_base64;
+
+      if (base64) {
+        const imgGrafico = document.createElement('img');
+        imgGrafico.src = `data:image/png;base64,${base64}`;
+        imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+        containerGrafico.prepend(imgGrafico);
+      } else {
+        console.warn("⚠ Nenhum base64 válido encontrado para o gráfico isolado.");
+      }
     }
 
   } catch (e) {
@@ -208,6 +215,7 @@ async function enviarAnaliseCompleta() {
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
+
 
 
 
