@@ -177,6 +177,8 @@ async function enviarAnaliseCompleta() {
     console.log("🟢 Status do backend:", resposta.status);
     const json = await resposta.json();
     console.log("🟢 Resposta do backend:", json);
+    window._ultimaRespostaAnalise = json;
+
 
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
