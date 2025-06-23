@@ -57,7 +57,7 @@ const configuracoesAnalises = {
   "Análises Diversas": [
     { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade"] },
     { nome: "Análise qualitativa", subitens: ["Análise de cluster (mista)"] },
-    { nome: "Análise Inteligente" }
+    // { nome: "Análise Inteligente" }
   ]
 };
 
