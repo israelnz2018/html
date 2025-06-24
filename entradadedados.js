@@ -85,6 +85,7 @@ async function enviarAnaliseCompleta() {
     exibirModalErro("⚠ Você precisa enviar um arquivo.");
     return;
   }
+
   if (!abaSelect?.value) {
     exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
     return;
@@ -92,6 +93,7 @@ async function enviarAnaliseCompleta() {
 
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
+
   if (!nomeFerramenta) {
     exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
     return;
@@ -113,6 +115,7 @@ async function enviarAnaliseCompleta() {
 
   const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
   const formData = new FormData();
+
   formData.append("arquivo", arquivoInput.files[0]);
   formData.append("aba", abaSelect.value);
   formData.append("ferramenta", analise);
@@ -180,6 +183,7 @@ async function enviarAnaliseCompleta() {
     formData.append("field", val);
   }
 
+  // LOG COMPLETO PARA DEBUG
   console.log("📦 Envio para backend (objeto final):");
   for (const [key, value] of formData.entries()) {
     console.log(`✅ ${key}: ${value}`);
@@ -226,3 +230,4 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
