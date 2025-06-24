@@ -82,6 +82,8 @@ async function enviarAnaliseCompleta() {
     return;
   }
 
+  console.log("📌 DEBUG: Novo arquivo sendo enviado:", arquivoInput.files[0]);
+
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
   if (!nomeFerramenta) {
@@ -161,9 +163,9 @@ async function enviarAnaliseCompleta() {
     });
   }
 
-  console.log("📦 Envio para backend (objeto final):");
+  console.log("📌 DEBUG: Valores realmente enviados ao backend:");
   for (const [key, value] of formData.entries()) {
-    console.log(`✅ ${key}: ${value}`);
+    console.log(`👉 ${key}: "${value}"`);
   }
 
   try {
@@ -175,25 +177,34 @@ async function enviarAnaliseCompleta() {
     console.log("🟢 Status do backend:", resposta.status);
     const json = await resposta.json();
     console.log("🟢 Resposta do backend:", json);
+    window._ultimaRespostaAnalise = json;
 
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
 
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
-      blocoAnalise.className = 'mb-4';
+      blocoAnalise.className = 'mb-4 analise-completa';
       blocoAnalise.innerHTML = `
-        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        <div class="analise-texto">${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
       containerAnalise.prepend(blocoAnalise);
     }
 
     if (json.grafico_isolado_base64) {
-      const imgGrafico = document.createElement('img');
-      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
-      containerGrafico.prepend(imgGrafico);
+      let base64 = Array.isArray(json.grafico_isolado_base64)
+        ? json.grafico_isolado_base64.find(v => v && v.length > 50)
+        : json.grafico_isolado_base64;
+
+      if (base64) {
+        const imgGrafico = document.createElement('img');
+        imgGrafico.src = `data:image/png;base64,${base64}`;
+        imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+        containerGrafico.prepend(imgGrafico);
+      } else {
+        console.warn("⚠ Nenhum base64 válido encontrado para o gráfico isolado.");
+      }
     }
 
   } catch (e) {
@@ -203,3 +214,83 @@ async function enviarAnaliseCompleta() {
 }
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
+
+
+
+
+async function perguntarIA() {
+  alert('▶️ perguntarIA foi acionado');
+
+  const promptInput = document.getElementById('perguntaAluno');  // Corrigido o ID
+  if (!promptInput) {
+    alert("❌ Campo de pergunta não encontrado no HTML.");
+    return;
+  }
+
+  const pergunta = promptInput.value.trim();
+  if (!pergunta) {
+    alert("⚠️ Você precisa digitar uma pergunta.");
+    return;
+  }
+
+  const ultima = document.querySelector('.analise-completa .analise-texto');
+  if (!ultima || !ultima.innerText) {
+    alert('⚠️ Nenhuma análise encontrada.');
+    return;
+  }
+
+  const textoPlano = ultima.innerText.trim();
+  console.log("🔍 Última análise capturada:", textoPlano);
+
+  const payload = {
+    analise: textoPlano,
+    prompt: pergunta
+  };
+
+  const blocoPergunta = document.createElement('div');
+  blocoPergunta.className = 'pergunta-resposta';
+  blocoPergunta.style.marginBottom = '24px';
+  blocoPergunta.style.border = '1px solid #007bff';
+  blocoPergunta.style.padding = '12px';
+  blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
+  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+
+  try {
+    const response = await fetch(
+      'https://primary-production-1d53.up.railway.app/webhook/perguntar-ia',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const data = await response.json();
+    console.log("🟡 Resposta bruta recebida do agente:", data);
+
+    let respostaFinal = "";
+
+    try {
+      if (typeof data === "string") {
+        respostaFinal = data;
+      } else if (data?.analise) {
+        respostaFinal = data.analise;
+      } else {
+        console.warn("⚠️ Nenhum campo 'analise' encontrado em 'data'.", data);
+        respostaFinal = JSON.stringify(data);
+      }
+
+      respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+    } catch (erro) {
+      console.error("❌ Erro ao formatar resultado:", erro);
+      console.log("🧪 Resultado recebido:", data);
+      respostaFinal = data?.analise || "❌ Nenhuma resposta formatável recebida.";
+    }
+
+    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+  } catch (e) {
+    console.error("❌ Erro no fetch ou no processamento:", e);
+    blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
+  }
+}
