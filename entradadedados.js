@@ -125,11 +125,6 @@ async function enviarAnaliseCompleta() {
     const val = document.getElementById('box_y')?.value || "";
     formData.append("coluna_y", val);
   }
- 
-  if (camposNecessarios.includes("Field_Distribuicao")) {
-    const val = document.getElementById('box_field_distribuicao')?.value || "";
-  if (val !== "") formData.append("Field_Distribuicao", val);
-  }
 
   if (camposNecessarios.includes("Ys")) {
     const el = document.getElementById('box_ys');
@@ -148,12 +143,6 @@ async function enviarAnaliseCompleta() {
     formData.append("colunas_x", val);
   }
 
-  if (camposNecessarios.includes("Xs_discreto")) {
-    const el = document.getElementById('box_xs_discreto');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x_discreto", val);
-  }
-
   if (camposNecessarios.includes("Z")) {
     const val = document.getElementById('box_z')?.value || "";
     formData.append("coluna_z", val);
@@ -164,20 +153,34 @@ async function enviarAnaliseCompleta() {
     formData.append("subgrupo", val);
   }
 
-  if (camposNecessarios.includes("X_subgrupo")) {
-    const val = document.getElementById('box_x_subgrupo')?.value || "";
-    formData.append("x_subgrupo", val);
+  if (camposNecessarios.includes("Field_LIE")) {
+    const val = document.getElementById('box_field_LIE')?.value || "";
+    formData.append("field_LIE", val);
   }
 
-  if (camposNecessarios.includes("Field") || camposNecessarios.some(c => c.startsWith("Field"))) {
-    const valField = document.getElementById('box_field')?.value || "";
-    if (valField !== "") formData.append("field", valField);
+  if (camposNecessarios.includes("Field_LSE")) {
+    const val = document.getElementById('box_field_LSE')?.value || "";
+    formData.append("field_LSE", val);
+  }
 
-    const valNivel = document.getElementById('box_field_nivelconfianca')?.value || "";
-    if (valNivel !== "") formData.append("field_nivelconfianca", valNivel);
+  if (camposNecessarios.includes("Field_conf")) {
+    const val = document.getElementById('box_field_conf')?.value || "";
+    formData.append("field_conf", val);
+  }
 
-    const valValor = document.getElementById('box_field_valor')?.value || "";
-    if (valValor !== "") formData.append("field_valor", valValor);
+  if (camposNecessarios.includes("Field_distribuicao")) {
+    const val = document.getElementById('box_field_distribuicao')?.value || "";
+    formData.append("field_distribuicao", val);
+  }
+
+  if (camposNecessarios.includes("Data")) {
+    const val = document.getElementById('box_data')?.value || "";
+    formData.append("Data", val);
+  }
+
+  if (camposNecessarios.includes("Field")) {
+    const val = document.getElementById('box_field')?.value || "";
+    formData.append("field", val);
   }
 
   console.log("📦 Envio para backend (objeto final):");
