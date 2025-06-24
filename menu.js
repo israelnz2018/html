@@ -3,7 +3,6 @@ const configuracoesAnalises = {
     { nome: "Análise de variabilidade", subitens: ["Gráfico Sumario", "Análise de outliers"] },
     { nome: "Análise de correlação", subitens: ["Correlação de person", "Matrix de dispersão"] },
     { nome: "Análise de estabilidade" },
-    { nome: "Análise de distribuição estatística" },
     { nome: "Análise de limpeza dos dados" }
   ],
   "Análise Descritiva (Gráficos)": [
