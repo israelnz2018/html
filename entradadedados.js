@@ -9,7 +9,7 @@ const configuracoesFerramentas = {
 
   // Análise Descritiva (Gráficos)
   "Histograma": ["Y", "Subgrupo"],
-  "Pareto": ["Y", "Subgrupo"],
+  "Pareto": ["Y", "X", "Subgrupo"],
   "Setores (Pizza)": ["Y", "Subgrupo"],
   "Barras": ["Y", "Subgrupo"],
   "BoxPlot": ["Ys", "Subgrupo"],
