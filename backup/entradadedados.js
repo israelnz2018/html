@@ -1,59 +1,77 @@
 const configuracoesFerramentas = {
   // Análise Exploratória
   "Gráfico Sumario": ["Y"],
-  "Análise de outliers": ["Xs"],
+  "Análise de outliers": ["Ys"],
   "Correlação de person": ["Y", "Xs"],
   "Matrix de dispersão": ["Y", "Xs"],
-  "Análise de estabilidade": ["Y", "Subgrupo"],
-  "Análise de distribuição estatística": ["Y"],
+  "Análise de estabilidade": ["Y"],
   "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
-  "Histograma": ["X", "Subgrupo"],
-  "Pareto": ["X", "X_subgrupo", "Y"],
-  "Setores (Pizza)": ["X", "Y"], 
+  "Histograma": ["Y", "Subgrupo"],
+  "Pareto": ["X", "Y", "Subgrupo"],
+  "Setores (Pizza)": ["X", "Y", "Subgrupo"],
   "Barras": ["X", "Y", "Subgrupo"],
-  "BoxPlot": ["Xs", "Subgrupo"],
-  "Dispersão": ["Y", "Xs", "Subgrupo"],
-  "Tendência": ["Y", "X", "Subgrupo"],
-  "Bolhas - 3D": ["X", "Y", "Z"],
-  "Superfície - 3D": ["X", "Y", "Z"],
-  "Pareto simples": ["X", "Subgrupo"],
-  "Gráfifo de barras": ["X", "Subgrupo"],
-  "BoxPlot simples": ["Y", "Subgrupo"],
-  "Gráfico de disperao": ["Y", "X"],
-  "Gráfico de tendecias": ["Y", "X"],
-  "Gráficos de bolhas": ["Y", "X", "Z"],
+  "BoxPlot": ["Ys", "Subgrupo"],
+  "Dispersão": ["Y", "X", "Subgrupo"],
+  "Tendência": ["Y", "Data", "Subgrupo"],
+  "Bolhas - 3D": ["Y", "X", "Z"],
+  "Superfície - 3D": ["Y", "X", "Z"],
 
   // Análise Inferencial
- "1 Sample T": ["Y", "Field"],
- "2 Sample T": ["Ys"],
-
-
-  "Paired Test": ["Xs"],
-  "One way ANOVA": ["Y", "Xs"],
+  "1 Sample T": ["Y", "Field", "Field_conf"],
+  "2 Sample T": ["Ys", "Field_conf"],
+  "2 Paired Test": ["Ys", "Field_conf"],
+  "One way ANOVA": ["Ys", "Subgrupo", "Field_conf"],
   "1 Wilcoxon": ["Y", "Field"],
-  "1 Teste de Sinal": ["Y", "Field"],
-  "2 Man Witney": ["Xs"],
-  "2 Wilcoxon": ["Xs"],
-  "Friedman": ["Xs"],
-  "Intervalo de Confianca": ["Y", "Field_NivelConfiança", "Field_Valor"],
-  "F/Levene Test": ["Xs"],
-  "Bartlett": ["Xs"],
-  "1 Proporcao": ["Y", "Field"],
-  "2 Proporcoes": ["Xs"],
-  "Qui- quadrado": ["Xs"],
+  "2 Mann-Whitney": ["Ys"],
+  "Kruskal-Wallis": ["Ys", "Subgrupo"],
+  "Friedman Pareado": ["Ys", "Subgrupo"],
+  "1 Intervalo de Confianca": ["Y", "Field_conf"],
+  "1 Intervalo Interquartilico": ["Y", "Field_conf"],
+  "2 Variancas": ["Ys", "Field_conf"],
+  "2 Variancas Brown-Forsythe": ["Ys", "Field_conf"],
+  "Bartlett": ["Ys", "Subgrupo", "Field_conf"],
+  "Brown-Forsythe": ["Ys", "Subgrupo", "Field_conf"],
+  "1 Intervalo de Confianca Variancia": ["Y", "Field_conf"],
+  "1 Proporcao": ["Y", "Field_conf"],
+  "2 Proporcoes": ["Ys", "Field_conf"],
+  "K Proporcoes": ["Ys", "Field_conf"],
+  "Qui-quadrado": ["Y", "Xs", "Subgrupo"],
 
   // Análise Preditiva
-  "Analise de correlacao": ["Y", "X"],
-  "Grafico de disperao": ["Y", "X"],
-  "Grafico de tendencias": ["Y", "X"],
+  "Tipo de modelo de regressão": ["Y"],
   "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs"],
   "Regressão logística binária": ["Y", "Xs"],
+  "Regressão logística ordinal": ["Y", "Xs"],
   "Regressão logística nominal": ["Y", "Xs"],
-  "Regressão logística ordinal": ["Y", "Xs"]
+  "Árvore de decisão": ["Y", "Xs"],
+  "Random Forest": ["Y", "Xs"],
+  "ARIMA": ["Y", "Field"],
+  "Holt-Winters": ["Y", "Field"],
+
+  // Análise Controle de Processo
+  "Carta I-MR": ["Y"],
+  "Carta X-Barra R": ["Y", "Subgrupo"],
+  "Carta X-Barra S": ["Y", "Subgrupo"],
+  "Carta P": ["Y", "Subgrupo"],
+  "Carta NP": ["Y", "Subgrupo"],
+  "Carta C": ["Y"],
+  "Carta U": ["Y", "Subgrupo"],
+
+  // Análise de Capabilidade
+  "Teste de normalidade": ["Y"],
+  "Análise de distribuição estatística": ["Y"],
+  "Capabilidade - dados normais": ["Y", "Subgrupo", "Field_LIE", "Field_LSE"],
+  "Capabilidade - outras distribuições": ["Y", "Subgrupo", "Field_Dist", "Field_LIE", "Field_LSE"],
+  "Capabilidade - com dados transformados": ["Y", "Subgrupo", "Field_LIE", "Field_LSE"],
+  "Capabilidade - com dados discretizados": ["Y", "Field_LIE", "Field_LSE"],
+
+  // Outras Análises
+  "Cálculo de Probabilidade": ["Y", "Field"]
 };
+
 
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
@@ -112,7 +130,6 @@ async function enviarAnaliseCompleta() {
     const el = document.getElementById('box_ys');
     const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
     formData.append("coluna_y", val);
-
   }
 
   if (camposNecessarios.includes("X")) {
@@ -136,20 +153,34 @@ async function enviarAnaliseCompleta() {
     formData.append("subgrupo", val);
   }
 
-  if (camposNecessarios.includes("X_subgrupo")) {
-    const val = document.getElementById('box_x_subgrupo')?.value || "";
-    formData.append("x_subgrupo", val);
+  if (camposNecessarios.includes("Field_LIE")) {
+    const val = document.getElementById('box_field_LIE')?.value || "";
+    formData.append("field_LIE", val);
   }
 
-  if (camposNecessarios.includes("Field") || camposNecessarios.some(c => c.startsWith("Field"))) {
-    const valField = document.getElementById('box_field')?.value || "";
-    if (valField !== "") formData.append("field", valField);
+  if (camposNecessarios.includes("Field_LSE")) {
+    const val = document.getElementById('box_field_LSE')?.value || "";
+    formData.append("field_LSE", val);
+  }
 
-    const valNivel = document.getElementById('box_field_nivelconfianca')?.value || "";
-    if (valNivel !== "") formData.append("field_nivelconfianca", valNivel);
+  if (camposNecessarios.includes("Field_conf")) {
+    const val = document.getElementById('box_field_conf')?.value || "";
+    formData.append("field_conf", val);
+  }
 
-    const valValor = document.getElementById('box_field_valor')?.value || "";
-    if (valValor !== "") formData.append("field_valor", valValor);
+  if (camposNecessarios.includes("Field_distribuicao")) {
+    const val = document.getElementById('box_field_distribuicao')?.value || "";
+    formData.append("field_distribuicao", val);
+  }
+
+  if (camposNecessarios.includes("Data")) {
+    const val = document.getElementById('box_data')?.value || "";
+    formData.append("Data", val);
+  }
+
+  if (camposNecessarios.includes("Field")) {
+    const val = document.getElementById('box_field')?.value || "";
+    formData.append("field", val);
   }
 
   console.log("📦 Envio para backend (objeto final):");
