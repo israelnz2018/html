@@ -102,10 +102,7 @@ async function enviarAnaliseCompleta() {
 
   const GRAFICOS_LIST = [
     "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
-    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
-    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
-    "Gráfico de Tendência"
+    "Tendência", "Bolhas - 3D", "Superfície - 3D"
   ];
 
   if (GRAFICOS_LIST.includes(nomeFerramenta)) {
@@ -168,7 +165,7 @@ async function enviarAnaliseCompleta() {
     formData.append("field_conf", val);
   }
 
-  if (camposNecessarios.includes("Field_distribuicao")) {
+  if (camposNecessarios.includes("Field_Dist") || camposNecessarios.includes("Field_distribuicao")) {
     const val = document.getElementById('box_field_distribuicao')?.value || "";
     formData.append("field_distribuicao", val);
   }
@@ -212,10 +209,16 @@ async function enviarAnaliseCompleta() {
     }
 
     if (json.grafico_isolado_base64) {
-      const imgGrafico = document.createElement('img');
-      imgGrafico.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-      imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
-      containerGrafico.prepend(imgGrafico);
+      const base64 = Array.isArray(json.grafico_isolado_base64)
+        ? json.grafico_isolado_base64.find(v => v && v.length > 50)
+        : json.grafico_isolado_base64;
+
+      if (base64) {
+        const imgGrafico = document.createElement('img');
+        imgGrafico.src = `data:image/png;base64,${base64}`;
+        imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
+        containerGrafico.prepend(imgGrafico);
+      }
     }
 
   } catch (e) {
