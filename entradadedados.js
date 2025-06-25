@@ -17,6 +17,8 @@ const configuracoesFerramentas = {
   "Tendência": ["Y", "Data", "Subgrupo"],
   "Bolhas - 3D": ["Y", "X", "Z"],
   "Superfície - 3D": ["Y", "X", "Z"],
+  "Dispersão 3D com Regressão": ["Y", "X", "Z"],
+
 
   // Análise Inferencial
   "1 Sample T": ["Y", "Field", "Field_conf"],
