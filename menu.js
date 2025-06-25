@@ -14,7 +14,9 @@ const configuracoesAnalises = {
     { nome: "Dispersão" },
     { nome: "Tendência" },
     { nome: "Bolhas - 3D" },
-    { nome: "Superfície - 3D" }
+    { nome: "Superfície - 3D" },
+    { nome: "Dispersão 3D com Regressão"}
+    
   ],
   "Análise Inferencial": [
     { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA", "1 Intervalo de Confianca"] },
