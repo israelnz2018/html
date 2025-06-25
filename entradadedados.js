@@ -31,7 +31,7 @@ const configuracoesFerramentas = {
   "Friedman Pareado": ["Ys", "Subgrupo", "Field_conf"],
   "1 Intervalo de Confianca": ["Y", "Field_conf"],
   "1 Intervalo Interquartilico": ["Y","Field_conf"],
-  "2 Variancas": ["Ys", "Field_conf"],
+  "2 Varianças": ["Ys", "Field_conf"],
   "2 Variancas Brown-Forsythe": ["Ys", "Field_conf"],
   "Bartlett": ["Ys", "Subgrupo", "Field_conf"],
   "Brown-Forsythe": ["Ys", "Subgrupo", "Field_conf"],
