@@ -33,8 +33,10 @@ const configuracoesAnalises = {
     { nome: "Regressão logística ordinal" },
     { nome: "Regressão logística nominal" },
     { nome: "Árvore de decisão" },
+    { nome: "Random Forest" },
     { nome: "ARIMA" },
     { nome: "Holt-Winters"}
+    
     
   ],
   "Análise de controle de processo": [
