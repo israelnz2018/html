@@ -118,7 +118,8 @@ function atualizarBoxAnalise(colunas) {
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "Ys", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
+    // Dropdowns com colunas
+    if (["Y", "Ys", "X", "Xs", "Subgrupo", "X_subgrupo", "Z", "Data"].includes(campoLimpo)) {
       const select = document.createElement("select");
       select.id = `box_${campoLimpo.toLowerCase()}`;
       select.className = "border rounded p-1 mb-2 w-full";
@@ -148,7 +149,8 @@ function atualizarBoxAnalise(colunas) {
       }
     }
 
-    if (campoLimpo === "Field_Distribuicao") {
+    // Dropdown de Distribuições
+    if (campoLimpo === "Field_Distribuicao" || campoLimpo === "Field_Dist") {
       const labelDist = document.createElement("label");
       labelDist.className = "block font-medium mb-1";
       labelDist.textContent = "Distribuição:";
@@ -174,15 +176,17 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(selectDist);
     }
 
-    if (campoLimpo.startsWith("Field") && campoLimpo !== "Field_Distribuicao") {
+    // Inputs numéricos para qualquer outro Field
+    if (campoLimpo.startsWith("Field") && campoLimpo !== "Field_Distribuicao" && campoLimpo !== "Field_Dist") {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_field`;
+      input.id = `box_${campoLimpo.toLowerCase()}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
 }
+
 
 
 function registrarFerramenta(ferramenta) {
