@@ -197,3 +197,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
+
+
+
