@@ -110,58 +110,30 @@ async function enviarAnaliseCompleta() {
   formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
 
-  // Adiciona todos os campos necessários conforme configuracoesFerramentas
-  if (camposNecessarios.includes("Y")) {
-    formData.append("coluna_y", document.getElementById('box_y')?.value || "");
-  }
+  const appendCampo = (id, chave, multiplo = false) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (multiplo) {
+      const val = Array.from(el.selectedOptions).map(opt => opt.value).join(",");
+      if (val) formData.append(chave, val);
+    } else {
+      if (el.value) formData.append(chave, el.value);
+    }
+  };
 
-  if (camposNecessarios.includes("Ys")) {
-    const el = document.getElementById('box_ys');
-    const val = el ? Array.from(el.selectedOptions).map(opt => opt.value).join(",") : "";
-    formData.append("coluna_y", val);
-  }
-
-  if (camposNecessarios.includes("X")) {
-    formData.append("colunas_x", document.getElementById('box_x')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Xs")) {
-    const el = document.getElementById('box_xs');
-    const val = el ? Array.from(el.selectedOptions).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x", val);
-  }
-
-  if (camposNecessarios.includes("Z")) {
-    formData.append("coluna_z", document.getElementById('box_z')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Subgrupo")) {
-    formData.append("subgrupo", document.getElementById('box_subgrupo')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Data")) {
-    formData.append("Data", document.getElementById('box_data')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Field")) {
-    formData.append("field", document.getElementById('box_field')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Field_conf")) {
-    formData.append("field_conf", document.getElementById('box_field_conf')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Field_LIE")) {
-    formData.append("field_LIE", document.getElementById('box_field_LIE')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Field_LSE")) {
-    formData.append("field_LSE", document.getElementById('box_field_LSE')?.value || "");
-  }
-
-  if (camposNecessarios.includes("Field_Dist") || camposNecessarios.includes("Field_distribuicao")) {
-    formData.append("field_distribuicao", document.getElementById('box_field_distribuicao')?.value || "");
-  }
+  appendCampo("box_y", "coluna_y");
+  appendCampo("box_ys", "lista_y", true);
+  appendCampo("box_x", "coluna_x");
+  appendCampo("box_xs", "lista_x", true);
+  appendCampo("box_z", "coluna_z");
+  appendCampo("box_zs", "lista_z", true);
+  appendCampo("box_data", "Data");
+  appendCampo("box_subgrupo", "subgrupo");
+  appendCampo("box_field", "field");
+  appendCampo("box_field_conf", "field_conf");
+  appendCampo("box_field_LIE", "field_LIE");
+  appendCampo("box_field_LSE", "field_LSE");
+  appendCampo("box_field_distribuicao", "field_dist");
 
   console.log("📌 DEBUG: Valores enviados ao backend:");
   for (const [key, value] of formData.entries()) {
