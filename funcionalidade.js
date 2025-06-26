@@ -131,8 +131,8 @@ async function enviarAnaliseCompleta() {
   appendCampo("box_subgrupo", "subgrupo");
   appendCampo("box_field", "field");
   appendCampo("box_field_conf", "field_conf");
-  appendCampo("box_field_LIE", "field_LIE");
-  appendCampo("box_field_LSE", "field_LSE");
+  appendCampo("box_field_lie", "field_LIE");
+  appendCampo("box_field_lie", "field_LSE");
   appendCampo("box_field_distribuicao", "field_dist");
 
   console.log("📌 DEBUG: Valores enviados ao backend:");
