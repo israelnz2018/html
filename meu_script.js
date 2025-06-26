@@ -132,10 +132,13 @@ function atualizarBoxAnalise(colunas) {
     const campoLimpo = campoOriginal.trim();
     const campoInterno = mapaCampos[campoLimpo] || campoLimpo;
 
-    const label = document.createElement("label");
-    label.className = "block font-medium mb-1";
-    label.textContent = `Variável ${campoLimpo}`;
-    box.appendChild(label);
+    // Cria label padrão, exceto para field_dist
+    if (campoInterno !== "field_dist") {
+      const label = document.createElement("label");
+      label.className = "block font-medium mb-1";
+      label.textContent = `Variável ${campoLimpo}`;
+      box.appendChild(label);
+    }
 
     // Dropdowns simples
     const dropdownSimples = [
@@ -184,16 +187,11 @@ function atualizarBoxAnalise(colunas) {
       new SlimSelect({ select: `#${select.id}` });
     }
 
-    // Distribuição
+    // Dropdown de distribuições (sem label extra)
     if (campoInterno === "field_dist") {
-      const labelDist = document.createElement("label");
-      labelDist.className = "block font-medium mb-1";
-      labelDist.textContent = "Distribuição:";
-      box.appendChild(labelDist);
-
-      const selectDist = document.createElement("select");
-      selectDist.id = "box_field_dist";
-      selectDist.className = "border rounded p-1 mb-2 w-full";
+      const select = document.createElement("select");
+      select.id = `box_${campoInterno}`;
+      select.className = "border rounded p-1 mb-2 w-full";
 
       const distribs = [
         "Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p",
@@ -205,10 +203,10 @@ function atualizarBoxAnalise(colunas) {
         const opt = document.createElement("option");
         opt.value = d;
         opt.textContent = d;
-        selectDist.appendChild(opt);
+        select.appendChild(opt);
       });
 
-      box.appendChild(selectDist);
+      box.appendChild(select);
     }
 
     // Campos numéricos diretos
@@ -225,6 +223,7 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
+
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
