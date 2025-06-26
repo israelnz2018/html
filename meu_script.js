@@ -120,7 +120,7 @@ function atualizarBoxAnalise(colunas) {
 
     // Dropdowns simples
     const dropdownSimples = [
-      "coluna_y", "coluna_x", "coluna_z", "Data", "subgrupo"
+      "Y", "X", "Z", "Data", "Subgrupo"
     ];
 
     if (dropdownSimples.includes(campoLimpo)) {
@@ -162,7 +162,6 @@ function atualizarBoxAnalise(colunas) {
       });
 
       box.appendChild(select);
-
       new SlimSelect({ select: `#${select.id}` });
     }
 
@@ -207,20 +206,6 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
-
-
-function registrarFerramenta(ferramenta) {
-  ferramentaAtual = ferramenta;
-  atualizarInterface();
-}
-
-// Garante que os eventos só sejam registrados após o DOM estar pronto
-document.addEventListener("DOMContentLoaded", () => {
-  inicializarEventos?.();  // Chama inicializarEventos se existir
-
-  document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
-  document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
-});
 
 
 
