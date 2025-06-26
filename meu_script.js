@@ -132,13 +132,11 @@ function atualizarBoxAnalise(colunas) {
     const campoLimpo = campoOriginal.trim();
     const campoInterno = mapaCampos[campoLimpo] || campoLimpo;
 
-    // Cria label padrão, exceto para field_dist
-    if (campoInterno !== "field_dist") {
-      const label = document.createElement("label");
-      label.className = "block font-medium mb-1";
-      label.textContent = `Variável ${campoLimpo}`;
-      box.appendChild(label);
-    }
+    // Label
+    const label = document.createElement("label");
+    label.className = "block font-medium mb-1";
+    label.textContent = `Variável ${campoLimpo}`;
+    box.appendChild(label);
 
     // Dropdowns simples
     const dropdownSimples = [
@@ -187,7 +185,7 @@ function atualizarBoxAnalise(colunas) {
       new SlimSelect({ select: `#${select.id}` });
     }
 
-    // Dropdown de distribuições (sem label extra)
+    // Dropdown de distribuições (agora com label padrão)
     if (campoInterno === "field_dist") {
       const select = document.createElement("select");
       select.id = `box_${campoInterno}`;
@@ -223,6 +221,7 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 }
+
 
 
 function registrarFerramenta(ferramenta) {
