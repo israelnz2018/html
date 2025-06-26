@@ -121,19 +121,20 @@ async function enviarAnaliseCompleta() {
     }
   };
 
-  appendCampo("box_y", "coluna_y");
-  appendCampo("box_ys", "lista_y", true);
-  appendCampo("box_x", "coluna_x");
-  appendCampo("box_xs", "lista_x", true);
-  appendCampo("box_z", "coluna_z");
-  appendCampo("box_zs", "lista_z", true);
-  appendCampo("box_data", "Data");
+  appendCampo("box_coluna_y", "coluna_y");
+  appendCampo("box_lista_y", "lista_y", true);
+  appendCampo("box_coluna_x", "coluna_x");
+  appendCampo("box_lista_x", "lista_x", true);
+  appendCampo("box_coluna_z", "coluna_z");
+  appendCampo("box_lista_z", "lista_z", true);
+  appendCampo("box_Data", "Data");
   appendCampo("box_subgrupo", "subgrupo");
   appendCampo("box_field", "field");
   appendCampo("box_field_conf", "field_conf");
-  appendCampo("box_field_lie", "field_LIE");
-  appendCampo("box_field_lie", "field_LSE");
-  appendCampo("box_field_distribuicao", "field_dist");
+  appendCampo("box_field_LIE", "field_LIE");
+  appendCampo("box_field_LSE", "field_LSE");
+  appendCampo("box_field_dist", "field_dist");
+
 
   console.log("📌 DEBUG: Valores enviados ao backend:");
   for (const [key, value] of formData.entries()) {
