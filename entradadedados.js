@@ -55,8 +55,8 @@ const configuracoesFerramentas = {
 
   // Análise Controle de Processo
   "Carta I-MR": ["Y"],
-  "Carta X-Barra R": ["Y", "Subgrupo"],
-  "Carta X-Barra S": ["Y", "Subgrupo"],
+  "Carta X-BarraR": ["Y", "Subgrupo"],
+  "Carta X-BarraS": ["Y", "Subgrupo"],
   "Carta P": ["Y", "Subgrupo"],
   "Carta NP": ["Y", "Subgrupo"],
   "Carta C": ["Y"],
