@@ -110,9 +110,28 @@ function atualizarBoxAnalise(colunas) {
     return;
   }
 
+  const mapaCampos = {
+    "Y": "coluna_y",
+    "X": "coluna_x",
+    "Z": "coluna_z",
+    "Ys": "lista_y",
+    "Xs": "lista_x",
+    "Zs": "lista_z",
+    "Data": "Data",
+    "Subgrupo": "subgrupo",
+    "Field": "field",
+    "Field_conf": "field_conf",
+    "Field_LSE": "field_LSE",
+    "Field_LIE": "field_LIE",
+    "Field_Dist": "field_dist"
+  };
+
   const config = configuracoesFerramentas[ferramentaAtual] || [];
-  config.forEach(campo => {
-    const campoLimpo = campo.trim();
+
+  config.forEach(campoOriginal => {
+    const campoLimpo = campoOriginal.trim();
+    const campoInterno = mapaCampos[campoLimpo] || campoLimpo;
+
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
@@ -120,12 +139,12 @@ function atualizarBoxAnalise(colunas) {
 
     // Dropdowns simples
     const dropdownSimples = [
-      "Y", "X", "Z", "Data", "Subgrupo"
+      "coluna_y", "coluna_x", "coluna_z", "Data", "subgrupo"
     ];
 
-    if (dropdownSimples.includes(campoLimpo)) {
+    if (dropdownSimples.includes(campoInterno)) {
       const select = document.createElement("select");
-      select.id = `box_${campoLimpo}`;
+      select.id = `box_${campoInterno}`;
       select.className = "border rounded p-1 mb-2 w-full";
 
       const opcaoVazia = document.createElement('option');
@@ -148,9 +167,9 @@ function atualizarBoxAnalise(colunas) {
       "lista_y", "lista_x", "lista_z"
     ];
 
-    if (dropdownMultiplos.includes(campoLimpo)) {
+    if (dropdownMultiplos.includes(campoInterno)) {
       const select = document.createElement("select");
-      select.id = `box_${campoLimpo}`;
+      select.id = `box_${campoInterno}`;
       select.className = "border rounded p-1 mb-2 w-full";
       select.multiple = true;
 
@@ -166,7 +185,7 @@ function atualizarBoxAnalise(colunas) {
     }
 
     // Distribuição
-    if (campoLimpo === "field_dist") {
+    if (campoInterno === "field_dist") {
       const labelDist = document.createElement("label");
       labelDist.className = "block font-medium mb-1";
       labelDist.textContent = "Distribuição:";
@@ -197,10 +216,10 @@ function atualizarBoxAnalise(colunas) {
       "field", "field_conf", "field_LSE", "field_LIE"
     ];
 
-    if (camposNumericos.includes(campoLimpo)) {
+    if (camposNumericos.includes(campoInterno)) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_${campoLimpo}`;
+      input.id = `box_${campoInterno}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
