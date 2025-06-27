@@ -183,17 +183,13 @@ async function enviarAnaliseCompleta() {
   }
 }
 
-
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
-
-
-
 
 async function perguntarIA() {
   alert('▶️ perguntarIA foi acionado');
 
-  const promptInput = document.getElementById('perguntaAluno');  // Corrigido o ID
+  const promptInput = document.getElementById('perguntaAluno');
   if (!promptInput) {
     alert("❌ Campo de pergunta não encontrado no HTML.");
     return;
@@ -205,13 +201,19 @@ async function perguntarIA() {
     return;
   }
 
-  const ultima = document.querySelector('.analise-completa .analise-texto');
-  if (!ultima || !ultima.innerText) {
+  // NOVO MÉTODO MAIS ROBUSTO PARA PEGAR A ÚLTIMA ANÁLISE
+  let textoPlano = "";
+  const blocosAnalise = document.querySelectorAll('.bloco-analise .analise-texto');
+  if (blocosAnalise.length > 0) {
+    const ultima = blocosAnalise[0];
+    textoPlano = ultima?.innerText?.trim() || "";
+  }
+
+  if (!textoPlano) {
     alert('⚠️ Nenhuma análise encontrada.');
     return;
   }
 
-  const textoPlano = ultima.innerText.trim();
   console.log("🔍 Última análise capturada:", textoPlano);
 
   const payload = {
@@ -265,3 +267,4 @@ async function perguntarIA() {
     blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
   }
 }
+
