@@ -251,6 +251,11 @@ document.getElementById("togglePersonalizacao").addEventListener("click", () => 
 
 // Botão Aplicar Alterações
 document.getElementById("btnAplicarPersonalizacao").addEventListener("click", async () => {
+  if (!ultimoGraficoInfo) {
+    alert("⚠️ Nenhum gráfico para personalizar.");
+    return;
+  }
+
   const cor = document.getElementById("corGrafico").value;
   const tituloX = document.getElementById("tituloEixoX").value;
   const tituloY = document.getElementById("tituloEixoY").value;
@@ -260,6 +265,21 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const espessura = document.getElementById("espessuraLinha").value;
 
   const formData = new FormData();
+  formData.append("arquivo", ultimoGraficoInfo.arquivo);
+  formData.append("aba", ultimoGraficoInfo.aba);
+  formData.append("grafico", ultimoGraficoInfo.grafico);
+  formData.append("coluna_y", ultimoGraficoInfo.coluna_y);
+  formData.append("coluna_x", ultimoGraficoInfo.coluna_x);
+  formData.append("coluna_z", ultimoGraficoInfo.coluna_z);
+  formData.append("subgrupo", ultimoGraficoInfo.subgrupo);
+  formData.append("field", ultimoGraficoInfo.field);
+  formData.append("field_conf", ultimoGraficoInfo.field_conf);
+  formData.append("field_dist", ultimoGraficoInfo.field_dist);
+  formData.append("field_LSE", ultimoGraficoInfo.field_LSE);
+  formData.append("field_LIE", ultimoGraficoInfo.field_LIE);
+  formData.append("Data", ultimoGraficoInfo.Data);
+
+  // ✅ Novos parâmetros de personalização
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
@@ -269,29 +289,28 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   formData.append("espessura", espessura);
 
   try {
-    const resposta = await fetch("https://analises-production.up.railway.app/atualizar-grafico", {
+    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
       method: "POST",
       body: formData
     });
 
     const json = await resposta.json();
 
-    if (json.grafico_personalizado_base64) {
+    if (json.grafico_isolado_base64) {
       const containerGrafico = document.getElementById("conteudoGrafico");
       const img = document.createElement("img");
-      img.src = `data:image/png;base64,${json.grafico_personalizado_base64}`;
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
       containerGrafico.prepend(img);
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
 
-    document.getElementById("corGrafico").value = cor;
-
   } catch (e) {
     console.error("❌ Erro ao atualizar gráfico:", e);
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
+
 
 
