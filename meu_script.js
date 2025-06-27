@@ -1,5 +1,6 @@
 let workbookGlobal = null;
 let ferramentaAtual = "";
+let ultimoGraficoInfo = null; // se ainda não existir, adicione isso no início
 
 function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
@@ -139,10 +140,7 @@ function atualizarBoxAnalise(colunas) {
     box.appendChild(label);
 
     // Dropdowns simples
-    const dropdownSimples = [
-      "coluna_y", "coluna_x", "coluna_z", "Data", "subgrupo"
-    ];
-
+    const dropdownSimples = ["coluna_y", "coluna_x", "coluna_z", "Data", "subgrupo"];
     if (dropdownSimples.includes(campoInterno)) {
       const select = document.createElement("select");
       select.id = `box_${campoInterno}`;
@@ -164,10 +162,7 @@ function atualizarBoxAnalise(colunas) {
     }
 
     // Dropdowns múltiplos
-    const dropdownMultiplos = [
-      "lista_y", "lista_x", "lista_z"
-    ];
-
+    const dropdownMultiplos = ["lista_y", "lista_x", "lista_z"];
     if (dropdownMultiplos.includes(campoInterno)) {
       const select = document.createElement("select");
       select.id = `box_${campoInterno}`;
@@ -185,7 +180,7 @@ function atualizarBoxAnalise(colunas) {
       new SlimSelect({ select: `#${select.id}` });
     }
 
-    // Dropdown de distribuições (agora com label padrão)
+    // Dropdown de distribuições
     if (campoInterno === "field_dist") {
       const select = document.createElement("select");
       select.id = `box_${campoInterno}`;
@@ -208,10 +203,7 @@ function atualizarBoxAnalise(colunas) {
     }
 
     // Campos numéricos diretos
-    const camposNumericos = [
-      "field", "field_conf", "field_LSE", "field_LIE"
-    ];
-
+    const camposNumericos = ["field", "field_conf", "field_LSE", "field_LIE"];
     if (camposNumericos.includes(campoInterno)) {
       const input = document.createElement("input");
       input.type = "number";
@@ -222,8 +214,6 @@ function atualizarBoxAnalise(colunas) {
   });
 }
 
-
-
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
   atualizarInterface();
@@ -231,8 +221,7 @@ function registrarFerramenta(ferramenta) {
 
 // Garante que os eventos só sejam registrados após o DOM estar pronto
 document.addEventListener("DOMContentLoaded", () => {
-  inicializarEventos?.();  // Chama inicializarEventos se existir
-
+  inicializarEventos?.();
   document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
@@ -265,14 +254,16 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const espessura = document.getElementById("espessuraLinha").value;
 
   console.log("▶️ Enviando personalização:", {
-    cor, tituloX, tituloY, tamanhoFonte, inclinacaoX, inclinacaoY, espessura,
-    ultimoGraficoInfo
+    cor, tituloX, tituloY, tamanhoFonte, inclinacaoX, inclinacaoY, espessura, ultimoGraficoInfo
   });
 
   const formData = new FormData();
   formData.append("arquivo", ultimoGraficoInfo.arquivo);
   formData.append("aba", ultimoGraficoInfo.aba);
-  formData.append("grafico", ultimoGraficoInfo.grafico);
+
+  // Envia o nome do gráfico + " Personalizado"
+  formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
+
   formData.append("coluna_y", ultimoGraficoInfo.coluna_y);
   formData.append("coluna_x", ultimoGraficoInfo.coluna_x);
   formData.append("coluna_z", ultimoGraficoInfo.coluna_z);
@@ -284,7 +275,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   formData.append("field_LIE", ultimoGraficoInfo.field_LIE);
   formData.append("Data", ultimoGraficoInfo.Data);
 
-  // ✅ Novos parâmetros de personalização
+  // Novos parâmetros de personalização
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
@@ -302,9 +293,17 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     const json = await resposta.json();
     console.log("✅ Resposta do backend (personalização):", json);
 
+    const containerGrafico = document.getElementById("conteudoGrafico");
+
+    // Remove gráfico anterior personalizado, se existir
+    const graficoPersonalizadoExistente = document.getElementById("graficoPersonalizado");
+    if (graficoPersonalizadoExistente) {
+      graficoPersonalizadoExistente.remove();
+    }
+
     if (json.grafico_isolado_base64) {
-      const containerGrafico = document.getElementById("conteudoGrafico");
       const img = document.createElement("img");
+      img.id = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
       containerGrafico.prepend(img);
@@ -317,4 +316,5 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
+
 
