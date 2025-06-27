@@ -276,4 +276,5 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   }
 });
 
+document.getElementById("corGrafico").value = cor;
 
