@@ -173,6 +173,9 @@ async function enviarAnaliseCompleta() {
         imgGrafico.src = `data:image/png;base64,${base64}`;
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
+
+        // ✅ Mostrar painel de personalização somente se houver gráfico isolado
+        document.getElementById('painelPersonalizacao').style.display = 'block';
       }
     }
 
@@ -181,6 +184,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
