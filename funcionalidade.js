@@ -65,6 +65,9 @@ function deslogar() {
   box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
 
+// ✅ ITEM 1 – Variável global no topo do seu script
+let ultimoGraficoInfo = null;
+
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
   sessaoAtiva = true;
@@ -102,6 +105,24 @@ async function enviarAnaliseCompleta() {
   } else {
     analise = nomeFerramenta;
   }
+
+  // ✅ ITEM 2 – Salvar infos do último gráfico
+  ultimoGraficoInfo = {
+    arquivo: arquivoInput.files[0],
+    aba: abaSelect.value,
+    ferramenta: analise,
+    grafico: grafico,
+    coluna_y: document.getElementById("box_coluna_y")?.value || "",
+    coluna_x: document.getElementById("box_coluna_x")?.value || "",
+    coluna_z: document.getElementById("box_coluna_z")?.value || "",
+    subgrupo: document.getElementById("box_subgrupo")?.value || "",
+    field: document.getElementById("box_field")?.value || "",
+    field_conf: document.getElementById("box_field_conf")?.value || "",
+    field_dist: document.getElementById("box_field_dist")?.value || "",
+    field_LSE: document.getElementById("box_field_LSE")?.value || "",
+    field_LIE: document.getElementById("box_field_LIE")?.value || "",
+    Data: document.getElementById("box_Data")?.value || ""
+  };
 
   const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
   const formData = new FormData();
@@ -184,7 +205,6 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
-
 
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
