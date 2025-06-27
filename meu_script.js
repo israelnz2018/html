@@ -264,6 +264,11 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const inclinacaoY = document.getElementById("inclinacaoY").value;
   const espessura = document.getElementById("espessuraLinha").value;
 
+  console.log("▶️ Enviando personalização:", {
+    cor, tituloX, tituloY, tamanhoFonte, inclinacaoX, inclinacaoY, espessura,
+    ultimoGraficoInfo
+  });
+
   const formData = new FormData();
   formData.append("arquivo", ultimoGraficoInfo.arquivo);
   formData.append("aba", ultimoGraficoInfo.aba);
@@ -295,6 +300,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     });
 
     const json = await resposta.json();
+    console.log("✅ Resposta do backend (personalização):", json);
 
     if (json.grafico_isolado_base64) {
       const containerGrafico = document.getElementById("conteudoGrafico");
@@ -311,6 +317,4 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
-
-
 
