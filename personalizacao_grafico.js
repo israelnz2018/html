@@ -27,6 +27,8 @@ try {
   });
 
   const json = await resposta.json();
+console.log("🟥 Resposta completa do backend:", JSON.stringify(json, null, 2));
+
 
   // 🔎 LOG DE DEBUG
   console.log("🟢 Resposta backend:", json);
