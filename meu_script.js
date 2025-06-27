@@ -237,6 +237,19 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
+// Toggle painel personalizacao
+document.getElementById("togglePersonalizacao").addEventListener("click", () => {
+  const opcoes = document.getElementById("opcoesPersonalizacao");
+  if (opcoes.style.display === "none") {
+    opcoes.style.display = "grid";
+    document.getElementById("togglePersonalizacao").innerText = "Personalizar Gráfico ▲";
+  } else {
+    opcoes.style.display = "none";
+    document.getElementById("togglePersonalizacao").innerText = "Personalizar Gráfico ▼";
+  }
+});
+
+// Botão Aplicar Alterações
 document.getElementById("btnAplicarPersonalizacao").addEventListener("click", async () => {
   const cor = document.getElementById("corGrafico").value;
   const tituloX = document.getElementById("tituloEixoX").value;
@@ -244,6 +257,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const tamanhoFonte = document.getElementById("tamanhoFonte").value;
   const inclinacaoX = document.getElementById("inclinacaoX").value;
   const inclinacaoY = document.getElementById("inclinacaoY").value;
+  const espessura = document.getElementById("espessuraLinha").value;
 
   const formData = new FormData();
   formData.append("cor", cor);
@@ -252,6 +266,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   formData.append("tamanho_fonte", tamanhoFonte);
   formData.append("inclinacao_x", inclinacaoX);
   formData.append("inclinacao_y", inclinacaoY);
+  formData.append("espessura", espessura);
 
   try {
     const resposta = await fetch("https://analises-production.up.railway.app/atualizar-grafico", {
@@ -270,6 +285,9 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
+
+    document.getElementById("corGrafico").value = cor;
+
   } catch (e) {
     console.error("❌ Erro ao atualizar gráfico:", e);
     alert("❌ Erro ao atualizar gráfico.");
