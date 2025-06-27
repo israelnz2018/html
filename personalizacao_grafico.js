@@ -43,3 +43,4 @@ async function atualizarGraficoPersonalizado() {
     console.error("Erro ao atualizar gráfico personalizado:", e);
   }
 }
+document.getElementById("corGrafico").value = cor;
