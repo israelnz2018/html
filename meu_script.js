@@ -237,3 +237,43 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
+document.getElementById("btnAplicarPersonalizacao").addEventListener("click", async () => {
+  const cor = document.getElementById("corGrafico").value;
+  const tituloX = document.getElementById("tituloEixoX").value;
+  const tituloY = document.getElementById("tituloEixoY").value;
+  const tamanhoFonte = document.getElementById("tamanhoFonte").value;
+  const inclinacaoX = document.getElementById("inclinacaoX").value;
+  const inclinacaoY = document.getElementById("inclinacaoY").value;
+
+  const formData = new FormData();
+  formData.append("cor", cor);
+  formData.append("titulo_x", tituloX);
+  formData.append("titulo_y", tituloY);
+  formData.append("tamanho_fonte", tamanhoFonte);
+  formData.append("inclinacao_x", inclinacaoX);
+  formData.append("inclinacao_y", inclinacaoY);
+
+  try {
+    const resposta = await fetch("https://analises-production.up.railway.app/atualizar-grafico", {
+      method: "POST",
+      body: formData
+    });
+
+    const json = await resposta.json();
+
+    if (json.grafico_personalizado_base64) {
+      const containerGrafico = document.getElementById("conteudoGrafico");
+      const img = document.createElement("img");
+      img.src = `data:image/png;base64,${json.grafico_personalizado_base64}`;
+      img.style = "max-width:100%; margin-bottom:10px;";
+      containerGrafico.prepend(img);
+    } else {
+      alert("⚠️ Nenhuma imagem retornada do backend.");
+    }
+  } catch (e) {
+    console.error("❌ Erro ao atualizar gráfico:", e);
+    alert("❌ Erro ao atualizar gráfico.");
+  }
+});
+
+
