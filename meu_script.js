@@ -294,18 +294,15 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
 
     const containerGrafico = document.getElementById("conteudoGrafico");
 
-    // Remove gráfico anterior personalizado, se existir
-    const graficoPersonalizadoExistente = document.getElementById("graficoPersonalizado");
-    if (graficoPersonalizadoExistente) {
-      graficoPersonalizadoExistente.remove();
-    }
+    // 🗑️ Remove TODOS os gráficos personalizados antes de adicionar o novo
+    containerGrafico.innerHTML = "";
 
     if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
       img.id = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
-      containerGrafico.prepend(img);
+      containerGrafico.appendChild(img);
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
@@ -315,5 +312,6 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
+
 
 
