@@ -135,7 +135,6 @@ async function enviarAnaliseCompleta() {
   appendCampo("box_field_LSE", "field_LSE");
   appendCampo("box_field_dist", "field_dist");
 
-
   console.log("📌 DEBUG: Valores enviados ao backend:");
   for (const [key, value] of formData.entries()) {
     console.log(`👉 ${key}: "${value}"`);
@@ -156,9 +155,9 @@ async function enviarAnaliseCompleta() {
 
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
-      blocoAnalise.className = 'mb-4';
+      blocoAnalise.className = 'bloco-analise mb-4';
       blocoAnalise.innerHTML = `
-        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
+        <div class="analise-texto">${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
       `;
       containerAnalise.prepend(blocoAnalise);
@@ -182,6 +181,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
