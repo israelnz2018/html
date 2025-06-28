@@ -226,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function enviarPersonalizacao() {
+  const formData = new FormData();
   // Envia o nome do gráfico + " Personalizado"
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
 
