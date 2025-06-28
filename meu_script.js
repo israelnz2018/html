@@ -362,15 +362,18 @@ if (toggleBtn && painel && opcoes) {
 window.enviarPersonalizacao = enviarPersonalizacao;
 
 // ✅ Vincula o botão Aplicar Personalização à função ao carregar o DOM
-document.addEventListener("DOMContentLoaded", () => {
+function registrarBotaoPersonalizacao() {
   const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
-
   if (btnAplicar) {
     btnAplicar.addEventListener("click", () => {
       console.log("✅ Botão Aplicar Personalização clicado.");
       enviarPersonalizacao();
     });
   } else {
-    console.warn("⚠️ Botão btnAplicarPersonalizacao não encontrado no DOM.");
+    console.warn("⚠️ Botão btnAplicarPersonalizacao não encontrado. Tentará novamente em 500ms.");
+    setTimeout(registrarBotaoPersonalizacao, 500);
   }
-});
+}
+
+// ✅ Inicia tentativa de registro após scripts carregarem
+window.addEventListener("load", registrarBotaoPersonalizacao);
