@@ -235,7 +235,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const cor = document.getElementById("corGrafico").value;
   const tituloX = document.getElementById("tituloEixoX").value;
   const tituloY = document.getElementById("tituloEixoY").value;
-  const tituloPrincipal = document.getElementById("tituloGrafico").value; // ✅ NOVO
+  const tituloPrincipal = document.getElementById("tituloGrafico")?.value || ""; // ✅ NOVO (com ?. para evitar erro)
   const tamanhoFonte = document.getElementById("tamanhoFonte").value;
   const inclinacaoX = document.getElementById("inclinacaoX").value;
   const inclinacaoY = document.getElementById("inclinacaoY").value;
@@ -311,7 +311,8 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
       document.getElementById("corGrafico").value = cor;
       document.getElementById("tituloEixoX").value = tituloX;
       document.getElementById("tituloEixoY").value = tituloY;
-      document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
+      if (document.getElementById("tituloGrafico"))
+        document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
       document.getElementById("tamanhoFonte").value = tamanhoFonte;
       document.getElementById("inclinacaoX").value = inclinacaoX;
       document.getElementById("inclinacaoY").value = inclinacaoY;
@@ -326,6 +327,22 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
+
+// ✅ Toggle painel personalizacao (incluído aqui)
+const toggleBtn = document.getElementById("togglePersonalizacao");
+const painel = document.getElementById("painelPersonalizacao");
+
+if (toggleBtn && painel) {
+  toggleBtn.addEventListener("click", () => {
+    if (painel.style.display === "none" || painel.style.display === "") {
+      painel.style.display = "block";
+      toggleBtn.innerText = "Ocultar Personalização ▲";
+    } else {
+      painel.style.display = "none";
+      toggleBtn.innerText = "Mostrar Personalização ▼";
+    }
+  });
+}
 
 
 
