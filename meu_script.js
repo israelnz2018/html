@@ -333,16 +333,10 @@ const painel = document.getElementById("painelPersonalizacao");
 
 if (toggleBtn && painel) {
   toggleBtn.addEventListener("click", () => {
-    // Se estiver escondido ou sem display definido, mostra como block
-    if (painel.style.display === "none" || painel.style.display === "") {
-      painel.style.display = "block"; // ou "grid" se preferir o layout em grid
-      toggleBtn.innerText = "Ocultar Personalização ▲";
-    } else {
-      painel.style.display = "block"; // força sempre block (nunca some)
-      toggleBtn.innerText = "Ocultar Personalização ▲";
-    }
+    // ...
   });
 }
+
 
 
 
