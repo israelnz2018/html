@@ -332,8 +332,15 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
 
 const painel = document.getElementById("painelPersonalizacao");
 if (painel) {
-  painel.style.display = "grid"; // ou "block" se preferir layout em bloco
+  painel.style.display = "grid"; // garante que fique visível
+
+  // Também garante que o painel de opções dentro dele fique visível
+  const opcoes = document.getElementById("opcoesPersonalizacao");
+  if (opcoes) {
+    opcoes.style.display = "grid"; // ou "block" conforme seu layout interno
+  }
 }
+
 
 
 
