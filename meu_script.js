@@ -2,7 +2,6 @@ let workbookGlobal = null;
 let ferramentaAtual = "";
 let ultimoGraficoInfo = null;
 
-
 function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
   const abaEl = document.getElementById('aba_planilha');
@@ -220,12 +219,17 @@ function registrarFerramenta(ferramenta) {
   atualizarInterface();
 }
 
-// Garante que os eventos só sejam registrados após o DOM estar pronto
 document.addEventListener("DOMContentLoaded", () => {
   inicializarEventos?.();
   document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
-  document.getElementById("btnAplicarPersonalizacao")?.addEventListener("click", enviarPersonalizacao);
+
+  const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
+  if (btnAplicar) {
+    btnAplicar.addEventListener("click", enviarPersonalizacao);
+  } else {
+    console.warn("⚠️ Botão btnAplicarPersonalizacao não encontrado no DOM no carregamento.");
+  }
 });
 
 
