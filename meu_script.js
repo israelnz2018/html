@@ -333,19 +333,17 @@ const painel = document.getElementById("painelPersonalizacao");
 
 if (toggleBtn && painel) {
   toggleBtn.addEventListener("click", () => {
-    const estiloAtual = painel.style.display;
-
-    if (estiloAtual === "" || estiloAtual === "none") {
-      painel.style.display = "grid"; // mostra como grid
+    // Se estiver escondido ou sem display definido, mostra como block
+    if (painel.style.display === "none" || painel.style.display === "") {
+      painel.style.display = "block"; // ou "grid" se preferir o layout em grid
       toggleBtn.innerText = "Ocultar Personalização ▲";
-      painel.setAttribute("data-visivel", "true");
     } else {
-      painel.style.display = "none";
-      toggleBtn.innerText = "Mostrar Personalização ▼";
-      painel.removeAttribute("data-visivel");
+      painel.style.display = "block"; // força sempre block (nunca some)
+      toggleBtn.innerText = "Ocultar Personalização ▲";
     }
   });
 }
+
 
 
 
