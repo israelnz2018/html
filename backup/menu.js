@@ -3,7 +3,6 @@ const configuracoesAnalises = {
     { nome: "Análise de variabilidade", subitens: ["Gráfico Sumario", "Análise de outliers"] },
     { nome: "Análise de correlação", subitens: ["Correlação de person", "Matrix de dispersão"] },
     { nome: "Análise de estabilidade" },
-    { nome: "Análise de distribuição estatística" },
     { nome: "Análise de limpeza dos dados" }
   ],
   "Análise Descritiva (Gráficos)": [
@@ -15,14 +14,16 @@ const configuracoesAnalises = {
     { nome: "Dispersão" },
     { nome: "Tendência" },
     { nome: "Bolhas - 3D" },
-    { nome: "Superfície - 3D" }
+    { nome: "Superfície - 3D" },
+    { nome: "Dispersão 3D com Regressão"}
+    
   ],
   "Análise Inferencial": [
-    { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA"] },
-    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon", "1 Teste de Sinal", "1 Sample W", "1 Sample S", "2 Sample W", "2 Paired W", "Friedman"] },
-    { nome: "Análise de Varianças", subitens: ["1 Intervalo de Confianca", "2 Varianças", "Bartlett"] },
-    { nome: "Análise de Proporção", subitens: ["1 Proporção", "2 Proporções"] },
-    { nome: "Análise de Associação", subitens: ["Qui- quadrado"] }
+    { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA", "1 Intervalo de Confianca"] },
+    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Kruskal-Wallis", "Friedman Pareado", "1 Intervalo Interquartilico"] },
+    { nome: "Análise de Varianças", subitens: ["2 Varianças", "2 Variancas Brown-Forsythe", "Bartlett", "Brown-Forsythe", "1 Intervalo de Confianca Variancia"] },
+    { nome: "Análise de Proporção", subitens: ["1 Proporcao", "2 Proporções", "K Proporcoes"] },
+    { nome: "Análise de Associação", subitens: ["Qui-quadrado"] }
   ],
   "Análise Preditiva": [
     { nome: "Tipo de modelo de regressão" },
@@ -30,12 +31,18 @@ const configuracoesAnalises = {
     { nome: "Regressão linear múltipla" },
     { nome: "Regressão logística binária" },
     { nome: "Regressão logística ordinal" },
-    { nome: "Regressão logística nominal" }
+    { nome: "Regressão logística nominal" },
+    { nome: "Árvore de decisão" },
+    { nome: "Random Forest" },
+    { nome: "ARIMA" },
+    { nome: "Holt-Winters"}
+    
+    
   ],
   "Análise de controle de processo": [
-    { nome: "Carta IMR" },
+    { nome: "Carta I-MR" },
     { nome: "Carta X-BarraR" },
-    { nome: "Carta X-BarraS" },
+    { nome: "Carta X-BarraS" }, 
     { nome: "Carta P" },
     { nome: "Carta NP" },
     { nome: "Carta C" },
@@ -51,8 +58,9 @@ const configuracoesAnalises = {
     { nome: "Capabilidade - com dados discretizados" }
   ],
   "Análises Diversas": [
-    { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade", "Análise Prescritiva inteligente"] },
-    { nome: "Análise qualitativa", subitens: ["5 porquês", "Árvore de falhas", "Espinha de peixe", "Brainstorming", "Mapeamento do processo", "Matriz de priorização"] }
+    { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade"] },
+    { nome: "Análise qualitativa", subitens: ["Análise de cluster (mista)"] },
+    // { nome: "Análise Inteligente" }
   ]
 };
 
@@ -75,7 +83,9 @@ function gerarMenus() {
 
     buttonGrupo.addEventListener("click", event => {
       event.preventDefault();
+      fecharTodosOsMenus();
       liGrupo.classList.toggle("show");
+      liGrupo.querySelector("ul").classList.toggle("hidden");
     });
 
     const ulSub = document.createElement("ul");
@@ -92,6 +102,7 @@ function gerarMenus() {
         divItem.addEventListener("click", event => {
           event.preventDefault();
           liItem.classList.toggle("show");
+          liItem.querySelector("ul").classList.toggle("hidden");
         });
         liItem.appendChild(divItem);
 
@@ -137,15 +148,19 @@ function gerarMenus() {
 
   document.addEventListener("click", event => {
     document.querySelectorAll("nav ul li.show").forEach(li => {
-      if (!li.contains(event.target)) li.classList.remove("show");
-    });
-    document.querySelectorAll("nav ul li ul li.show").forEach(li => {
-      if (!li.contains(event.target)) li.classList.remove("show");
+      if (!li.contains(event.target)) {
+        li.classList.remove("show");
+        const submenu = li.querySelector("ul");
+        if (submenu) submenu.classList.add("hidden");
+      }
     });
   });
 }
 
 function fecharTodosOsMenus() {
-  document.querySelectorAll("nav ul li.show").forEach(li => li.classList.remove("show"));
-  document.querySelectorAll("nav ul li ul li.show").forEach(li => li.classList.remove("show"));
+  document.querySelectorAll("nav ul li.show").forEach(li => {
+    li.classList.remove("show");
+    const submenu = li.querySelector("ul");
+    if (submenu) submenu.classList.add("hidden");
+  });
 }
