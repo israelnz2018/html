@@ -328,13 +328,11 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   }
 });
 
-const toggleBtn = document.getElementById("togglePersonalizacao");
-const painel = document.getElementById("painelPersonalizacao");
+// ✅ Deixe o painel sempre aberto
 
-if (toggleBtn && painel) {
-  toggleBtn.addEventListener("click", () => {
-    // ...
-  });
+const painel = document.getElementById("painelPersonalizacao");
+if (painel) {
+  painel.style.display = "grid"; // ou "block" se preferir layout em bloco
 }
 
 
