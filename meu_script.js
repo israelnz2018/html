@@ -334,17 +334,20 @@ const painel = document.getElementById("painelPersonalizacao");
 
 if (toggleBtn && painel) {
   toggleBtn.addEventListener("click", () => {
-    const estiloAtual = window.getComputedStyle(painel).display;
+    const estaVisivel = painel.classList.contains("ativo");
 
-    if (estiloAtual === "none") {
-      painel.style.display = "grid"; // ✅ mostra como grid
-      toggleBtn.innerText = "Ocultar Personalização ▲";
-    } else {
+    if (estaVisivel) {
       painel.style.display = "none";
+      painel.classList.remove("ativo");
       toggleBtn.innerText = "Mostrar Personalização ▼";
+    } else {
+      painel.style.display = "grid"; // ou "block" se preferir
+      painel.classList.add("ativo");
+      toggleBtn.innerText = "Ocultar Personalização ▲";
     }
   });
 }
+
 
 
 
