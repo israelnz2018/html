@@ -226,8 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function enviarPersonalizacao() {
+  if (!ultimoGraficoInfo) {
+    alert("❌ Nenhum gráfico carregado para personalizar.");
+    return;
+  }
+
   const formData = new FormData();
-  // Envia o nome do gráfico + " Personalizado"
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
 
   formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
