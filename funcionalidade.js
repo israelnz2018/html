@@ -197,7 +197,8 @@ async function enviarAnaliseCompleta() {
           field_LIE: document.getElementById("box_field_LIE")?.value || "",
           Data: document.getElementById("box_Data")?.value || "",
           cor: "#4682B4", // steelblue
-          titulo_x: document.getElementById("box_coluna_x")?.value || "",
+          // 🔧 Ajuste aqui: usa coluna_x se existir, senão coluna_y
+          titulo_x: document.getElementById("box_coluna_x")?.value || document.getElementById("box_coluna_y")?.value || "",
           titulo_y: document.getElementById("box_coluna_y")?.value || "",
           tamanho_fonte: 12,
           inclinacao_x: 0,
@@ -221,6 +222,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 
