@@ -351,6 +351,8 @@ if (toggleBtn && painel && opcoes) {
   });
 }
 
+// Garante que a função registrarFerramenta fique global
+window.registrarFerramenta = registrarFerramenta;
 
 
 
