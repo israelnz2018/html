@@ -225,31 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
-// Botão Aplicar Alterações
-document.getElementById("btnAplicarPersonalizacao").addEventListener("click", async () => {
-  if (!ultimoGraficoInfo) {
-    alert("⚠️ Nenhum gráfico para personalizar.");
-    return;
-  }
-
-  const cor = document.getElementById("corGrafico").value;
-  const tituloX = document.getElementById("tituloEixoX").value;
-  const tituloY = document.getElementById("tituloEixoY").value;
-  const tituloPrincipal = document.getElementById("tituloGrafico")?.value || "";
-  const tamanhoFonte = document.getElementById("tamanhoFonte").value;
-  const inclinacaoX = document.getElementById("inclinacaoX").value;
-  const inclinacaoY = document.getElementById("inclinacaoY").value;
-  const espessura = document.getElementById("espessuraLinha").value;
-
-  console.log("▶️ Enviando personalização:", {
-    cor, tituloX, tituloY, tituloPrincipal, tamanhoFonte, inclinacaoX, inclinacaoY, espessura, ultimoGraficoInfo
-  });
-
-  const formData = new FormData();
-  formData.append("arquivo", ultimoGraficoInfo.arquivo);
-  formData.append("aba", ultimoGraficoInfo.aba);
-
-  // Envia o nome do gráfico + " Personalizado"
+// Envia o nome do gráfico + " Personalizado"
 formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
 
 formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
@@ -264,11 +240,24 @@ formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
 formData.append("Data", ultimoGraficoInfo.Data || "");
 
 // ✅ Inclui listas se existirem (como string separada por vírgula)
-if (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y)) {
-  formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
+if (ultimoGraficoInfo.lista_y) {
+  if (Array.isArray(ultimoGraficoInfo.lista_y)) {
+    formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
+  } else {
+    formData.append("lista_y", ultimoGraficoInfo.lista_y);
+  }
+} else {
+  formData.append("lista_y", "");
 }
-if (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x)) {
-  formData.append("lista_x", ultimoGraficoInfo.lista_x.join(","));
+
+if (ultimoGraficoInfo.lista_x) {
+  if (Array.isArray(ultimoGraficoInfo.lista_x)) {
+    formData.append("lista_x", ultimoGraficoInfo.lista_x.join(","));
+  } else {
+    formData.append("lista_x", ultimoGraficoInfo.lista_x);
+  }
+} else {
+  formData.append("lista_x", "");
 }
 
 // Novos parâmetros de personalização
@@ -281,6 +270,12 @@ formData.append("inclinacao_x", inclinacaoX);
 formData.append("inclinacao_y", inclinacaoY);
 formData.append("espessura", espessura);
 
+// 🔍 DEBUG: Verifica tudo que está no formData antes de enviar
+console.log("📤 FormData sendo enviado:");
+for (var pair of formData.entries()) {
+  console.log(pair[0] + ': ' + pair[1]);
+}
+
 try {
   const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
     method: "POST",
@@ -291,8 +286,6 @@ try {
   console.log("✅ Resposta do backend (personalização):", json);
 
   const containerGrafico = document.getElementById("conteudoGrafico");
-
-  // 🗑️ Remove TODOS os gráficos personalizados antes de adicionar o novo
   containerGrafico.innerHTML = "";
 
   if (json.grafico_isolado_base64) {
@@ -334,6 +327,7 @@ try {
   console.error("❌ Erro ao atualizar gráfico:", e);
   alert("❌ Erro ao atualizar gráfico.");
 }
+
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
