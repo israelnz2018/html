@@ -264,92 +264,91 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   formData.append("Data", ultimoGraficoInfo.Data);
 
 // Novos parâmetros de personalização
-formData.append("cor", cor);
-formData.append("titulo_x", tituloX);
-formData.append("titulo_y", tituloY);
-formData.append("titulo_grafico", tituloPrincipal); // ✅ NOVO
-formData.append("tamanho_fonte", tamanhoFonte);
-formData.append("inclinacao_x", inclinacaoX);
-formData.append("inclinacao_y", inclinacaoY);
-formData.append("espessura", espessura);
+  formData.append("cor", cor);
+  formData.append("titulo_x", tituloX);
+  formData.append("titulo_y", tituloY);
+  formData.append("titulo_grafico", tituloPrincipal); // ✅ NOVO
+  formData.append("tamanho_fonte", tamanhoFonte);
+  formData.append("inclinacao_x", inclinacaoX);
+  formData.append("inclinacao_y", inclinacaoY);
+  formData.append("espessura", espessura);
 
-try {
-  console.log("🚀 Iniciando envio de personalização do gráfico...");
-  console.log("📤 URL do POST:", "https://analises-production.up.railway.app/personalizar-grafico");
-
-  if (formData && formData.entries) {
-    console.log("📤 FormData sendo enviado:");
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
-  } else {
-    console.warn("⚠️ formData não está definido ou não possui entries()");
-  }
-
-  const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
-    method: "POST",
-    body: formData
-  });
-
-  console.log("📥 Status da resposta:", resposta.status, resposta.statusText);
-
-  const textoResposta = await resposta.text();
-  console.log("📥 Texto bruto da resposta:", textoResposta);
-
-  let json = {};
   try {
-    json = JSON.parse(textoResposta);
-    console.log("✅ Resposta JSON parseada:", json);
-  } catch (parseError) {
-    console.error("❌ Erro ao parsear JSON da resposta:", parseError);
+    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
+      method: "POST",
+      body: formData
+    });
+
+    const json = await resposta.json();
+    console.log("✅ Resposta do backend (personalização):", json);
+
+    const containerGrafico = document.getElementById("conteudoGrafico");
+
+    // 🗑️ Remove TODOS os gráficos personalizados antes de adicionar o novo
+    containerGrafico.innerHTML = "";
+
+    if (json.grafico_isolado_base64) {
+      const img = document.createElement("img");
+      img.id = "graficoPersonalizado";
+      img.src = data:image/png;base64,${json.grafico_isolado_base64};
+      img.style = "max-width:100%; margin-bottom:10px;";
+      containerGrafico.appendChild(img);
+
+      // ✅ Salva valores usados no ultimoGraficoInfo
+      ultimoGraficoInfo = {
+        ...ultimoGraficoInfo,
+        cor,
+        titulo_x: tituloX,
+        titulo_y: tituloY,
+        titulo_grafico: tituloPrincipal, // ✅ NOVO
+        tamanho_fonte: tamanhoFonte,
+        inclinacao_x: inclinacaoX,
+        inclinacao_y: inclinacaoY,
+        espessura
+      };
+
+      // ✅ Atualiza inputs com esses valores para exibir como default
+      document.getElementById("corGrafico").value = cor;
+      document.getElementById("tituloEixoX").value = tituloX;
+      document.getElementById("tituloEixoY").value = tituloY;
+      if (document.getElementById("tituloGrafico"))
+        document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
+      document.getElementById("tamanhoFonte").value = tamanhoFonte;
+      document.getElementById("inclinacaoX").value = inclinacaoX;
+      document.getElementById("inclinacaoY").value = inclinacaoY;
+      document.getElementById("espessuraLinha").value = espessura;
+
+    } else {
+      alert("⚠️ Nenhuma imagem retornada do backend.");
+    }
+
+  } catch (e) {
+    console.error("❌ Erro ao atualizar gráfico:", e);
+    alert("❌ Erro ao atualizar gráfico.");
   }
+});
 
-  const containerGrafico = document.getElementById("conteudoGrafico");
+const toggleBtn = document.getElementById("togglePersonalizacao");
+const painel = document.getElementById("painelPersonalizacao");
+const opcoes = document.getElementById("opcoesPersonalizacao");
 
-  // 🗑️ Remove TODOS os gráficos personalizados antes de adicionar o novo
-  containerGrafico.innerHTML = "";
+if (toggleBtn && painel && opcoes) {
+  // Inicializa fechado
+  painel.style.display = "block"; // mantém o painel visível
+  opcoes.style.display = "none"; // opções começam escondidas
+  toggleBtn.innerText = "Mostrar Personalização ▼";
 
-  if (json.grafico_isolado_base64) {
-    const img = document.createElement("img");
-    img.id = "graficoPersonalizado";
-    img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-    img.style = "max-width:100%; margin-bottom:10px;";
-    containerGrafico.appendChild(img);
+  toggleBtn.addEventListener("click", () => {
+    const estaVisivel = opcoes.style.display !== "none";
 
-    // ✅ Salva valores usados no ultimoGraficoInfo
-    ultimoGraficoInfo = {
-      ...ultimoGraficoInfo,
-      cor,
-      titulo_x: tituloX,
-      titulo_y: tituloY,
-      titulo_grafico: tituloPrincipal, // ✅ NOVO
-      tamanho_fonte: tamanhoFonte,
-      inclinacao_x: inclinacaoX,
-      inclinacao_y: inclinacaoY,
-      espessura
-    };
-
-    // ✅ Atualiza inputs com esses valores para exibir como default
-    document.getElementById("corGrafico").value = cor;
-    document.getElementById("tituloEixoX").value = tituloX;
-    document.getElementById("tituloEixoY").value = tituloY;
-    if (document.getElementById("tituloGrafico"))
-      document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
-    document.getElementById("tamanhoFonte").value = tamanhoFonte;
-    document.getElementById("inclinacaoX").value = inclinacaoX;
-    document.getElementById("inclinacaoY").value = inclinacaoY;
-    document.getElementById("espessuraLinha").value = espessura;
-
-    console.log("✅ Gráfico personalizado atualizado com sucesso!");
-
-  } else {
-    console.warn("⚠️ Nenhuma imagem retornada do backend.");
-    alert("⚠️ Nenhuma imagem retornada do backend.");
-  }
-
-} catch (e) {
-  console.error("❌ Erro ao atualizar gráfico:", e);
-  alert("❌ Erro ao atualizar gráfico. Ver console para detalhes.");
+    if (estaVisivel) {
+      opcoes.style.display = "none";
+      toggleBtn.innerText = "Mostrar Personalização ▼";
+    } else {
+      opcoes.style.display = "grid"; // ou "block"
+      toggleBtn.innerText = "Ocultar Personalização ▲";
+    }
+  });
 }
 
 
