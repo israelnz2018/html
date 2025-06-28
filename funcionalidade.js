@@ -65,7 +65,7 @@ function deslogar() {
   box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
 
-// ✅ ITEM 1 – Variável global no topo do seu script
+// ✅ Variável global no topo
 let ultimoGraficoInfo = null;
 
 async function enviarAnaliseCompleta() {
@@ -180,19 +180,32 @@ async function enviarAnaliseCompleta() {
         // ✅ Mostrar painel de personalização somente se houver gráfico isolado
         document.getElementById('painelPersonalizacao').style.display = 'block';
 
-        // ✅ Salvar valores padrões de personalização no ultimoGraficoInfo
+        // ✅ Atualizar ultimoGraficoInfo incluindo defaults de personalização
         ultimoGraficoInfo = {
-          ...ultimoGraficoInfo,
-          cor: "#4682B4", // cor padrão (steelblue)
-          titulo_x: ultimoGraficoInfo.coluna_x || "", // título X default
-          titulo_y: ultimoGraficoInfo.coluna_y || "", // título Y default
-          tamanho_fonte: 12, // tamanho padrão
-          inclinacao_x: 0, // padrão
-          inclinacao_y: 0, // padrão
-          espessura: 2 // padrão
+          arquivo: arquivoInput.files[0],
+          aba: abaSelect.value,
+          ferramenta: analise,
+          grafico: grafico,
+          coluna_y: document.getElementById("box_coluna_y")?.value || "",
+          coluna_x: document.getElementById("box_coluna_x")?.value || "",
+          coluna_z: document.getElementById("box_coluna_z")?.value || "",
+          subgrupo: document.getElementById("box_subgrupo")?.value || "",
+          field: document.getElementById("box_field")?.value || "",
+          field_conf: document.getElementById("box_field_conf")?.value || "",
+          field_dist: document.getElementById("box_field_dist")?.value || "",
+          field_LSE: document.getElementById("box_field_LSE")?.value || "",
+          field_LIE: document.getElementById("box_field_LIE")?.value || "",
+          Data: document.getElementById("box_Data")?.value || "",
+          cor: "#4682B4", // steelblue
+          titulo_x: document.getElementById("box_coluna_x")?.value || "",
+          titulo_y: document.getElementById("box_coluna_y")?.value || "",
+          tamanho_fonte: 12,
+          inclinacao_x: 0,
+          inclinacao_y: 0,
+          espessura: 2
         };
 
-        // ✅ Atualizar inputs do painel de personalização com esses valores
+        // ✅ Preencher painel de personalização com defaults
         document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
         document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
         document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
@@ -208,6 +221,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
