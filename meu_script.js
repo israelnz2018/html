@@ -235,7 +235,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const cor = document.getElementById("corGrafico").value;
   const tituloX = document.getElementById("tituloEixoX").value;
   const tituloY = document.getElementById("tituloEixoY").value;
-  const tituloPrincipal = document.getElementById("tituloGrafico")?.value || ""; // ✅ NOVO (com ?. para evitar erro)
+  const tituloPrincipal = document.getElementById("tituloGrafico")?.value || "";
   const tamanhoFonte = document.getElementById("tamanhoFonte").value;
   const inclinacaoX = document.getElementById("inclinacaoX").value;
   const inclinacaoY = document.getElementById("inclinacaoY").value;
@@ -263,11 +263,11 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   formData.append("field_LIE", ultimoGraficoInfo.field_LIE);
   formData.append("Data", ultimoGraficoInfo.Data);
 
-// Novos parâmetros de personalização
+  // Novos parâmetros de personalização
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
-  formData.append("titulo_grafico", tituloPrincipal); // ✅ NOVO
+  formData.append("titulo_grafico", tituloPrincipal);
   formData.append("tamanho_fonte", tamanhoFonte);
   formData.append("inclinacao_x", inclinacaoX);
   formData.append("inclinacao_y", inclinacaoY);
@@ -290,7 +290,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
       img.id = "graficoPersonalizado";
-      img.src = data:image/png;base64,${json.grafico_isolado_base64};
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
       containerGrafico.appendChild(img);
 
@@ -300,7 +300,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
         cor,
         titulo_x: tituloX,
         titulo_y: tituloY,
-        titulo_grafico: tituloPrincipal, // ✅ NOVO
+        titulo_grafico: tituloPrincipal,
         tamanho_fonte: tamanhoFonte,
         inclinacao_x: inclinacaoX,
         inclinacao_y: inclinacaoY,
@@ -312,7 +312,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
       document.getElementById("tituloEixoX").value = tituloX;
       document.getElementById("tituloEixoY").value = tituloY;
       if (document.getElementById("tituloGrafico"))
-        document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
+        document.getElementById("tituloGrafico").value = tituloPrincipal;
       document.getElementById("tamanhoFonte").value = tamanhoFonte;
       document.getElementById("inclinacaoX").value = inclinacaoX;
       document.getElementById("inclinacaoY").value = inclinacaoY;
@@ -345,7 +345,7 @@ if (toggleBtn && painel && opcoes) {
       opcoes.style.display = "none";
       toggleBtn.innerText = "Mostrar Personalização ▼";
     } else {
-      opcoes.style.display = "grid"; // ou "block"
+      opcoes.style.display = "grid";
       toggleBtn.innerText = "Ocultar Personalização ▲";
     }
   });
@@ -353,6 +353,7 @@ if (toggleBtn && painel && opcoes) {
 
 // Garante que a função registrarFerramenta fique global
 window.registrarFerramenta = registrarFerramenta;
+
 
 
 
