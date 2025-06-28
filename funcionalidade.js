@@ -200,6 +200,7 @@ async function enviarAnaliseCompleta() {
           // 🔧 Ajuste aqui: usa coluna_x se existir, senão coluna_y
           titulo_x: "",        // deixar em branco
           titulo_y: "",        // deixar em branco
+          titulo_grafico: "", // deixar em branco
           tamanho_fonte: 12,
           inclinacao_x: 0,
           inclinacao_y: 0,
@@ -208,6 +209,7 @@ async function enviarAnaliseCompleta() {
 
         // ✅ Preencher painel de personalização com defaults
         document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
+        document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
         document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
         document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
         document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
