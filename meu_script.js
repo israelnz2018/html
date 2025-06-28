@@ -277,10 +277,13 @@ try {
   console.log("🚀 Iniciando envio de personalização do gráfico...");
   console.log("📤 URL do POST:", "https://analises-production.up.railway.app/personalizar-grafico");
 
-  // Log de cada campo do formData
-  console.log("📤 FormData sendo enviado:");
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ': ' + pair[1]);
+  if (formData && formData.entries) {
+    console.log("📤 FormData sendo enviado:");
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+  } else {
+    console.warn("⚠️ formData não está definido ou não possui entries()");
   }
 
   const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
@@ -348,6 +351,7 @@ try {
   console.error("❌ Erro ao atualizar gráfico:", e);
   alert("❌ Erro ao atualizar gráfico. Ver console para detalhes.");
 }
+
 
 
 
