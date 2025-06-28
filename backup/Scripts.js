@@ -110,22 +110,40 @@ function atualizarBoxAnalise(colunas) {
     return;
   }
 
+  const mapaCampos = {
+    "Y": "coluna_y",
+    "X": "coluna_x",
+    "Z": "coluna_z",
+    "Ys": "lista_y",
+    "Xs": "lista_x",
+    "Zs": "lista_z",
+    "Data": "Data",
+    "Subgrupo": "subgrupo",
+    "Field": "field",
+    "Field_conf": "field_conf",
+    "Field_LSE": "field_LSE",
+    "Field_LIE": "field_LIE",
+    "Field_Dist": "field_dist"
+  };
+
   const config = configuracoesFerramentas[ferramentaAtual] || [];
-  config.forEach(campo => {
-    const campoLimpo = campo.trim();
+
+  config.forEach(campoOriginal => {
+    const campoLimpo = campoOriginal.trim();
+    const campoInterno = mapaCampos[campoLimpo] || campoLimpo;
+
+    // Label
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    if (["Y", "Ys", "X", "Xs", "Subgrupo", "X_subgrupo", "Z"].includes(campoLimpo)) {
+    // Dropdowns simples
+    const dropdownSimples = ["coluna_y", "coluna_x", "coluna_z", "Data", "subgrupo"];
+    if (dropdownSimples.includes(campoInterno)) {
       const select = document.createElement("select");
-      select.id = `box_${campoLimpo.toLowerCase()}`;
+      select.id = `box_${campoInterno}`;
       select.className = "border rounded p-1 mb-2 w-full";
-
-      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
-        select.multiple = true;
-      }
 
       const opcaoVazia = document.createElement('option');
       opcaoVazia.value = '';
@@ -140,23 +158,32 @@ function atualizarBoxAnalise(colunas) {
       });
 
       box.appendChild(select);
-
-      if (campoLimpo === "Xs" || campoLimpo === "Ys") {
-        new SlimSelect({
-          select: `#${select.id}`
-        });
-      }
     }
 
-    if (campoLimpo === "Field_Distribuicao") {
-      const labelDist = document.createElement("label");
-      labelDist.className = "block font-medium mb-1";
-      labelDist.textContent = "Distribuição:";
-      box.appendChild(labelDist);
+    // Dropdowns múltiplos
+    const dropdownMultiplos = ["lista_y", "lista_x", "lista_z"];
+    if (dropdownMultiplos.includes(campoInterno)) {
+      const select = document.createElement("select");
+      select.id = `box_${campoInterno}`;
+      select.className = "border rounded p-1 mb-2 w-full";
+      select.multiple = true;
 
-      const selectDist = document.createElement("select");
-      selectDist.id = "box_field_distribuicao";
-      selectDist.className = "border rounded p-1 mb-2 w-full";
+      colunas.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        select.appendChild(opt);
+      });
+
+      box.appendChild(select);
+      new SlimSelect({ select: `#${select.id}` });
+    }
+
+    // Dropdown de distribuições
+    if (campoInterno === "field_dist") {
+      const select = document.createElement("select");
+      select.id = `box_${campoInterno}`;
+      select.className = "border rounded p-1 mb-2 w-full";
 
       const distribs = [
         "Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p",
@@ -168,22 +195,23 @@ function atualizarBoxAnalise(colunas) {
         const opt = document.createElement("option");
         opt.value = d;
         opt.textContent = d;
-        selectDist.appendChild(opt);
+        select.appendChild(opt);
       });
 
-      box.appendChild(selectDist);
+      box.appendChild(select);
     }
 
-    if (campoLimpo.startsWith("Field") && campoLimpo !== "Field_Distribuicao") {
+    // Campos numéricos diretos
+    const camposNumericos = ["field", "field_conf", "field_LSE", "field_LIE"];
+    if (camposNumericos.includes(campoInterno)) {
       const input = document.createElement("input");
       input.type = "number";
-      input.id = `box_field`;
+      input.id = `box_${campoInterno}`;
       input.className = "border rounded p-1 mb-2 w-full";
       box.appendChild(input);
     }
   });
 }
-
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
@@ -192,11 +220,136 @@ function registrarFerramenta(ferramenta) {
 
 // Garante que os eventos só sejam registrados após o DOM estar pronto
 document.addEventListener("DOMContentLoaded", () => {
-  inicializarEventos?.();  // Chama inicializarEventos se existir
-
+  inicializarEventos?.();
   document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
+
+// Botão Aplicar Alterações
+document.getElementById("btnAplicarPersonalizacao").addEventListener("click", async () => {
+  if (!ultimoGraficoInfo) {
+    alert("⚠️ Nenhum gráfico para personalizar.");
+    return;
+  }
+
+  const cor = document.getElementById("corGrafico").value;
+  const tituloX = document.getElementById("tituloEixoX").value;
+  const tituloY = document.getElementById("tituloEixoY").value;
+  const tituloPrincipal = document.getElementById("tituloGrafico")?.value || ""; // ✅ NOVO (com ?. para evitar erro)
+  const tamanhoFonte = document.getElementById("tamanhoFonte").value;
+  const inclinacaoX = document.getElementById("inclinacaoX").value;
+  const inclinacaoY = document.getElementById("inclinacaoY").value;
+  const espessura = document.getElementById("espessuraLinha").value;
+
+  console.log("▶️ Enviando personalização:", {
+    cor, tituloX, tituloY, tituloPrincipal, tamanhoFonte, inclinacaoX, inclinacaoY, espessura, ultimoGraficoInfo
+  });
+
+  const formData = new FormData();
+  formData.append("arquivo", ultimoGraficoInfo.arquivo);
+  formData.append("aba", ultimoGraficoInfo.aba);
+
+  // Envia o nome do gráfico + " Personalizado"
+  formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
+
+  formData.append("coluna_y", ultimoGraficoInfo.coluna_y);
+  formData.append("coluna_x", ultimoGraficoInfo.coluna_x);
+  formData.append("coluna_z", ultimoGraficoInfo.coluna_z);
+  formData.append("subgrupo", ultimoGraficoInfo.subgrupo);
+  formData.append("field", ultimoGraficoInfo.field);
+  formData.append("field_conf", ultimoGraficoInfo.field_conf);
+  formData.append("field_dist", ultimoGraficoInfo.field_dist);
+  formData.append("field_LSE", ultimoGraficoInfo.field_LSE);
+  formData.append("field_LIE", ultimoGraficoInfo.field_LIE);
+  formData.append("Data", ultimoGraficoInfo.Data);
+
+  // Novos parâmetros de personalização
+  formData.append("cor", cor);
+  formData.append("titulo_x", tituloX);
+  formData.append("titulo_y", tituloY);
+  formData.append("titulo_grafico", tituloPrincipal); // ✅ NOVO
+  formData.append("tamanho_fonte", tamanhoFonte);
+  formData.append("inclinacao_x", inclinacaoX);
+  formData.append("inclinacao_y", inclinacaoY);
+  formData.append("espessura", espessura);
+
+  try {
+    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
+      method: "POST",
+      body: formData
+    });
+
+    const json = await resposta.json();
+    console.log("✅ Resposta do backend (personalização):", json);
+
+    const containerGrafico = document.getElementById("conteudoGrafico");
+
+    // 🗑️ Remove TODOS os gráficos personalizados antes de adicionar o novo
+    containerGrafico.innerHTML = "";
+
+    if (json.grafico_isolado_base64) {
+      const img = document.createElement("img");
+      img.id = "graficoPersonalizado";
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      img.style = "max-width:100%; margin-bottom:10px;";
+      containerGrafico.appendChild(img);
+
+      // ✅ Salva valores usados no ultimoGraficoInfo
+      ultimoGraficoInfo = {
+        ...ultimoGraficoInfo,
+        cor,
+        titulo_x: tituloX,
+        titulo_y: tituloY,
+        titulo_grafico: tituloPrincipal, // ✅ NOVO
+        tamanho_fonte: tamanhoFonte,
+        inclinacao_x: inclinacaoX,
+        inclinacao_y: inclinacaoY,
+        espessura
+      };
+
+      // ✅ Atualiza inputs com esses valores para exibir como default
+      document.getElementById("corGrafico").value = cor;
+      document.getElementById("tituloEixoX").value = tituloX;
+      document.getElementById("tituloEixoY").value = tituloY;
+      if (document.getElementById("tituloGrafico"))
+        document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
+      document.getElementById("tamanhoFonte").value = tamanhoFonte;
+      document.getElementById("inclinacaoX").value = inclinacaoX;
+      document.getElementById("inclinacaoY").value = inclinacaoY;
+      document.getElementById("espessuraLinha").value = espessura;
+
+    } else {
+      alert("⚠️ Nenhuma imagem retornada do backend.");
+    }
+
+  } catch (e) {
+    console.error("❌ Erro ao atualizar gráfico:", e);
+    alert("❌ Erro ao atualizar gráfico.");
+  }
+});
+
+const toggleBtn = document.getElementById("togglePersonalizacao");
+const painel = document.getElementById("painelPersonalizacao");
+const opcoes = document.getElementById("opcoesPersonalizacao");
+
+if (toggleBtn && painel && opcoes) {
+  // Inicializa fechado
+  painel.style.display = "block"; // mantém o painel visível
+  opcoes.style.display = "none"; // opções começam escondidas
+  toggleBtn.innerText = "Mostrar Personalização ▼";
+
+  toggleBtn.addEventListener("click", () => {
+    const estaVisivel = opcoes.style.display !== "none";
+
+    if (estaVisivel) {
+      opcoes.style.display = "none";
+      toggleBtn.innerText = "Mostrar Personalização ▼";
+    } else {
+      opcoes.style.display = "grid"; // ou "block"
+      toggleBtn.innerText = "Ocultar Personalização ▲";
+    }
+  });
+}
 
 
 
