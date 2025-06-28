@@ -225,7 +225,9 @@ document.addEventListener("DOMContentLoaded", () => {
   inicializarEventos?.();
   document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
+  document.getElementById("btnAplicarPersonalizacao")?.addEventListener("click", enviarPersonalizacao);
 });
+
 
 // ✅ Variáveis globais seguras
 
