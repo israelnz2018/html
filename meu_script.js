@@ -227,6 +227,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
+// ✅ Variáveis globais seguras
+let ultimoGraficoInfo = window.ultimoGraficoInfo || null;
+let cor = window.cor || "#4682B4";
+let tituloX = window.tituloX || "";
+let tituloY = window.tituloY || "";
+let tituloPrincipal = window.tituloPrincipal || "";
+let tamanhoFonte = window.tamanhoFonte || 12;
+let inclinacaoX = window.inclinacaoX || 0;
+let inclinacaoY = window.inclinacaoY || 0;
+let espessura = window.espessura || 2;
+
 async function enviarPersonalizacao() {
   if (!ultimoGraficoInfo) {
     alert("❌ Nenhum gráfico carregado para personalizar.");
@@ -235,7 +246,6 @@ async function enviarPersonalizacao() {
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
-
   formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
   formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
   formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
@@ -247,7 +257,7 @@ async function enviarPersonalizacao() {
   formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
   formData.append("Data", ultimoGraficoInfo.Data || "");
 
-  // ✅ Envia lista_y e lista_x como string única separada por vírgula
+  // ✅ lista_y e lista_x como string única separada por vírgula
   formData.append("lista_y",
     (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
       ? ultimoGraficoInfo.lista_y.join(",")
@@ -259,7 +269,7 @@ async function enviarPersonalizacao() {
       : (ultimoGraficoInfo.lista_x || "")
   );
 
-  // Novos parâmetros de personalização
+  // Parâmetros de personalização
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
@@ -269,7 +279,7 @@ async function enviarPersonalizacao() {
   formData.append("inclinacao_y", inclinacaoY);
   formData.append("espessura", espessura);
 
-  // 🔍 DEBUG: Verifica tudo que está no formData antes de enviar
+  // 🔍 DEBUG
   console.log("📤 FormData sendo enviado:");
   for (var pair of formData.entries()) {
     console.log(pair[0] + ': ' + pair[1]);
@@ -294,7 +304,7 @@ async function enviarPersonalizacao() {
       img.style = "max-width:100%; margin-bottom:10px;";
       containerGrafico.appendChild(img);
 
-      // ✅ Salva valores usados no ultimoGraficoInfo
+      // Atualiza ultimoGraficoInfo
       ultimoGraficoInfo = {
         ...ultimoGraficoInfo,
         cor,
@@ -307,7 +317,7 @@ async function enviarPersonalizacao() {
         espessura
       };
 
-      // ✅ Atualiza inputs com esses valores para exibir como default
+      // Atualiza inputs
       document.getElementById("corGrafico").value = cor;
       document.getElementById("tituloEixoX").value = tituloX;
       document.getElementById("tituloEixoY").value = tituloY;
@@ -326,33 +336,29 @@ async function enviarPersonalizacao() {
     console.error("❌ Erro ao atualizar gráfico:", e);
     alert("❌ Erro ao atualizar gráfico.");
   }
+}
 
+// 🔧 Inicializa botão toggle personalização apenas 1x no carregamento
+document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("togglePersonalizacao");
   const painel = document.getElementById("painelPersonalizacao");
   const opcoes = document.getElementById("opcoesPersonalizacao");
 
   if (toggleBtn && painel && opcoes) {
-    // Inicializa fechado
-    painel.style.display = "block"; // mantém o painel visível
-    opcoes.style.display = "none"; // opções começam escondidas
+    painel.style.display = "block";
+    opcoes.style.display = "none";
     toggleBtn.innerText = "Mostrar Personalização ▼";
 
     toggleBtn.addEventListener("click", () => {
       const estaVisivel = opcoes.style.display !== "none";
-
-      if (estaVisivel) {
-        opcoes.style.display = "none";
-        toggleBtn.innerText = "Mostrar Personalização ▼";
-      } else {
-        opcoes.style.display = "grid";
-        toggleBtn.innerText = "Ocultar Personalização ▲";
-      }
+      opcoes.style.display = estaVisivel ? "none" : "grid";
+      toggleBtn.innerText = estaVisivel
+        ? "Mostrar Personalização ▼"
+        : "Ocultar Personalização ▲";
     });
   }
 
-  // Garante que a função registrarFerramenta fique global
-  window.registrarFerramenta = registrarFerramenta;
-}
+  // Torna a função global
+  window.enviarPersonalizacao = enviarPersonalizacao;
+});
 
-// ✅ Chama a função imediatamente se necessário
-enviarPersonalizacao();
