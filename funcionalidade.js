@@ -198,9 +198,8 @@ async function enviarAnaliseCompleta() {
           Data: document.getElementById("box_Data")?.value || "",
           cor: "#4682B4", // steelblue
           // 🔧 Ajuste aqui: usa coluna_x se existir, senão coluna_y
-          titulo_x: document.getElementById("box_coluna_x")?.value || document.getElementById("box_coluna_y")?.value || "",
-          titulo_y: document.getElementById("box_coluna_y")?.value || "Frequência",
-
+          titulo_x: "",        // deixar em branco
+          titulo_y: "",        // deixar em branco
           tamanho_fonte: 12,
           inclinacao_x: 0,
           inclinacao_y: 0,
