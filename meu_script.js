@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ✅ Variáveis globais seguras
-let ultimoGraficoInfo = window.ultimoGraficoInfo || null;
+
 let cor = window.cor || "#4682B4";
 let tituloX = window.tituloX || "";
 let tituloY = window.tituloY || "";
