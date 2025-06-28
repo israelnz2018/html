@@ -328,18 +328,29 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   }
 });
 
-// ✅ Deixe o painel sempre aberto
-
+const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
-if (painel) {
-  painel.style.display = "grid"; // garante que fique visível
+const opcoes = document.getElementById("opcoesPersonalizacao");
 
-  // Também garante que o painel de opções dentro dele fique visível
-  const opcoes = document.getElementById("opcoesPersonalizacao");
-  if (opcoes) {
-    opcoes.style.display = "grid"; // ou "block" conforme seu layout interno
-  }
+if (toggleBtn && painel && opcoes) {
+  // Inicializa fechado
+  painel.style.display = "block"; // mantém o painel visível
+  opcoes.style.display = "none"; // opções começam escondidas
+  toggleBtn.innerText = "Mostrar Personalização ▼";
+
+  toggleBtn.addEventListener("click", () => {
+    const estaVisivel = opcoes.style.display !== "none";
+
+    if (estaVisivel) {
+      opcoes.style.display = "none";
+      toggleBtn.innerText = "Mostrar Personalização ▼";
+    } else {
+      opcoes.style.display = "grid"; // ou "block"
+      toggleBtn.innerText = "Ocultar Personalização ▲";
+    }
+  });
 }
+
 
 
 
