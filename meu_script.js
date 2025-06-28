@@ -303,6 +303,28 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
       containerGrafico.appendChild(img);
+
+      // ✅ Salva valores usados no ultimoGraficoInfo
+      ultimoGraficoInfo = {
+        ...ultimoGraficoInfo,
+        cor,
+        titulo_x: tituloX,
+        titulo_y: tituloY,
+        tamanho_fonte: tamanhoFonte,
+        inclinacao_x: inclinacaoX,
+        inclinacao_y: inclinacaoY,
+        espessura
+      };
+
+      // ✅ Atualiza inputs com esses valores para exibir como default
+      document.getElementById("corGrafico").value = cor;
+      document.getElementById("tituloEixoX").value = tituloX;
+      document.getElementById("tituloEixoY").value = tituloY;
+      document.getElementById("tamanhoFonte").value = tamanhoFonte;
+      document.getElementById("inclinacaoX").value = inclinacaoX;
+      document.getElementById("inclinacaoY").value = inclinacaoY;
+      document.getElementById("espessuraLinha").value = espessura;
+
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
@@ -312,6 +334,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
+
 
 
 
