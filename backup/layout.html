@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<nav class="bg-gray-800 text-white p-2 flex justify-between items-center">
+<nav class="bg-blue-600 text-white p-2 flex justify-between items-center">
   <div class="text-lg font-semibold">Learning by Working</div>
   <ul class="flex space-x-2 items-center"></ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
@@ -68,12 +68,65 @@
     <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
       <h2 class="font-bold text-lg mb-2 text-center">Gráfico Isolado</h2>
       <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
+
+<!-- Painel Personalização Gráfico -->
+<div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin-top:10px;">
+  <button id="togglePersonalizacao" style="font-weight:bold; margin-bottom:10px;">
+    Personalizar Gráfico ▼
+  </button>
+
+  <div id="opcoesPersonalizacao" style="display:none; grid-template-columns: repeat(3, 1fr); gap:10px;" class="grid">
+
+    <!-- Primeira linha: Título do Gráfico ocupando 100% -->
+    <div class="col-span-3">
+      <label for="tituloGrafico">Título do Gráfico</label>
+      <input type="text" id="tituloGrafico" placeholder="Título do gráfico">
     </div>
+
+    <!-- Segunda linha: Título Eixo Y | Título Eixo X | Cor do Gráfico -->
+    <div>
+      <label for="tituloEixoY">Título Eixo Y</label>
+      <input type="text" id="tituloEixoY" placeholder="Eixo Y">
+    </div>
+
+    <div>
+      <label for="tituloEixoX">Título Eixo X</label>
+      <input type="text" id="tituloEixoX" placeholder="Eixo X">
+    </div>
+
+    <div>
+      <label for="corGrafico">Cor do Gráfico</label>
+      <input type="color" id="corGrafico" value="#000000">
+    </div>
+
+    <!-- Terceira linha: Inclinação Eixo Y | Inclinação Eixo X | Tamanho Fonte -->
+    <div>
+      <label for="inclinacaoY">Inclinação Eixo Y</label>
+      <input type="number" id="inclinacaoY" value="0" min="0" max="90">
+    </div>
+
+    <div>
+      <label for="inclinacaoX">Inclinação Eixo X</label>
+      <input type="number" id="inclinacaoX" value="0" min="0" max="90">
+    </div>
+
+    <div>
+      <label for="tamanhoFonte">Tamanho Fonte</label>
+      <input type="number" id="tamanhoFonte" value="12" min="8" max="30">
+    </div>
+
+    <!-- Espessura da Linha (ESCONDIDO) -->
+    <div style="display:none;">
+      <label for="espessuraLinha">Espessura da Linha</label>
+      <input type="number" id="espessuraLinha" value="2" min="1" max="10">
+    </div>
+
+    <!-- Botão Aplicar Alterações -->
+    <div class="col-span-3">
+      <button id="btnAplicarPersonalizacao" style="background-color:green; color:white; padding:6px 12px; border-radius:4px;">
+        Aplicar Alterações
+      </button>
+    </div>
+
   </div>
 </div>
-
-<script src="scripts.js"></script>
-<script src="menu.js"></script>
-
-</body>
-</html>
