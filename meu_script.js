@@ -233,22 +233,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ✅ Variáveis globais seguras
-
-let cor = window.cor || "#4682B4";
-let tituloX = window.tituloX || "";
-let tituloY = window.tituloY || "";
-let tituloPrincipal = window.tituloPrincipal || "";
-let tamanhoFonte = window.tamanhoFonte || 12;
-let inclinacaoX = window.inclinacaoX || 0;
-let inclinacaoY = window.inclinacaoY || 0;
-let espessura = window.espessura || 2;
+// ✅ Variáveis globais seguras – agora capturando direto dos inputs
 
 async function enviarPersonalizacao() {
   if (!ultimoGraficoInfo) {
     alert("❌ Nenhum gráfico carregado para personalizar.");
     return;
   }
+
+  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
+  let cor = document.getElementById("corGrafico").value;
+  let tituloX = document.getElementById("tituloEixoX").value;
+  let tituloY = document.getElementById("tituloEixoY").value;
+  let tituloPrincipal = document.getElementById("tituloGrafico").value;
+  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
+  let inclinacaoX = document.getElementById("inclinacaoX").value;
+  let inclinacaoY = document.getElementById("inclinacaoY").value;
+  let espessura = document.getElementById("espessuraLinha").value;
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
@@ -323,17 +324,6 @@ async function enviarPersonalizacao() {
         espessura
       };
 
-      // Atualiza inputs
-      document.getElementById("corGrafico").value = cor;
-      document.getElementById("tituloEixoX").value = tituloX;
-      document.getElementById("tituloEixoY").value = tituloY;
-      if (document.getElementById("tituloGrafico"))
-        document.getElementById("tituloGrafico").value = tituloPrincipal;
-      document.getElementById("tamanhoFonte").value = tamanhoFonte;
-      document.getElementById("inclinacaoX").value = inclinacaoX;
-      document.getElementById("inclinacaoY").value = inclinacaoY;
-      document.getElementById("espessuraLinha").value = espessura;
-
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
@@ -343,19 +333,19 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
 
 if (toggleBtn && painel && opcoes) {
-  // Inicializa fechado
-  painel.style.display = "block"; // mantém o painel visível
-  opcoes.style.display = "none"; // opções começam escondidas
+  painel.style.display = "block";
+  opcoes.style.display = "none";
   toggleBtn.innerText = "Mostrar Personalização ▼";
 
   toggleBtn.addEventListener("click", () => {
     const estaVisivel = opcoes.style.display !== "none";
-    opcoes.style.display = estaVisivel ? "none" : "grid"; // ou "block" se preferir
+    opcoes.style.display = estaVisivel ? "none" : "grid";
     toggleBtn.innerText = estaVisivel
       ? "Mostrar Personalização ▼"
       : "Ocultar Personalização ▲";
@@ -364,5 +354,6 @@ if (toggleBtn && painel && opcoes) {
 
 // ✅ Torna a função enviarPersonalizacao global
 window.enviarPersonalizacao = enviarPersonalizacao;
+
 
 
