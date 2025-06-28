@@ -328,25 +328,25 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   }
 });
 
-// ✅ Toggle painel personalizacao (corrigido)
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 
 if (toggleBtn && painel) {
   toggleBtn.addEventListener("click", () => {
-    const estaVisivel = painel.classList.contains("ativo");
+    const estiloAtual = painel.style.display;
 
-    if (estaVisivel) {
-      painel.style.display = "none";
-      painel.classList.remove("ativo");
-      toggleBtn.innerText = "Mostrar Personalização ▼";
-    } else {
-      painel.style.display = "grid"; // ou "block" se preferir
-      painel.classList.add("ativo");
+    if (estiloAtual === "" || estiloAtual === "none") {
+      painel.style.display = "grid"; // mostra como grid
       toggleBtn.innerText = "Ocultar Personalização ▲";
+      painel.setAttribute("data-visivel", "true");
+    } else {
+      painel.style.display = "none";
+      toggleBtn.innerText = "Mostrar Personalização ▼";
+      painel.removeAttribute("data-visivel");
     }
   });
 }
+
 
 
 
