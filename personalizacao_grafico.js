@@ -54,4 +54,4 @@ console.log("🟥 Resposta completa do backend:", JSON.stringify(json, null, 2))
   console.error("Erro ao atualizar gráfico personalizado:", e);
 }
 
-document.getElementById("corGrafico").value = cor;
+
