@@ -239,26 +239,17 @@ formData.append("field_LSE", ultimoGraficoInfo.field_LSE || "");
 formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
 formData.append("Data", ultimoGraficoInfo.Data || "");
 
-// ✅ Inclui listas se existirem (como string separada por vírgula)
-if (ultimoGraficoInfo.lista_y) {
-  if (Array.isArray(ultimoGraficoInfo.lista_y)) {
-    formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
-  } else {
-    formData.append("lista_y", ultimoGraficoInfo.lista_y);
-  }
-} else {
-  formData.append("lista_y", "");
-}
-
-if (ultimoGraficoInfo.lista_x) {
-  if (Array.isArray(ultimoGraficoInfo.lista_x)) {
-    formData.append("lista_x", ultimoGraficoInfo.lista_x.join(","));
-  } else {
-    formData.append("lista_x", ultimoGraficoInfo.lista_x);
-  }
-} else {
-  formData.append("lista_x", "");
-}
+// ✅ Envia lista_y e lista_x como string única separada por vírgula
+formData.append("lista_y",
+  (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
+    ? ultimoGraficoInfo.lista_y.join(",")
+    : (ultimoGraficoInfo.lista_y || "")
+);
+formData.append("lista_x",
+  (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
+    ? ultimoGraficoInfo.lista_x.join(",")
+    : (ultimoGraficoInfo.lista_x || "")
+);
 
 // Novos parâmetros de personalização
 formData.append("cor", cor);
@@ -327,6 +318,7 @@ try {
   console.error("❌ Erro ao atualizar gráfico:", e);
   alert("❌ Erro ao atualizar gráfico.");
 }
+
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
