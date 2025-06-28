@@ -106,24 +106,6 @@ async function enviarAnaliseCompleta() {
     analise = nomeFerramenta;
   }
 
-  // ✅ ITEM 2 – Salvar infos do último gráfico
-  ultimoGraficoInfo = {
-    arquivo: arquivoInput.files[0],
-    aba: abaSelect.value,
-    ferramenta: analise,
-    grafico: grafico,
-    coluna_y: document.getElementById("box_coluna_y")?.value || "",
-    coluna_x: document.getElementById("box_coluna_x")?.value || "",
-    coluna_z: document.getElementById("box_coluna_z")?.value || "",
-    subgrupo: document.getElementById("box_subgrupo")?.value || "",
-    field: document.getElementById("box_field")?.value || "",
-    field_conf: document.getElementById("box_field_conf")?.value || "",
-    field_dist: document.getElementById("box_field_dist")?.value || "",
-    field_LSE: document.getElementById("box_field_LSE")?.value || "",
-    field_LIE: document.getElementById("box_field_LIE")?.value || "",
-    Data: document.getElementById("box_Data")?.value || ""
-  };
-
   const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
   const formData = new FormData();
   formData.append("arquivo", arquivoInput.files[0]);
@@ -197,6 +179,27 @@ async function enviarAnaliseCompleta() {
 
         // ✅ Mostrar painel de personalização somente se houver gráfico isolado
         document.getElementById('painelPersonalizacao').style.display = 'block';
+
+        // ✅ Salvar valores padrões de personalização no ultimoGraficoInfo
+        ultimoGraficoInfo = {
+          ...ultimoGraficoInfo,
+          cor: "#4682B4", // cor padrão (steelblue)
+          titulo_x: ultimoGraficoInfo.coluna_x || "", // título X default
+          titulo_y: ultimoGraficoInfo.coluna_y || "", // título Y default
+          tamanho_fonte: 12, // tamanho padrão
+          inclinacao_x: 0, // padrão
+          inclinacao_y: 0, // padrão
+          espessura: 2 // padrão
+        };
+
+        // ✅ Atualizar inputs do painel de personalização com esses valores
+        document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
+        document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
+        document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
+        document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
+        document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
+        document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
+        document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
       }
     }
 
