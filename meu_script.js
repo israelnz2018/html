@@ -328,14 +328,16 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   }
 });
 
-// ✅ Toggle painel personalizacao (corrigido para usar "grid")
+// ✅ Toggle painel personalizacao (corrigido)
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 
 if (toggleBtn && painel) {
   toggleBtn.addEventListener("click", () => {
-    if (painel.style.display === "none" || painel.style.display === "") {
-      painel.style.display = "grid"; // ✅ ALTERADO de block para grid
+    const estiloAtual = window.getComputedStyle(painel).display;
+
+    if (estiloAtual === "none") {
+      painel.style.display = "grid"; // ✅ mostra como grid
       toggleBtn.innerText = "Ocultar Personalização ▲";
     } else {
       painel.style.display = "none";
@@ -343,6 +345,7 @@ if (toggleBtn && painel) {
     }
   });
 }
+
 
 
 
