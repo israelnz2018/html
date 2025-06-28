@@ -338,27 +338,25 @@ async function enviarPersonalizacao() {
   }
 }
 
-// 🔧 Inicializa botão toggle personalização apenas 1x no carregamento
-document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("togglePersonalizacao");
-  const painel = document.getElementById("painelPersonalizacao");
-  const opcoes = document.getElementById("opcoesPersonalizacao");
+const toggleBtn = document.getElementById("togglePersonalizacao");
+const painel = document.getElementById("painelPersonalizacao");
+const opcoes = document.getElementById("opcoesPersonalizacao");
 
-  if (toggleBtn && painel && opcoes) {
-    painel.style.display = "block";
-    opcoes.style.display = "none";
-    toggleBtn.innerText = "Mostrar Personalização ▼";
+if (toggleBtn && painel && opcoes) {
+  // Inicializa fechado
+  painel.style.display = "block"; // mantém o painel visível
+  opcoes.style.display = "none"; // opções começam escondidas
+  toggleBtn.innerText = "Mostrar Personalização ▼";
 
-    toggleBtn.addEventListener("click", () => {
-      const estaVisivel = opcoes.style.display !== "none";
-      opcoes.style.display = estaVisivel ? "none" : "grid";
-      toggleBtn.innerText = estaVisivel
-        ? "Mostrar Personalização ▼"
-        : "Ocultar Personalização ▲";
-    });
-  }
+  toggleBtn.addEventListener("click", () => {
+    const estaVisivel = opcoes.style.display !== "none";
+    opcoes.style.display = estaVisivel ? "none" : "grid"; // ou "block" se preferir
+    toggleBtn.innerText = estaVisivel
+      ? "Mostrar Personalização ▼"
+      : "Ocultar Personalização ▲";
+  });
+}
+// Torna a função enviarPersonalizacao global
+window.enviarPersonalizacao = enviarPersonalizacao;
 
-  // Torna a função global
-  window.enviarPersonalizacao = enviarPersonalizacao;
-});
 
