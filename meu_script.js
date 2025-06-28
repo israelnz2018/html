@@ -225,140 +225,127 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
-// Envia o nome do gráfico + " Personalizado"
-formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
+async function enviarPersonalizacao() {
+  // Envia o nome do gráfico + " Personalizado"
+  formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
 
-formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
-formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
-formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
-formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
-formData.append("field", ultimoGraficoInfo.field || "");
-formData.append("field_conf", ultimoGraficoInfo.field_conf || "");
-formData.append("field_dist", ultimoGraficoInfo.field_dist || "");
-formData.append("field_LSE", ultimoGraficoInfo.field_LSE || "");
-formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
-formData.append("Data", ultimoGraficoInfo.Data || "");
+  formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
+  formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
+  formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
+  formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
+  formData.append("field", ultimoGraficoInfo.field || "");
+  formData.append("field_conf", ultimoGraficoInfo.field_conf || "");
+  formData.append("field_dist", ultimoGraficoInfo.field_dist || "");
+  formData.append("field_LSE", ultimoGraficoInfo.field_LSE || "");
+  formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
+  formData.append("Data", ultimoGraficoInfo.Data || "");
 
-// ✅ Envia lista_y e lista_x como string única separada por vírgula
-formData.append("lista_y",
-  (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
-    ? ultimoGraficoInfo.lista_y.join(",")
-    : (ultimoGraficoInfo.lista_y || "")
-);
-formData.append("lista_x",
-  (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
-    ? ultimoGraficoInfo.lista_x.join(",")
-    : (ultimoGraficoInfo.lista_x || "")
-);
+  // ✅ Envia lista_y e lista_x como string única separada por vírgula
+  formData.append("lista_y",
+    (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
+      ? ultimoGraficoInfo.lista_y.join(",")
+      : (ultimoGraficoInfo.lista_y || "")
+  );
+  formData.append("lista_x",
+    (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
+      ? ultimoGraficoInfo.lista_x.join(",")
+      : (ultimoGraficoInfo.lista_x || "")
+  );
 
-// Novos parâmetros de personalização
-formData.append("cor", cor);
-formData.append("titulo_x", tituloX);
-formData.append("titulo_y", tituloY);
-formData.append("titulo_grafico", tituloPrincipal);
-formData.append("tamanho_fonte", tamanhoFonte);
-formData.append("inclinacao_x", inclinacaoX);
-formData.append("inclinacao_y", inclinacaoY);
-formData.append("espessura", espessura);
+  // Novos parâmetros de personalização
+  formData.append("cor", cor);
+  formData.append("titulo_x", tituloX);
+  formData.append("titulo_y", tituloY);
+  formData.append("titulo_grafico", tituloPrincipal);
+  formData.append("tamanho_fonte", tamanhoFonte);
+  formData.append("inclinacao_x", inclinacaoX);
+  formData.append("inclinacao_y", inclinacaoY);
+  formData.append("espessura", espessura);
 
-// 🔍 DEBUG: Verifica tudo que está no formData antes de enviar
-console.log("📤 FormData sendo enviado:");
-for (var pair of formData.entries()) {
-  console.log(pair[0] + ': ' + pair[1]);
-}
-
-try {
-  const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
-    method: "POST",
-    body: formData
-  });
-
-  const json = await resposta.json();
-  console.log("✅ Resposta do backend (personalização):", json);
-
-  const containerGrafico = document.getElementById("conteudoGrafico");
-  containerGrafico.innerHTML = "";
-
-  if (json.grafico_isolado_base64) {
-    const img = document.createElement("img");
-    img.id = "graficoPersonalizado";
-    img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-    img.style = "max-width:100%; margin-bottom:10px;";
-    containerGrafico.appendChild(img);
-
-    // ✅ Salva valores usados no ultimoGraficoInfo
-    ultimoGraficoInfo = {
-      ...ultimoGraficoInfo,
-      cor,
-      titulo_x: tituloX,
-      titulo_y: tituloY,
-      titulo_grafico: tituloPrincipal,
-      tamanho_fonte: tamanhoFonte,
-      inclinacao_x: inclinacaoX,
-      inclinacao_y: inclinacaoY,
-      espessura
-    };
-
-    // ✅ Atualiza inputs com esses valores para exibir como default
-    document.getElementById("corGrafico").value = cor;
-    document.getElementById("tituloEixoX").value = tituloX;
-    document.getElementById("tituloEixoY").value = tituloY;
-    if (document.getElementById("tituloGrafico"))
-      document.getElementById("tituloGrafico").value = tituloPrincipal;
-    document.getElementById("tamanhoFonte").value = tamanhoFonte;
-    document.getElementById("inclinacaoX").value = inclinacaoX;
-    document.getElementById("inclinacaoY").value = inclinacaoY;
-    document.getElementById("espessuraLinha").value = espessura;
-
-  } else {
-    alert("⚠️ Nenhuma imagem retornada do backend.");
+  // 🔍 DEBUG: Verifica tudo que está no formData antes de enviar
+  console.log("📤 FormData sendo enviado:");
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ': ' + pair[1]);
   }
 
-} catch (e) {
-  console.error("❌ Erro ao atualizar gráfico:", e);
-  alert("❌ Erro ao atualizar gráfico.");
-}
+  try {
+    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
+      method: "POST",
+      body: formData
+    });
 
+    const json = await resposta.json();
+    console.log("✅ Resposta do backend (personalização):", json);
 
+    const containerGrafico = document.getElementById("conteudoGrafico");
+    containerGrafico.innerHTML = "";
 
-const toggleBtn = document.getElementById("togglePersonalizacao");
-const painel = document.getElementById("painelPersonalizacao");
-const opcoes = document.getElementById("opcoesPersonalizacao");
+    if (json.grafico_isolado_base64) {
+      const img = document.createElement("img");
+      img.id = "graficoPersonalizado";
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      img.style = "max-width:100%; margin-bottom:10px;";
+      containerGrafico.appendChild(img);
 
-if (toggleBtn && painel && opcoes) {
-  // Inicializa fechado
-  painel.style.display = "block"; // mantém o painel visível
-  opcoes.style.display = "none"; // opções começam escondidas
-  toggleBtn.innerText = "Mostrar Personalização ▼";
+      // ✅ Salva valores usados no ultimoGraficoInfo
+      ultimoGraficoInfo = {
+        ...ultimoGraficoInfo,
+        cor,
+        titulo_x: tituloX,
+        titulo_y: tituloY,
+        titulo_grafico: tituloPrincipal,
+        tamanho_fonte: tamanhoFonte,
+        inclinacao_x: inclinacaoX,
+        inclinacao_y: inclinacaoY,
+        espessura
+      };
 
-  toggleBtn.addEventListener("click", () => {
-    const estaVisivel = opcoes.style.display !== "none";
+      // ✅ Atualiza inputs com esses valores para exibir como default
+      document.getElementById("corGrafico").value = cor;
+      document.getElementById("tituloEixoX").value = tituloX;
+      document.getElementById("tituloEixoY").value = tituloY;
+      if (document.getElementById("tituloGrafico"))
+        document.getElementById("tituloGrafico").value = tituloPrincipal;
+      document.getElementById("tamanhoFonte").value = tamanhoFonte;
+      document.getElementById("inclinacaoX").value = inclinacaoX;
+      document.getElementById("inclinacaoY").value = inclinacaoY;
+      document.getElementById("espessuraLinha").value = espessura;
 
-    if (estaVisivel) {
-      opcoes.style.display = "none";
-      toggleBtn.innerText = "Mostrar Personalização ▼";
     } else {
-      opcoes.style.display = "grid";
-      toggleBtn.innerText = "Ocultar Personalização ▲";
+      alert("⚠️ Nenhuma imagem retornada do backend.");
     }
-  });
+
+  } catch (e) {
+    console.error("❌ Erro ao atualizar gráfico:", e);
+    alert("❌ Erro ao atualizar gráfico.");
+  }
+
+  const toggleBtn = document.getElementById("togglePersonalizacao");
+  const painel = document.getElementById("painelPersonalizacao");
+  const opcoes = document.getElementById("opcoesPersonalizacao");
+
+  if (toggleBtn && painel && opcoes) {
+    // Inicializa fechado
+    painel.style.display = "block"; // mantém o painel visível
+    opcoes.style.display = "none"; // opções começam escondidas
+    toggleBtn.innerText = "Mostrar Personalização ▼";
+
+    toggleBtn.addEventListener("click", () => {
+      const estaVisivel = opcoes.style.display !== "none";
+
+      if (estaVisivel) {
+        opcoes.style.display = "none";
+        toggleBtn.innerText = "Mostrar Personalização ▼";
+      } else {
+        opcoes.style.display = "grid";
+        toggleBtn.innerText = "Ocultar Personalização ▲";
+      }
+    });
+  }
+
+  // Garante que a função registrarFerramenta fique global
+  window.registrarFerramenta = registrarFerramenta;
 }
 
-// Garante que a função registrarFerramenta fique global
-window.registrarFerramenta = registrarFerramenta;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ✅ Chama a função imediatamente se necessário
+enviarPersonalizacao();
