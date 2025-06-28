@@ -17,19 +17,21 @@ const configuracoesFerramentas = {
   "Tendência": ["Y", "Data", "Subgrupo"],
   "Bolhas - 3D": ["Y", "X", "Z"],
   "Superfície - 3D": ["Y", "X", "Z"],
+  "Dispersão 3D com Regressão": ["Y", "X", "Z"],
+
 
   // Análise Inferencial
   "1 Sample T": ["Y", "Field", "Field_conf"],
   "2 Sample T": ["Ys", "Field_conf"],
   "2 Paired Test": ["Ys", "Field_conf"],
   "One way ANOVA": ["Ys", "Subgrupo", "Field_conf"],
-  "1 Wilcoxon": ["Y", "Field"],
-  "2 Mann-Whitney": ["Ys"],
-  "Kruskal-Wallis": ["Ys", "Subgrupo"],
-  "Friedman Pareado": ["Ys", "Subgrupo"],
+  "1 Wilcoxon": ["Y", "Field", "Field_conf"],
+  "2 Mann-Whitney": ["Ys", "Field_conf"],
+  "Kruskal-Wallis": ["Ys", "Subgrupo", "Field_conf"],
+  "Friedman Pareado": ["Ys", "Subgrupo", "Field_conf"],
   "1 Intervalo de Confianca": ["Y", "Field_conf"],
-  "1 Intervalo Interquartilico": ["Y", "Field_conf"],
-  "2 Variancas": ["Ys", "Field_conf"],
+  "1 Intervalo Interquartilico": ["Y","Field_conf"],
+  "2 Varianças": ["Ys", "Field_conf"],
   "2 Variancas Brown-Forsythe": ["Ys", "Field_conf"],
   "Bartlett": ["Ys", "Subgrupo", "Field_conf"],
   "Brown-Forsythe": ["Ys", "Subgrupo", "Field_conf"],
@@ -53,8 +55,8 @@ const configuracoesFerramentas = {
 
   // Análise Controle de Processo
   "Carta I-MR": ["Y"],
-  "Carta X-Barra R": ["Y", "Subgrupo"],
-  "Carta X-Barra S": ["Y", "Subgrupo"],
+  "Carta X-BarraR": ["Y", "Subgrupo"],
+  "Carta X-BarraS": ["Y", "Subgrupo"], 
   "Carta P": ["Y", "Subgrupo"],
   "Carta NP": ["Y", "Subgrupo"],
   "Carta C": ["Y"],
@@ -71,162 +73,3 @@ const configuracoesFerramentas = {
   // Outras Análises
   "Cálculo de Probabilidade": ["Y", "Field"]
 };
-
-
-async function enviarAnaliseCompleta() {
-  console.log("🚀 Botão Enviar Análise foi clicado.");
-  sessaoAtiva = true;
-  resetarTimer();
-
-  const arquivoInput = document.getElementById('fileInput');
-  const abaSelect = document.getElementById('aba_planilha');
-
-  if (!arquivoInput?.files[0]) {
-    exibirModalErro("⚠ Você precisa enviar um arquivo.");
-    return;
-  }
-
-  if (!abaSelect?.value) {
-    exibirModalErro("⚠ Você precisa escolher uma aba da planilha.");
-    return;
-  }
-
-  const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
-  const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
-
-  if (!nomeFerramenta) {
-    exibirModalErro("⚠ Você deve selecionar uma análise ou um gráfico.");
-    return;
-  }
-
-  let analise = "";
-  let grafico = "";
-
-  const GRAFICOS_LIST = [
-    "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Superfície - 3D"
-  ];
-
-  if (GRAFICOS_LIST.includes(nomeFerramenta)) {
-    grafico = nomeFerramenta;
-  } else {
-    analise = nomeFerramenta;
-  }
-
-  const camposNecessarios = configuracoesFerramentas[nomeFerramenta] || [];
-  const formData = new FormData();
-
-  formData.append("arquivo", arquivoInput.files[0]);
-  formData.append("aba", abaSelect.value);
-  formData.append("ferramenta", analise);
-  formData.append("grafico", grafico);
-
-  if (camposNecessarios.includes("Y")) {
-    const val = document.getElementById('box_y')?.value || "";
-    formData.append("coluna_y", val);
-  }
-
-  if (camposNecessarios.includes("Ys")) {
-    const el = document.getElementById('box_ys');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("coluna_y", val);
-  }
-
-  if (camposNecessarios.includes("X")) {
-    const val = document.getElementById('box_x')?.value || "";
-    formData.append("colunas_x", val);
-  }
-
-  if (camposNecessarios.includes("Xs")) {
-    const el = document.getElementById('box_xs');
-    const val = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x", val);
-  }
-
-  if (camposNecessarios.includes("Z")) {
-    const val = document.getElementById('box_z')?.value || "";
-    formData.append("coluna_z", val);
-  }
-
-  if (camposNecessarios.includes("Subgrupo")) {
-    const val = document.getElementById('box_subgrupo')?.value || "";
-    formData.append("subgrupo", val);
-  }
-
-  if (camposNecessarios.includes("Field_LIE")) {
-    const val = document.getElementById('box_field_LIE')?.value || "";
-    formData.append("field_LIE", val);
-  }
-
-  if (camposNecessarios.includes("Field_LSE")) {
-    const val = document.getElementById('box_field_LSE')?.value || "";
-    formData.append("field_LSE", val);
-  }
-
-  if (camposNecessarios.includes("Field_conf")) {
-    const val = document.getElementById('box_field_conf')?.value || "";
-    formData.append("field_conf", val);
-  }
-
-  if (camposNecessarios.includes("Field_Dist") || camposNecessarios.includes("Field_distribuicao")) {
-    const val = document.getElementById('box_field_distribuicao')?.value || "";
-    formData.append("field_distribuicao", val);
-  }
-
-  if (camposNecessarios.includes("Data")) {
-    const val = document.getElementById('box_data')?.value || "";
-    formData.append("Data", val);
-  }
-
-  if (camposNecessarios.includes("Field")) {
-    const val = document.getElementById('box_field')?.value || "";
-    formData.append("field", val);
-  }
-
-  // LOG COMPLETO PARA DEBUG
-  console.log("📦 Envio para backend (objeto final):");
-  for (const [key, value] of formData.entries()) {
-    console.log(`✅ ${key}: ${value}`);
-  }
-
-  try {
-    const resposta = await fetch('https://analises-production.up.railway.app/analise', {
-      method: 'POST',
-      body: formData
-    });
-
-    console.log("🟢 Status do backend:", resposta.status);
-    const json = await resposta.json();
-    console.log("🟢 Resposta do backend:", json);
-
-    const containerAnalise = document.getElementById('conteudoAnalise');
-    const containerGrafico = document.getElementById('conteudoGrafico');
-
-    if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
-      const blocoAnalise = document.createElement('div');
-      blocoAnalise.className = 'mb-4';
-      blocoAnalise.innerHTML = `
-        <div>${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
-        ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
-      `;
-      containerAnalise.prepend(blocoAnalise);
-    }
-
-    if (json.grafico_isolado_base64) {
-      const base64 = Array.isArray(json.grafico_isolado_base64)
-        ? json.grafico_isolado_base64.find(v => v && v.length > 50)
-        : json.grafico_isolado_base64;
-
-      if (base64) {
-        const imgGrafico = document.createElement('img');
-        imgGrafico.src = `data:image/png;base64,${base64}`;
-        imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
-        containerGrafico.prepend(imgGrafico);
-      }
-    }
-
-  } catch (e) {
-    exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
-    console.error("❌ Erro detalhado:", e);
-  }
-}
