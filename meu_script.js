@@ -364,8 +364,12 @@ window.enviarPersonalizacao = enviarPersonalizacao;
 // ✅ Vincula o botão Aplicar Personalização à função ao carregar o DOM
 document.addEventListener("DOMContentLoaded", () => {
   const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
+
   if (btnAplicar) {
-    btnAplicar.addEventListener("click", enviarPersonalizacao);
+    btnAplicar.addEventListener("click", () => {
+      console.log("✅ Botão Aplicar Personalização clicado.");
+      enviarPersonalizacao();
+    });
   } else {
     console.warn("⚠️ Botão btnAplicarPersonalizacao não encontrado no DOM.");
   }
