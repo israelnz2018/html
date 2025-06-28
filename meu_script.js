@@ -339,7 +339,6 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
-
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
@@ -358,7 +357,16 @@ if (toggleBtn && painel && opcoes) {
       : "Ocultar Personalização ▲";
   });
 }
-// Torna a função enviarPersonalizacao global
+
+// ✅ Torna a função enviarPersonalizacao global
 window.enviarPersonalizacao = enviarPersonalizacao;
 
-
+// ✅ Vincula o botão Aplicar Personalização à função ao carregar o DOM
+document.addEventListener("DOMContentLoaded", () => {
+  const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
+  if (btnAplicar) {
+    btnAplicar.addEventListener("click", enviarPersonalizacao);
+  } else {
+    console.warn("⚠️ Botão btnAplicarPersonalizacao não encontrado no DOM.");
+  }
+});
