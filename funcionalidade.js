@@ -208,14 +208,15 @@ async function enviarAnaliseCompleta() {
         };
 
         // ✅ Preencher painel de personalização com defaults
-        document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
-        document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
-        document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
-        document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
-        document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
-        document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
-        document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
-        document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
+        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
+        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
+        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
+        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
+        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
+        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
+        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
+        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
+
       }
     }
 
