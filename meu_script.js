@@ -225,18 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
-// Toggle painel personalizacao
-document.getElementById("togglePersonalizacao").addEventListener("click", () => {
-  const opcoes = document.getElementById("opcoesPersonalizacao");
-  if (opcoes.style.display === "none") {
-    opcoes.style.display = "grid";
-    document.getElementById("togglePersonalizacao").innerText = "Personalizar Gráfico ▲";
-  } else {
-    opcoes.style.display = "none";
-    document.getElementById("togglePersonalizacao").innerText = "Personalizar Gráfico ▼";
-  }
-});
-
 // Botão Aplicar Alterações
 document.getElementById("btnAplicarPersonalizacao").addEventListener("click", async () => {
   if (!ultimoGraficoInfo) {
@@ -247,13 +235,14 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   const cor = document.getElementById("corGrafico").value;
   const tituloX = document.getElementById("tituloEixoX").value;
   const tituloY = document.getElementById("tituloEixoY").value;
+  const tituloPrincipal = document.getElementById("tituloGrafico").value; // ✅ NOVO
   const tamanhoFonte = document.getElementById("tamanhoFonte").value;
   const inclinacaoX = document.getElementById("inclinacaoX").value;
   const inclinacaoY = document.getElementById("inclinacaoY").value;
   const espessura = document.getElementById("espessuraLinha").value;
 
   console.log("▶️ Enviando personalização:", {
-    cor, tituloX, tituloY, tamanhoFonte, inclinacaoX, inclinacaoY, espessura, ultimoGraficoInfo
+    cor, tituloX, tituloY, tituloPrincipal, tamanhoFonte, inclinacaoX, inclinacaoY, espessura, ultimoGraficoInfo
   });
 
   const formData = new FormData();
@@ -278,6 +267,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
+  formData.append("titulo_grafico", tituloPrincipal); // ✅ NOVO
   formData.append("tamanho_fonte", tamanhoFonte);
   formData.append("inclinacao_x", inclinacaoX);
   formData.append("inclinacao_y", inclinacaoY);
@@ -310,6 +300,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
         cor,
         titulo_x: tituloX,
         titulo_y: tituloY,
+        titulo_grafico: tituloPrincipal, // ✅ NOVO
         tamanho_fonte: tamanhoFonte,
         inclinacao_x: inclinacaoX,
         inclinacao_y: inclinacaoY,
@@ -320,6 +311,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
       document.getElementById("corGrafico").value = cor;
       document.getElementById("tituloEixoX").value = tituloX;
       document.getElementById("tituloEixoY").value = tituloY;
+      document.getElementById("tituloGrafico").value = tituloPrincipal; // ✅ NOVO
       document.getElementById("tamanhoFonte").value = tamanhoFonte;
       document.getElementById("inclinacaoX").value = inclinacaoX;
       document.getElementById("inclinacaoY").value = inclinacaoY;
@@ -334,6 +326,7 @@ document.getElementById("btnAplicarPersonalizacao").addEventListener("click", as
     alert("❌ Erro ao atualizar gráfico.");
   }
 });
+
 
 
 
