@@ -65,6 +65,9 @@ function deslogar() {
   box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
 
+// ✅ Variável global no topo
+let ultimoGraficoInfo = null;
+
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
   sessaoAtiva = true;
@@ -82,8 +85,6 @@ async function enviarAnaliseCompleta() {
     return;
   }
 
-  console.log("📌 DEBUG: Novo arquivo sendo enviado:", arquivoInput.files[0]);
-
   const analiseSelecionada = document.querySelector("#boxAnalise p")?.innerText || "";
   const nomeFerramenta = analiseSelecionada.replace("Análise selecionada: ", "").trim();
   if (!nomeFerramenta) {
@@ -96,10 +97,7 @@ async function enviarAnaliseCompleta() {
 
   const GRAFICOS_LIST = [
     "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Gráfico de Pareto", "Gráfico de Dispersão",
-    "Gráfico de Linha", "Gráfico de Bolhas", "Gráfico Sumário",
-    "BoxPlot Múltiplo", "BoxPlot Empilhado", "Histograma Múltiplo",
-    "Gráfico de Tendência"
+    "Tendência", "Bolhas - 3D", "Superfície - 3D"
   ];
 
   if (GRAFICOS_LIST.includes(nomeFerramenta)) {
@@ -115,55 +113,32 @@ async function enviarAnaliseCompleta() {
   formData.append("ferramenta", analise);
   formData.append("grafico", grafico);
 
-  let yVal = "", xVal = "", zVal = "", fieldVal = "";
-
-  if (camposNecessarios.includes("Y")) {
-    yVal = document.getElementById('box_y')?.value || "";
-    formData.append("coluna_y", yVal);
-  }
-
-  if (camposNecessarios.includes("Ys")) {
-    const el = document.getElementById('box_ys');
-    yVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("coluna_y", yVal);
-  }
-
-  if (camposNecessarios.includes("X")) {
-    xVal = document.getElementById('box_x')?.value || "";
-    formData.append("colunas_x", xVal);
-  }
-
-  if (camposNecessarios.includes("Xs")) {
-    const el = document.getElementById('box_xs');
-    xVal = el ? Array.from(el.selectedOptions || []).map(opt => opt.value).join(",") : "";
-    formData.append("colunas_x", xVal);
-  }
-
-  if (camposNecessarios.includes("Z")) {
-    zVal = document.getElementById('box_z')?.value || "";
-    formData.append("coluna_z", zVal);
-  }
-
-  if (camposNecessarios.some(c => c.startsWith("Field"))) {
-    fieldVal = document.getElementById('box_field')?.value || "";
-    if (fieldVal !== "") {
-      formData.append("field", fieldVal);
+  const appendCampo = (id, chave, multiplo = false) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (multiplo) {
+      const val = Array.from(el.selectedOptions).map(opt => opt.value).join(",");
+      if (val) formData.append(chave, val);
+    } else {
+      if (el.value) formData.append(chave, el.value);
     }
-  }
+  };
 
-  const box = document.getElementById("boxAnalise");
-  if (box) {
-    const textosExtras = box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field");
-    textosExtras.forEach(el => {
-      try {
-        el.remove();
-      } catch (err) {
-        console.warn("⚠ Erro ao tentar remover elemento:", el, err);
-      }
-    });
-  }
+  appendCampo("box_coluna_y", "coluna_y");
+  appendCampo("box_lista_y", "lista_y", true);
+  appendCampo("box_coluna_x", "coluna_x");
+  appendCampo("box_lista_x", "lista_x", true);
+  appendCampo("box_coluna_z", "coluna_z");
+  appendCampo("box_lista_z", "lista_z", true);
+  appendCampo("box_Data", "Data");
+  appendCampo("box_subgrupo", "subgrupo");
+  appendCampo("box_field", "field");
+  appendCampo("box_field_conf", "field_conf");
+  appendCampo("box_field_LIE", "field_LIE");
+  appendCampo("box_field_LSE", "field_LSE");
+  appendCampo("box_field_dist", "field_dist");
 
-  console.log("📌 DEBUG: Valores realmente enviados ao backend:");
+  console.log("📌 DEBUG: Valores enviados ao backend:");
   for (const [key, value] of formData.entries()) {
     console.log(`👉 ${key}: "${value}"`);
   }
@@ -177,14 +152,13 @@ async function enviarAnaliseCompleta() {
     console.log("🟢 Status do backend:", resposta.status);
     const json = await resposta.json();
     console.log("🟢 Resposta do backend:", json);
-    window._ultimaRespostaAnalise = json;
 
     const containerAnalise = document.getElementById('conteudoAnalise');
     const containerGrafico = document.getElementById('conteudoGrafico');
 
     if (json.analise || (json.grafico_base64 && json.grafico_base64.length > 0)) {
       const blocoAnalise = document.createElement('div');
-      blocoAnalise.className = 'mb-4 analise-completa';
+      blocoAnalise.className = 'bloco-analise mb-4';
       blocoAnalise.innerHTML = `
         <div class="analise-texto">${(json.analise || '').replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</div>
         ${json.grafico_base64 ? `<img src="data:image/png;base64,${json.grafico_base64}" style="margin-top:10px; max-width:100%;" />` : ""}
@@ -193,7 +167,7 @@ async function enviarAnaliseCompleta() {
     }
 
     if (json.grafico_isolado_base64) {
-      let base64 = Array.isArray(json.grafico_isolado_base64)
+      const base64 = Array.isArray(json.grafico_isolado_base64)
         ? json.grafico_isolado_base64.find(v => v && v.length > 50)
         : json.grafico_isolado_base64;
 
@@ -202,8 +176,47 @@ async function enviarAnaliseCompleta() {
         imgGrafico.src = `data:image/png;base64,${base64}`;
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
-      } else {
-        console.warn("⚠ Nenhum base64 válido encontrado para o gráfico isolado.");
+
+        // ✅ Mostrar painel de personalização somente se houver gráfico isolado
+        document.getElementById('painelPersonalizacao').style.display = 'block';
+
+        // ✅ Atualizar ultimoGraficoInfo incluindo defaults de personalização
+        ultimoGraficoInfo = {
+          arquivo: arquivoInput.files[0],
+          aba: abaSelect.value,
+          ferramenta: analise,
+          grafico: grafico,
+          coluna_y: document.getElementById("box_coluna_y")?.value || "",
+          coluna_x: document.getElementById("box_coluna_x")?.value || "",
+          coluna_z: document.getElementById("box_coluna_z")?.value || "",
+          subgrupo: document.getElementById("box_subgrupo")?.value || "",
+          field: document.getElementById("box_field")?.value || "",
+          field_conf: document.getElementById("box_field_conf")?.value || "",
+          field_dist: document.getElementById("box_field_dist")?.value || "",
+          field_LSE: document.getElementById("box_field_LSE")?.value || "",
+          field_LIE: document.getElementById("box_field_LIE")?.value || "",
+          Data: document.getElementById("box_Data")?.value || "",
+          cor: "#4682B4", // steelblue
+          // 🔧 Ajuste aqui: usa coluna_x se existir, senão coluna_y
+          titulo_x: "",        // deixar em branco
+          titulo_y: "",        // deixar em branco
+          titulo_grafico: "", // deixar em branco
+          tamanho_fonte: 12,
+          inclinacao_x: 0,
+          inclinacao_y: 0,
+          espessura: 2
+        };
+
+        // ✅ Preencher painel de personalização com defaults
+        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
+        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
+        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
+        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
+        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
+        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
+        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
+        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
+
       }
     }
 
@@ -213,16 +226,16 @@ async function enviarAnaliseCompleta() {
   }
 }
 
+
+
+
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
-
-
-
 
 async function perguntarIA() {
   alert('▶️ perguntarIA foi acionado');
 
-  const promptInput = document.getElementById('perguntaAluno');  // Corrigido o ID
+  const promptInput = document.getElementById('perguntaAluno');
   if (!promptInput) {
     alert("❌ Campo de pergunta não encontrado no HTML.");
     return;
@@ -234,13 +247,19 @@ async function perguntarIA() {
     return;
   }
 
-  const ultima = document.querySelector('.analise-completa .analise-texto');
-  if (!ultima || !ultima.innerText) {
+  // NOVO MÉTODO MAIS ROBUSTO PARA PEGAR A ÚLTIMA ANÁLISE
+  let textoPlano = "";
+  const blocosAnalise = document.querySelectorAll('.bloco-analise .analise-texto');
+  if (blocosAnalise.length > 0) {
+    const ultima = blocosAnalise[0];
+    textoPlano = ultima?.innerText?.trim() || "";
+  }
+
+  if (!textoPlano) {
     alert('⚠️ Nenhuma análise encontrada.');
     return;
   }
 
-  const textoPlano = ultima.innerText.trim();
   console.log("🔍 Última análise capturada:", textoPlano);
 
   const payload = {
