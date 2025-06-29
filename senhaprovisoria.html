@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Trocar Senha Provisória</title>
+</head>
+<body>
+  <h2>Troque sua senha provisória</h2>
+  <form id="formTrocarSenha">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="senha_provisoria">Senha provisória:</label><br>
+    <input type="password" id="senha_provisoria" name="senha_provisoria" required><br><br>
+
+    <label for="nova_senha">Nova senha:</label><br>
+    <input type="password" id="nova_senha" name="nova_senha" required><br><br>
+
+    <button type="submit">Trocar Senha</button>
+  </form>
+
+  <script>
+    document.getElementById("formTrocarSenha").addEventListener("submit", async function(event){
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const senha_provisoria = document.getElementById("senha_provisoria").value;
+      const nova_senha = document.getElementById("nova_senha").value;
+
+      const resposta = await fetch("URL_DO_SEU_WEBHOOK_N8N", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+          senha_provisoria: senha_provisoria,
+          nova_senha: nova_senha
+        })
+      });
+
+      const resultado = await resposta.json();
+      alert(resultado.mensagem || "Senha alterada com sucesso");
+    });
+  </script>
+</body>
+</html>
