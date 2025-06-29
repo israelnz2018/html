@@ -58,18 +58,43 @@
 
       <input type="password" id="nova_senha" name="nova_senha" placeholder="Nova senha" required>
 
+      <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme a nova senha" required>
+
       <button type="submit">Trocar Senha</button>
     </form>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
   <script>
+    // Configuração do seu projeto Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
+      authDomain: "senha-92ce1.firebaseapp.com",
+      projectId: "senha-92ce1",
+      storageBucket: "senha-92ce1.firebasestorage.app",
+      messagingSenderId: "359510043151",
+      appId: "1:359510043151:web:d4346ea1dc9865c65cd17a",
+      measurementId: "G-SK017CKJE9"
+    };
+
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+
     document.getElementById("formTrocarSenha").addEventListener("submit", async function(event){
       event.preventDefault();
 
-      const email = document.getElementById("email").value;
-      const senha_provisoria = document.getElementById("senha_provisoria").value;
-      const nova_senha = document.getElementById("nova_senha").value;
+      const email = document.getElementById("email").value.trim();
+      const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
+      const nova_senha = document.getElementById("nova_senha").value.trim();
+      const confirmar_senha = document.getElementById("confirmar_senha").value.trim();
 
+      if (nova_senha !== confirmar_senha) {
+        alert("As senhas não coincidem. Por favor, digite novamente.");
+        return;
+      }
+
+      // Aqui você envia para seu backend para validar a senha provisória e atualizar
       const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/senhaprovisoria", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -82,34 +107,17 @@
 
       const resultado = await resposta.json();
       alert(resultado.mensagem || "Senha alterada com sucesso");
+
+      // Aqui, se desejar, pode implementar login automático após troca de senha
+      // Exemplo:
+      // const auth = firebase.auth();
+      // await auth.signInWithEmailAndPassword(email, nova_senha);
+      // window.location.href = "https://SEU_SITE.com";
     });
   </script>
-
-<!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-
-<!-- Firebase Authentication -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-
-<script>
-  // Configuração do seu projeto Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
-    authDomain: "senha-92ce1.firebaseapp.com",
-    projectId: "senha-92ce1",
-    storageBucket: "senha-92ce1.firebasestorage.app",
-    messagingSenderId: "359510043151",
-    appId: "1:359510043151:web:d4346ea1dc9865c65cd17a",
-    measurementId: "G-SK017CKJE9"
-  };
-
-  // Inicializa o Firebase
-  firebase.initializeApp(firebaseConfig);
-</script>
-
-
 </body>
 </html>
+
 
    
       
