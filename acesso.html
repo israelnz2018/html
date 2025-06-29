@@ -108,6 +108,27 @@
   // Inicializa o Firebase
   firebase.initializeApp(firebaseConfig);
 
+  // Verifica se o usuário já está logado ao carregar a página
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      // Usuário está logado, mostra app diretamente
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+
+      const inicial = user.email.charAt(0).toUpperCase();
+      document.getElementById("usuario-info").innerHTML = `
+        <div>
+          <p>Usuário: ${user.email}</p>
+          <p>Inicial: ${inicial}</p>
+        </div>
+      `;
+    } else {
+      // Usuário não está logado, mostra tela de login
+      document.getElementById("login-box").style.display = "block";
+      document.getElementById("app").style.display = "none";
+    }
+  });
+
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
     const senha = document.getElementById('senha-login').value.trim();
@@ -174,5 +195,4 @@
 
 </body>
 </html>
-
 
