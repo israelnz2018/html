@@ -15,13 +15,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh; /* altura total da tela */
+      height: 100vh;
       margin: 0;
       background-color: #f2f2f2;
     }
     #login-box {
       max-width: 400px;
-      width: 100%; /* garante responsividade */
+      width: 100%;
       padding: 30px;
       border-radius: 12px;
       background-color: #fdfdfd;
@@ -108,10 +108,12 @@
   // Inicializa o Firebase
   firebase.initializeApp(firebaseConfig);
 
-  // Verifica se o usuário já está logado ao carregar a página
+  // Faz signOut imediato ao carregar para garantir tela de login sempre visível
+  firebase.auth().signOut();
+
+  // Verifica se o usuário está logado ao carregar a página
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      // Usuário está logado, mostra app diretamente
       document.getElementById("login-box").style.display = "none";
       document.getElementById("app").style.display = "block";
 
@@ -123,7 +125,6 @@
         </div>
       `;
     } else {
-      // Usuário não está logado, mostra tela de login
       document.getElementById("login-box").style.display = "block";
       document.getElementById("app").style.display = "none";
     }
@@ -195,4 +196,5 @@
 
 </body>
 </html>
+
 
