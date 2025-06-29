@@ -27,7 +27,7 @@
       const senha_provisoria = document.getElementById("senha_provisoria").value;
       const nova_senha = document.getElementById("nova_senha").value;
 
-      const resposta = await fetch("URL_DO_SEU_WEBHOOK_N8N", {
+      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/senhaprovisoria", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
