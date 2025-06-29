@@ -355,5 +355,11 @@ if (toggleBtn && painel && opcoes) {
 // ✅ Torna a função enviarPersonalizacao global
 window.enviarPersonalizacao = enviarPersonalizacao;
 
+// 🔥 Registrar evento no botão de aplicar personalização
+document.addEventListener("click", function(e) {
+  if (e.target && e.target.id === "btnAplicarPersonalizacao") {
+    enviarPersonalizacao();
+  }
+});
 
 
