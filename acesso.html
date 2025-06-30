@@ -4,46 +4,43 @@
   <meta charset="UTF-8" />
   <title>Learning by Working – Acesso</title>
 
-  <!-- Firebase App (compat) -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0; }
+
     .container {
       max-width: 400px;
-      margin: 50px auto;
-      background: #fff;
+      margin: 60px auto;
       padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      background-color: #fdfdfd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
     }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+
+    h2 { margin-bottom: 24px; color: #333; }
+
+    input[type="email"], input[type="password"] {
+      width: 100%; padding: 12px; margin: 8px 0 16px 0;
+      border: 1px solid #ccc; border-radius: 6px;
     }
+
     button {
-      width: 100%;
-      padding: 12px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
+      width: 100%; padding: 12px;
+      background-color: #4CAF50; color: white;
+      border: none; border-radius: 6px;
+      font-size: 16px; cursor: pointer;
     }
-    button:hover { background-color: #218838; }
-    p a { color: #007BFF; text-decoration: none; font-size: 14px; }
+
+    button:hover { background-color: #45a049; }
+
+    p a {
+      color: #007BFF; text-decoration: none; font-size: 14px;
+    }
+
     #primeiroAcesso, #loginSection { display: none; }
   </style>
 </head>
@@ -60,22 +57,31 @@
     <input type="password" id="confirmar_senha" placeholder="Confirme a nova senha" required>
     <button type="submit">Trocar Senha</button>
   </form>
-  <p><a href="#" onclick="showLogin()">Voltar ao Login</a></p>
+  <p style="margin-top:16px;"><a href="#" onclick="showLogin()">Voltar ao Login</a></p>
 </div>
 
 <!-- 🔐 Login Normal -->
 <div id="loginSection" class="container">
   <h2>🔐 Login do Aluno</h2>
-  <input type="email" id="email-login" placeholder="E-mail" required>
-  <input type="password" id="senha-login" placeholder="Senha" required>
+
+  <input type="email" id="email-login" placeholder="Digite seu e-mail" required>
+  <input type="password" id="senha-login" placeholder="Digite sua senha" required>
+
   <button onclick="fazerLogin()">Entrar</button>
-  <p><a href="#" onclick="recuperarSenha()">Esqueci minha senha</a></p>
-  <p><a href="#" onclick="showPrimeiroAcesso()">Primeiro acesso? Clique aqui</a></p>
-  <p id="mensagem-login"></p>
+
+  <div style="margin-top: 16px;">
+    <a href="#" onclick="recuperarSenha()">Esqueci minha senha</a>
+  </div>
+
+  <p style="margin-top: 8px;">
+    <a href="#" onclick="showPrimeiroAcesso()">Primeiro acesso? Clique aqui</a>
+  </p>
+
+  <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
 </div>
 
 <script>
-  // Configuração do Firebase
+  // Config Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
     authDomain: "senha-92ce1.firebaseapp.com",
@@ -95,13 +101,12 @@
     document.getElementById("loginSection").style.display = "none";
     document.getElementById("primeiroAcesso").style.display = "block";
   }
-
   function showLogin() {
     document.getElementById("primeiroAcesso").style.display = "none";
     document.getElementById("loginSection").style.display = "block";
   }
 
-  // Primeiro acesso – troca de senha
+  // 🔒 Primeiro acesso – troca de senha
   document.getElementById("formTrocarSenha").addEventListener("submit", async function(event){
     event.preventDefault();
     const email = document.getElementById("email").value.trim();
@@ -129,7 +134,7 @@
     }
   });
 
-  // Login normal
+  // 🔑 Login normal
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
     const senha = document.getElementById('senha-login').value.trim();
@@ -151,8 +156,7 @@
       msg.textContent = `✅ Bem-vindo, ${user.email}!`;
 
       // Redireciona para o layout do app
-      window.location.href = "index.html";
-
+      window.location.href = "layout.html";
 
     } catch (error) {
       console.error("Erro no login:", error);
@@ -161,15 +165,13 @@
     }
   }
 
-  // Recuperar senha
+  // 🔄 Recuperar senha
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
 
     firebase.auth().sendPasswordResetEmail(email)
-      .then(() => {
-        alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
-      })
+      .then(() => alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."))
       .catch((error) => {
         console.error("Erro ao enviar email de redefinição:", error);
         alert("❌ Erro ao enviar email de redefinição: " + error.message);
@@ -179,6 +181,4 @@
 
 </body>
 </html>
-
-
 
