@@ -65,11 +65,14 @@
       <h2 class="font-bold text-lg mb-2 text-center">Análise Estatística</h2>
       <div id="conteudoAnalise" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
     </div>
+
     <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
       <h2 class="font-bold text-lg mb-2 text-center">Gráfico Isolado</h2>
-      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
+      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto">
+        
+        <!-- Aqui será inserido o gráfico isolado dinamicamente -->
 
-<!-- Painel Personalização Gráfico -->
+        <!-- Painel Personalização Gráfico -->
 <div id="painelPersonalizacao" style="display:block; border:1px solid #ccc; padding:10px; margin:0; width:100%;">
   <button id="togglePersonalizacao" style="font-weight:bold; margin:0 0 10px 0;">
     Personalizar Gráfico ▼
@@ -123,15 +126,14 @@
 
     <!-- Botão Aplicar Alterações -->
     <div class="col-span-3">
-      <button id="btnAplicarPersonalizacao" style="background-color:green; color:white; padding:6px 12px; border-radius:4px;">
+      <button id="btnAplicarPersonalizacao" style="background-color:green; color:white; padding:6px 12px; border-radius:4px;"
+        onclick="enviarPersonalizacao(); document.getElementById('opcoesPersonalizacao').style.display='grid';">
         Aplicar Alterações
       </button>
     </div>
 
   </div>
 </div>
-
-
 
 
 
