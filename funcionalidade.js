@@ -232,7 +232,7 @@ document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAna
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 
 async function perguntarIA() {
-  alert('▶️ perguntarIA foi acionado');
+  console.log('▶️ perguntarIA foi acionado');
 
   const promptInput = document.getElementById('perguntaAluno');
   if (!promptInput) {
@@ -246,25 +246,25 @@ async function perguntarIA() {
     return;
   }
 
-  // NOVO MÉTODO MAIS ROBUSTO PARA PEGAR A ÚLTIMA ANÁLISE
-  let textoPlano = "";
+  // 🔍 Determina se vai perguntar sobre análise ou gráfico
+  let tipo = "";
   const blocosAnalise = document.querySelectorAll('.bloco-analise .analise-texto');
-  if (blocosAnalise.length > 0) {
-    const ultima = blocosAnalise[0];
-    textoPlano = ultima?.innerText?.trim() || "";
-  }
+  const containerGrafico = document.getElementById('conteudoGrafico');
 
-  if (!textoPlano) {
-    alert('⚠️ Nenhuma análise encontrada.');
+  if (blocosAnalise.length > 0) {
+    tipo = "analise";
+  } else if (containerGrafico.querySelector('img')) {
+    tipo = "grafico";
+  } else {
+    alert("⚠️ Nenhuma análise ou gráfico encontrado para perguntar.");
     return;
   }
 
-  console.log("🔍 Última análise capturada:", textoPlano);
+  console.log("🔧 Tipo de pergunta:", tipo);
 
-  const payload = {
-    analise: textoPlano,
-    prompt: pergunta
-  };
+  const payload = new FormData();
+  payload.append("pergunta", pergunta);
+  payload.append("tipo", tipo);
 
   const blocoPergunta = document.createElement('div');
   blocoPergunta.className = 'pergunta-resposta';
@@ -272,43 +272,36 @@ async function perguntarIA() {
   blocoPergunta.style.border = '1px solid #007bff';
   blocoPergunta.style.padding = '12px';
   blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
-  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+
+  if (tipo === "analise") {
+    document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+  } else {
+    document.getElementById('conteudoGrafico').prepend(blocoPergunta);
+  }
 
   try {
-    const response = await fetch(
-      'https://primary-production-1d53.up.railway.app/webhook/perguntar-ia',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }
-    );
+    const response = await fetch('https://analises-production.up.railway.app/pergunta', {
+      method: 'POST',
+      body: payload
+    });
 
     const data = await response.json();
-    console.log("🟡 Resposta bruta recebida do agente:", data);
+    console.log("🟢 Resposta recebida do backend:", data);
 
-    let respostaFinal = "";
+    if (data.resposta) {
+      let respostaFinal = data.resposta
+        .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+        .replace(/\n/g, "<br>");
 
-    try {
-      if (typeof data === "string") {
-        respostaFinal = data;
-      } else if (data?.analise) {
-        respostaFinal = data.analise;
-      } else {
-        console.warn("⚠️ Nenhum campo 'analise' encontrado em 'data'.", data);
-        respostaFinal = JSON.stringify(data);
-      }
-
-      respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
-    } catch (erro) {
-      console.error("❌ Erro ao formatar resultado:", erro);
-      console.log("🧪 Resultado recebido:", data);
-      respostaFinal = data?.analise || "❌ Nenhuma resposta formatável recebida.";
+      blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+    } else if (data.erro) {
+      blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${data.erro}</span>`;
+    } else {
+      blocoPergunta.innerHTML = `<span style="color:red;">❌ Nenhuma resposta recebida.</span>`;
     }
 
-    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
   } catch (e) {
-    console.error("❌ Erro no fetch ou no processamento:", e);
+    console.error("❌ Erro no fetch ou processamento:", e);
     blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
   }
 }
