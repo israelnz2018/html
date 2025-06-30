@@ -7,6 +7,10 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Firebase App (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
   <!-- SlimSelect -->
   <link href="https://cdn.jsdelivr.net/npm/slim-select@2.6.0/dist/slimselect.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/slim-select@2.6.0/dist/slimselect.min.js"></script>
@@ -28,7 +32,7 @@
 
   <script>
     const arquivos = [
-      "acesso_permissoes.html",
+      "acesso.html",
       "layout.html",
       "pokayoke.html"
     ];
@@ -48,7 +52,7 @@
           } else if (node.tagName === "STYLE") {
             document.head.appendChild(node);
           } else {
-            if (nome === "acesso_permissoes.html") {
+            if (nome === "acesso.html") {
               document.getElementById("login-container").appendChild(node);
             } else {
               document.getElementById("app").appendChild(node);
@@ -89,7 +93,6 @@
   </script>
 
   <script src="personalizacao_grafico.js"></script>
-
 
 </body>
 </html>
