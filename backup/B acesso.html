@@ -1,0 +1,181 @@
+<div id="login-box" style="
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  text-align: center;
+">
+  <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
+
+  <div id="loginSection" style="text-align: left;">
+    <label for="email-login" style="font-weight: bold;">E-mail</label>
+    <input type="email" id="email-login" placeholder="Digite seu e-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
+
+    <label for="senha-login" style="font-weight: bold;">Senha</label>
+    <input type="password" id="senha-login" placeholder="Digite sua senha" required
+      style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px;" />
+
+    <button id="botao-login" onclick="fazerLogin()"
+      style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+      Entrar
+    </button>
+
+    <div style="margin-top: 16px;">
+      <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+        Esqueci minha senha
+      </a>
+      <br>
+      <a href="#" onclick="showPrimeiroAcesso()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+        Primeiro acesso? Clique aqui
+      </a>
+    </div>
+
+    <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
+  </div>
+
+  <!-- 🔒 Primeiro Acesso -->
+  <div id="primeiroAcesso" style="display:none; text-align: left;">
+    <h3 style="text-align:center;">🔒 Primeiro Acesso</h3>
+    <input type="email" id="email" placeholder="E-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" id="senha_provisoria" placeholder="Senha provisória" required
+      style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" id="nova_senha" placeholder="Nova senha" required
+      style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" id="confirmar_senha" placeholder="Confirme a nova senha" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
+
+    <button onclick="trocarSenha()"
+      style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+      Trocar Senha
+    </button>
+
+    <div style="margin-top: 16px;">
+      <a href="#" onclick="showLogin()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+        Voltar ao Login
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
+    authDomain: "senha-92ce1.firebaseapp.com",
+    projectId: "senha-92ce1",
+    storageBucket: "senha-92ce1.firebasestorage.app",
+    messagingSenderId: "359510043151",
+    appId: "1:359510043151:web:d4346ea1dc9865c65cd17a",
+    measurementId: "G-SK017CKJE9"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  // Funções de exibição
+  function showPrimeiroAcesso() {
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("primeiroAcesso").style.display = "block";
+  }
+  function showLogin() {
+    document.getElementById("primeiroAcesso").style.display = "none";
+    document.getElementById("loginSection").style.display = "block";
+  }
+
+  // Primeiro acesso – troca de senha
+  async function trocarSenha() {
+    const email = document.getElementById("email").value.trim();
+    const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
+    const nova_senha = document.getElementById("nova_senha").value.trim();
+    const confirmar_senha = document.getElementById("confirmar_senha").value.trim();
+    if (nova_senha !== confirmar_senha) { alert("As senhas não coincidem."); return; }
+
+    try {
+      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/senhaprovisoria", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha_provisoria, nova_senha })
+      });
+      const resultado = await resposta.json();
+      if (resultado.sucesso || (resultado.mensagem && resultado.mensagem.includes("correta"))) {
+        alert("Senha alterada com sucesso! Faça login.");
+        showLogin();
+      } else {
+        alert(resultado.mensagem || "Erro na troca de senha.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao processar: " + error.message);
+    }
+  }
+
+  // Login normal
+  async function fazerLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
+
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
+
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
+
+    try {
+      const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+      const user = userCredential.user;
+      msg.style.color = "green";
+      msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
+      const inicial = user.email.charAt(0).toUpperCase();
+      document.getElementById("usuario-info").innerHTML = `
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold">
+            ${inicial}
+          </div>
+          <span class="text-sm font-medium">${user.email}</span>
+          <button onclick="deslogarAluno()" class="text-blue-600 text-xs underline">Deslogar</button>
+        </div>
+      `;
+    } catch (error) {
+      console.error("Erro no login:", error);
+      msg.style.color = "red";
+      msg.textContent = "❌ Erro ao fazer login: " + error.message;
+    }
+  }
+
+  // Recuperar senha
+  function recuperarSenha() {
+    const email = prompt("Digite seu e-mail para recuperar a senha:");
+    if (!email) return;
+
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar email de redefinição:", error);
+        alert("❌ Erro ao enviar email de redefinição: " + error.message);
+      });
+  }
+
+  function deslogarAluno() {
+    firebase.auth().signOut().then(() => {
+      document.getElementById("app").style.display = "none";
+      document.getElementById("login-box").style.display = "block";
+      document.getElementById("mensagem-login").textContent = "";
+    }).catch((error) => console.error("Erro ao deslogar:", error));
+  }
+</script>
