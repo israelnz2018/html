@@ -2,100 +2,67 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Acesso do Aluno</title>
+  <title>Learning by Working – SPA</title>
 
   <!-- Firebase App (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-  <!-- Firebase Authentication (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
-    body {
-      
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f2f2f2;
-    }
-    #login-box {
-      max-width: 400px;
-      width: 100%;
-      padding: 30px;
-      border-radius: 12px;
-      background-color: #fdfdfd;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0 16px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    a {
-      color: #007BFF;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    #mensagem-login {
-      margin-top: 18px;
-      font-size: 15px;
-    }
-    #app {
-      display: none;
-      text-align: center;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0; }
+    .container, #login-box, #app { max-width: 400px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    input[type="email"], input[type="password"] { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; }
+    button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: #218838; }
+    #app { display: none; }
+    #primeiroAcesso, #loginSection { display: none; }
   </style>
-
 </head>
 <body>
 
-<div id="login-box">
-  <h2>🔐 Acesso do Aluno</h2>
+<!-- 🔒 Primeiro Acesso -->
+<div id="primeiroAcesso" class="container">
+  <h2>🔒 Primeiro Acesso</h2>
+  <form id="formTrocarSenha">
+    <input type="email" id="email" placeholder="E-mail" required>
+    <input type="password" id="senha_provisoria" placeholder="Senha provisória" required>
+    <input type="password" id="nova_senha" placeholder="Nova senha" required>
+    <input type="password" id="confirmar_senha" placeholder="Confirme a nova senha" required>
+    <button type="submit">Trocar Senha</button>
+  </form>
+  <p><a href="#" onclick="showLogin()">Voltar ao Login</a></p>
+</div>
 
-  <div>
-    <label for="email-login"><b>E-mail</b></label>
-    <input type="email" id="email-login" placeholder="Digite seu e-mail" required>
-
-    <label for="senha-login"><b>Senha</b></label>
-    <input type="password" id="senha-login" placeholder="Digite sua senha" required>
-  </div>
-
-  <button id="botao-login" onclick="fazerLogin()">Entrar</button>
-
-  <div style="margin-top: 16px;">
-    <a href="#" onclick="recuperarSenha()">Esqueci minha senha</a>
-  </div>
-
+<!-- 🔐 Login Normal -->
+<div id="loginSection" class="container">
+  <h2>🔐 Login do Aluno</h2>
+  <input type="email" id="email-login" placeholder="E-mail" required>
+  <input type="password" id="senha-login" placeholder="Senha" required>
+  <button onclick="fazerLogin()">Entrar</button>
+  <p><a href="#" onclick="recuperarSenha()">Esqueci minha senha</a></p>
+  <p><a href="#" onclick="showPrimeiroAcesso()">Primeiro acesso? Clique aqui</a></p>
   <p id="mensagem-login"></p>
 </div>
 
+<!-- ✅ Aplicativo -->
 <div id="app">
-  <h2>Bem-vindo ao aplicativo!</h2>
-  <div id="usuario-info"></div>
-  <button onclick="deslogarAluno()">Deslogar</button>
+  <nav class="bg-blue-600 text-white p-2 flex justify-between items-center">
+    <div class="text-lg font-semibold">Learning by Working</div>
+    <div id="usuario-info"></div>
+    <button onclick="deslogarAluno()">Deslogar</button>
+  </nav>
+
+  <div class="max-w-6xl mx-auto p-4">
+    <h2>Bem-vindo ao aplicativo!</h2>
+    <!-- Aqui entra todo o conteúdo do seu app (ex: upload, análises) -->
+    <!-- Exemplo simplificado -->
+    <p>Conteúdo do aplicativo Learning by Working.</p>
+  </div>
 </div>
 
 <script>
-  // Configuração do Firebase
+  // Config Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
     authDomain: "senha-92ce1.firebaseapp.com",
@@ -105,64 +72,64 @@
     appId: "1:359510043151:web:d4346ea1dc9865c65cd17a",
     measurementId: "G-SK017CKJE9"
   };
-
-  // Inicializa o Firebase
   firebase.initializeApp(firebaseConfig);
 
-  // Faz signOut imediato ao carregar para garantir tela de login sempre visível
-  firebase.auth().signOut();
+  // Mostra login por padrão
+  document.getElementById("loginSection").style.display = "block";
 
-  // Verifica se o usuário está logado ao carregar a página
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      document.getElementById("login-box").style.display = "none";
-      document.getElementById("app").style.display = "block";
+  // 🔄 Funções de exibição
+  function showPrimeiroAcesso() {
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("primeiroAcesso").style.display = "block";
+  }
+  function showLogin() {
+    document.getElementById("primeiroAcesso").style.display = "none";
+    document.getElementById("loginSection").style.display = "block";
+  }
 
-      const inicial = user.email.charAt(0).toUpperCase();
-      document.getElementById("usuario-info").innerHTML = `
-        <div>
-          <p>Usuário: ${user.email}</p>
-          <p>Inicial: ${inicial}</p>
-        </div>
-      `;
-    } else {
-      document.getElementById("login-box").style.display = "block";
-      document.getElementById("app").style.display = "none";
+  // 🔐 Primeiro acesso - troca de senha
+  document.getElementById("formTrocarSenha").addEventListener("submit", async function(event){
+    event.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
+    const nova_senha = document.getElementById("nova_senha").value.trim();
+    const confirmar_senha = document.getElementById("confirmar_senha").value.trim();
+    if (nova_senha !== confirmar_senha) { alert("As senhas não coincidem."); return; }
+
+    try {
+      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/senhaprovisoria", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha_provisoria, nova_senha })
+      });
+      const resultado = await resposta.json();
+      if (resultado.sucesso || (resultado.mensagem && resultado.mensagem.includes("correta"))) {
+        alert("Senha alterada com sucesso! Faça login.");
+        showLogin();
+      } else {
+        alert(resultado.mensagem || "Erro na troca de senha.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao processar: " + error.message);
     }
   });
 
+  // 🔑 Login normal
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
     const senha = document.getElementById('senha-login').value.trim();
     const msg = document.getElementById('mensagem-login');
-
-    if (!email || !senha) {
-      msg.style.color = "red";
-      msg.textContent = "❌ Preencha todos os campos.";
-      return;
-    }
-
-    msg.style.color = "#444";
-    msg.textContent = "🔄 Verificando...";
+    if (!email || !senha) { msg.style.color = "red"; msg.textContent = "❌ Preencha todos os campos."; return; }
+    msg.style.color = "#444"; msg.textContent = "🔄 Verificando...";
 
     try {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
       const user = userCredential.user;
-
-      msg.style.color = "green";
-      msg.textContent = `✅ Acesso permitido. Bem-vindo, ${user.email}!`;
-
-      document.getElementById("login-box").style.display = "none";
+      msg.style.color = "green"; msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+      document.getElementById("loginSection").style.display = "none";
       document.getElementById("app").style.display = "block";
-
-      const inicial = user.email.charAt(0).toUpperCase();
-      document.getElementById("usuario-info").innerHTML = `
-        <div>
-          <p>Usuário: ${user.email}</p>
-          <p>Inicial: ${inicial}</p>
-        </div>
-      `;
-
+      document.getElementById("usuario-info").innerHTML = `<p>${user.email}</p>`;
     } catch (error) {
       console.error("Erro no login:", error);
       msg.style.color = "red";
@@ -170,32 +137,30 @@
     }
   }
 
-  function deslogarAluno() {
-    firebase.auth().signOut().then(() => {
-      document.getElementById("app").style.display = "none";
-      document.getElementById("login-box").style.display = "block";
-      document.getElementById("mensagem-login").textContent = "";
-    }).catch((error) => {
-      console.error("Erro ao deslogar:", error);
-    });
-  }
-
+  // 🔄 Recuperar senha
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
-
     firebase.auth().sendPasswordResetEmail(email)
-      .then(() => {
-        alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
-      })
+      .then(() => alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."))
       .catch((error) => {
         console.error("Erro ao enviar email de redefinição:", error);
         alert("❌ Erro ao enviar email de redefinição: " + error.message);
       });
   }
+
+  // 🔓 Deslogar
+  function deslogarAluno() {
+    firebase.auth().signOut().then(() => {
+      document.getElementById("app").style.display = "none";
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("mensagem-login").textContent = "";
+    }).catch((error) => console.error("Erro ao deslogar:", error));
+  }
 </script>
 
 </body>
 </html>
+
 
 
