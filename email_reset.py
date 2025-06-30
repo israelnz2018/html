@@ -35,3 +35,48 @@ def enviar_email_reset(destinatario_email, link_reset):
             print("✅ E-mail enviado com sucesso.")
     except Exception as e:
         print("❌ Erro ao enviar e-mail:", e)
+
+
+        import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+def enviar_email_reset(destinatario, link_reset):
+    # CONFIGURAÇÕES SMTP HOSTINGER
+    smtp_host = "smtp.hostinger.com"
+    smtp_port = 465
+    smtp_user = "contact@learningbyworking.com"
+    smtp_pass = "Dani4035*+"
+
+    # MONTAGEM DO EMAIL
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = "Redefinição de Senha - Learning by Working"
+    msg["From"] = smtp_user
+    msg["To"] = destinatario
+
+    corpo_html = f"""
+    <html>
+    <body>
+      <h2>Olá!</h2>
+      <p>Segue o link para redefinir sua senha:</p>
+      <a href='{link_reset}'>Clique aqui para redefinir</a>
+      <p>Se não solicitou, ignore este email.</p>
+      <p>Atenciosamente,<br><b>Learning by Working</b></p>
+    </body>
+    </html>
+    """
+
+    parte_html = MIMEText(corpo_html, "html")
+    msg.attach(parte_html)
+
+    # ENVIO SMTP
+    try:
+        with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, destinatario, msg.as_string())
+        print("✅ Email de reset enviado com sucesso.")
+        return True
+    except Exception as e:
+        print(f"❌ Erro ao enviar email de reset: {e}")
+        return False
+
