@@ -65,8 +65,7 @@ function deslogar() {
   box.querySelectorAll(".info-analise, .info-y, .info-x, .info-z, .info-field").forEach(el => el.remove());
 }
 
-// ✅ Variável global no topo
-let ultimoGraficoInfo = null;
+
 
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
