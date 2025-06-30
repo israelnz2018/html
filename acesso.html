@@ -2,23 +2,23 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Learning by Working – SPA</title>
+  <title>Learning by Working – Acesso</title>
 
   <!-- Firebase App (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
     body { font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0; }
-    .container, #login-box, #app { max-width: 400px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .container { max-width: 400px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
     input[type="email"], input[type="password"] { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; }
     button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
     button:hover { background-color: #218838; }
-    #app { display: none; }
+    p a { color: #007BFF; text-decoration: none; font-size: 14px; }
     #primeiroAcesso, #loginSection { display: none; }
   </style>
 </head>
+
 <body>
 
 <!-- 🔒 Primeiro Acesso -->
@@ -45,24 +45,8 @@
   <p id="mensagem-login"></p>
 </div>
 
-<!-- ✅ Aplicativo -->
-<div id="app">
-  <nav class="bg-blue-600 text-white p-2 flex justify-between items-center">
-    <div class="text-lg font-semibold">Learning by Working</div>
-    <div id="usuario-info"></div>
-    <button onclick="deslogarAluno()">Deslogar</button>
-  </nav>
-
-  <div class="max-w-6xl mx-auto p-4">
-    <h2>Bem-vindo ao aplicativo!</h2>
-    <!-- Aqui entra todo o conteúdo do seu app (ex: upload, análises) -->
-    <!-- Exemplo simplificado -->
-    <p>Conteúdo do aplicativo Learning by Working.</p>
-  </div>
-</div>
-
 <script>
-  // Config Firebase
+  // Configuração do Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
     authDomain: "senha-92ce1.firebaseapp.com",
@@ -74,20 +58,21 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  // Mostra login por padrão
+  // Exibe login por padrão
   document.getElementById("loginSection").style.display = "block";
 
-  // 🔄 Funções de exibição
+  // Funções de exibição
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
     document.getElementById("primeiroAcesso").style.display = "block";
   }
+
   function showLogin() {
     document.getElementById("primeiroAcesso").style.display = "none";
     document.getElementById("loginSection").style.display = "block";
   }
 
-  // 🔐 Primeiro acesso - troca de senha
+  // Primeiro acesso – troca de senha
   document.getElementById("formTrocarSenha").addEventListener("submit", async function(event){
     event.preventDefault();
     const email = document.getElementById("email").value.trim();
@@ -115,21 +100,30 @@
     }
   });
 
-  // 🔑 Login normal
+  // Login normal
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
     const senha = document.getElementById('senha-login').value.trim();
     const msg = document.getElementById('mensagem-login');
-    if (!email || !senha) { msg.style.color = "red"; msg.textContent = "❌ Preencha todos os campos."; return; }
-    msg.style.color = "#444"; msg.textContent = "🔄 Verificando...";
+
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
+
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
 
     try {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
       const user = userCredential.user;
-      msg.style.color = "green"; msg.textContent = `✅ Bem-vindo, ${user.email}!`;
-      document.getElementById("loginSection").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      document.getElementById("usuario-info").innerHTML = `<p>${user.email}</p>`;
+      msg.style.color = "green";
+      msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+
+      // Redireciona para o layout do app
+      window.location.href = "layout.html";
+
     } catch (error) {
       console.error("Erro no login:", error);
       msg.style.color = "red";
@@ -137,25 +131,19 @@
     }
   }
 
-  // 🔄 Recuperar senha
+  // Recuperar senha
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
+
     firebase.auth().sendPasswordResetEmail(email)
-      .then(() => alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."))
+      .then(() => {
+        alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+      })
       .catch((error) => {
         console.error("Erro ao enviar email de redefinição:", error);
         alert("❌ Erro ao enviar email de redefinição: " + error.message);
       });
-  }
-
-  // 🔓 Deslogar
-  function deslogarAluno() {
-    firebase.auth().signOut().then(() => {
-      document.getElementById("app").style.display = "none";
-      document.getElementById("loginSection").style.display = "block";
-      document.getElementById("mensagem-login").textContent = "";
-    }).catch((error) => console.error("Erro ao deslogar:", error));
   }
 </script>
 
