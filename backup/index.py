@@ -7,6 +7,17 @@ app = FastAPI()
 # Serve arquivos estáticos da raiz do projeto
 app.mount("/", StaticFiles(directory=".", html=True), name="static")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://educacaopelotrabalho-production.up.railway.app",
+        "https://app.educacaopelotrabalho.com"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 async def home():
     return FileResponse("index.html")
