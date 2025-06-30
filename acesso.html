@@ -1,91 +1,69 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Learning by Working – Acesso</title>
+<div id="login-box" style="
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  text-align: center;
+">
+  <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
 
-  <!-- Firebase App (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <div id="loginSection" style="text-align: left;">
+    <label for="email-login" style="font-weight: bold;">E-mail</label>
+    <input type="email" id="email-login" placeholder="Digite seu e-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 400px;
-      margin: 60px auto;
-      padding: 30px;
-      border-radius: 12px;
-      background-color: #fdfdfd;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0 16px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover { background-color: #45a049; }
-    a { color: #007BFF; text-decoration: none; font-size: 14px; }
-    #primeiroAcesso, #loginSection { display: none; }
-    h2 { margin-bottom: 24px; color: #333; }
-    label { font-weight: bold; text-align: left; display: block; }
-    #mensagem-login { margin-top: 18px; font-size: 15px; }
-  </style>
-</head>
+    <label for="senha-login" style="font-weight: bold;">Senha</label>
+    <input type="password" id="senha-login" placeholder="Digite sua senha" required
+      style="width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px;" />
 
-<body>
+    <button id="botao-login" onclick="fazerLogin()"
+      style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+      Entrar
+    </button>
 
-<!-- 🔒 Primeiro Acesso -->
-<div id="primeiroAcesso" class="container">
-  <h2>🔒 Primeiro Acesso</h2>
-  <form id="formTrocarSenha">
-    <input type="email" id="email" placeholder="E-mail" required>
-    <input type="password" id="senha_provisoria" placeholder="Senha provisória" required>
-    <input type="password" id="nova_senha" placeholder="Nova senha" required>
-    <input type="password" id="confirmar_senha" placeholder="Confirme a nova senha" required>
-    <button type="submit">Trocar Senha</button>
-  </form>
-  <p style="margin-top:16px;"><a href="#" onclick="showLogin()">Voltar ao Login</a></p>
-</div>
+    <div style="margin-top: 16px;">
+      <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+        Esqueci minha senha
+      </a>
+      <br>
+      <a href="#" onclick="showPrimeiroAcesso()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+        Primeiro acesso? Clique aqui
+      </a>
+    </div>
 
-<!-- 🔐 Login Normal -->
-<div id="loginSection" class="container">
-  <h2>🔐 Acesso do Aluno</h2>
-
-  <label for="email-login">E-mail</label>
-  <input type="email" id="email-login" placeholder="Digite seu e-mail" required>
-
-  <label for="senha-login">Senha</label>
-  <input type="password" id="senha-login" placeholder="Digite sua senha" required>
-
-  <button onclick="fazerLogin()">Entrar</button>
-
-  <div style="margin-top: 16px;">
-    <a href="#" onclick="recuperarSenha()">Esqueci minha senha</a>
+    <p id="mensagem-login" style="margin-top: 18px; font-size: 15px;"></p>
   </div>
 
-  <p id="mensagem-login"></p>
+  <!-- 🔒 Primeiro Acesso -->
+  <div id="primeiroAcesso" style="display:none; text-align: left;">
+    <h3 style="text-align:center;">🔒 Primeiro Acesso</h3>
+    <input type="email" id="email" placeholder="E-mail" required
+      style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" id="senha_provisoria" placeholder="Senha provisória" required
+      style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" id="nova_senha" placeholder="Nova senha" required
+      style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;" />
+    <input type="password" id="confirmar_senha" placeholder="Confirme a nova senha" required
+      style="width: 100%; padding: 12px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 6px;" />
 
-  <p style="margin-top:10px;"><a href="#" onclick="showPrimeiroAcesso()">Primeiro acesso? Clique aqui</a></p>
+    <button onclick="trocarSenha()"
+      style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+      Trocar Senha
+    </button>
+
+    <div style="margin-top: 16px;">
+      <a href="#" onclick="showLogin()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
+        Voltar ao Login
+      </a>
+    </div>
+  </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
   // Configuração do Firebase
   const firebaseConfig = {
@@ -99,9 +77,6 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  // Exibe login por padrão
-  document.getElementById("loginSection").style.display = "block";
-
   // Funções de exibição
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
@@ -113,8 +88,7 @@
   }
 
   // Primeiro acesso – troca de senha
-  document.getElementById("formTrocarSenha").addEventListener("submit", async function(event){
-    event.preventDefault();
+  async function trocarSenha() {
     const email = document.getElementById("email").value.trim();
     const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
     const nova_senha = document.getElementById("nova_senha").value.trim();
@@ -138,22 +112,43 @@
       console.error(error);
       alert("Erro ao processar: " + error.message);
     }
-  });
+  }
 
   // Login normal
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
     const senha = document.getElementById('senha-login').value.trim();
     const msg = document.getElementById('mensagem-login');
-    if (!email || !senha) { msg.style.color = "red"; msg.textContent = "❌ Preencha todos os campos."; return; }
-    msg.style.color = "#444"; msg.textContent = "🔄 Verificando...";
+
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
+
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
 
     try {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
       const user = userCredential.user;
-      msg.style.color = "green"; msg.textContent = `✅ Bem-vindo, ${user.email}!`;
-      // Redireciona para o layout do app
-      window.location.href = "layout.html";
+      msg.style.color = "green";
+      msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
+      const inicial = user.email.charAt(0).toUpperCase();
+      document.getElementById("usuario-info").innerHTML = `
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold">
+            ${inicial}
+          </div>
+          <span class="text-sm font-medium">${user.email}</span>
+          <button onclick="deslogarAluno()" class="text-blue-600 text-xs underline">Deslogar</button>
+        </div>
+      `;
     } catch (error) {
       console.error("Erro no login:", error);
       msg.style.color = "red";
@@ -165,15 +160,23 @@
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
+
     firebase.auth().sendPasswordResetEmail(email)
-      .then(() => { alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha."); })
+      .then(() => {
+        alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+      })
       .catch((error) => {
         console.error("Erro ao enviar email de redefinição:", error);
         alert("❌ Erro ao enviar email de redefinição: " + error.message);
       });
   }
-</script>
 
-</body>
-</html>
+  function deslogarAluno() {
+    firebase.auth().signOut().then(() => {
+      document.getElementById("app").style.display = "none";
+      document.getElementById("login-box").style.display = "block";
+      document.getElementById("mensagem-login").textContent = "";
+    }).catch((error) => console.error("Erro ao deslogar:", error));
+  }
+</script>
 
