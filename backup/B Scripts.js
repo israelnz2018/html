@@ -302,16 +302,26 @@ async function enviarPersonalizacao() {
     console.log("✅ Resposta do backend (personalização):", json);
 
     const containerGrafico = document.getElementById("conteudoGrafico");
-    containerGrafico.innerHTML = "";
 
+    // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
+    const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
+    if (imgsPersonalizados.length > 0) {
+      const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
+      containerGrafico.removeChild(ultimo);
+    }
+
+    // 🔥 Cria o novo gráfico personalizado
     if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
-      img.id = "graficoPersonalizado";
+      img.className = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
-      containerGrafico.appendChild(img);
 
-      // Atualiza ultimoGraficoInfo
+      // 🔥 Insere o novo gráfico acima do painel de personalização
+      const painel = document.getElementById("painelPersonalizacao");
+      containerGrafico.insertBefore(img, painel);
+
+      // ✅ Atualiza ultimoGraficoInfo
       ultimoGraficoInfo = {
         ...ultimoGraficoInfo,
         cor,
@@ -333,6 +343,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
