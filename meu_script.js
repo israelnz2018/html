@@ -241,30 +241,30 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // 🔧 CAPTURA valores com proteção contra null e envia "0" se vazio
+  // 🔧 CAPTURA valores com proteção contra null e define padrões seguros
   let corEl = document.getElementById("corGrafico");
-  let cor = corEl ? corEl.value : "";
+  let cor = corEl && corEl.value ? corEl.value : "#000000"; // padrão preto
 
   let tituloXEl = document.getElementById("tituloEixoX");
-  let tituloX = tituloXEl ? tituloXEl.value : "";
+  let tituloX = tituloXEl && tituloXEl.value ? tituloXEl.value : "Eixo X";
 
   let tituloYEl = document.getElementById("tituloEixoY");
-  let tituloY = tituloYEl ? tituloYEl.value : "";
+  let tituloY = tituloYEl && tituloYEl.value ? tituloYEl.value : "Eixo Y";
 
   let tituloPrincipalEl = document.getElementById("tituloGrafico");
-  let tituloPrincipal = tituloPrincipalEl ? tituloPrincipalEl.value : "";
+  let tituloPrincipal = tituloPrincipalEl && tituloPrincipalEl.value ? tituloPrincipalEl.value : "Título do Gráfico";
 
   let tamanhoFonteEl = document.getElementById("tamanhoFonte");
-  let tamanhoFonte = tamanhoFonteEl ? tamanhoFonteEl.value : "";
+  let tamanhoFonte = tamanhoFonteEl && tamanhoFonteEl.value ? tamanhoFonteEl.value : "10";
 
   let inclinacaoXEl = document.getElementById("inclinacaoX");
-  let inclinacaoX = inclinacaoXEl ? inclinacaoXEl.value : "0";
+  let inclinacaoX = inclinacaoXEl && inclinacaoXEl.value ? inclinacaoXEl.value : "0";
 
   let inclinacaoYEl = document.getElementById("inclinacaoY");
-  let inclinacaoY = inclinacaoYEl ? inclinacaoYEl.value : "0";
+  let inclinacaoY = inclinacaoYEl && inclinacaoYEl.value ? inclinacaoYEl.value : "0";
 
   let espessuraEl = document.getElementById("espessuraLinha");
-  let espessura = espessuraEl ? espessuraEl.value : "";
+  let espessura = espessuraEl && espessuraEl.value ? espessuraEl.value : "1";
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
@@ -291,14 +291,14 @@ async function enviarPersonalizacao() {
       : (ultimoGraficoInfo.lista_x || "")
   );
 
-  // Parâmetros de personalização
+  // Parâmetros de personalização com padrões
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
   formData.append("titulo_grafico", tituloPrincipal);
   formData.append("tamanho_fonte", tamanhoFonte);
-  formData.append("inclinacao_x", inclinacaoX || "0");
-  formData.append("inclinacao_y", inclinacaoY || "0");
+  formData.append("inclinacao_x", inclinacaoX);
+  formData.append("inclinacao_y", inclinacaoY);
   formData.append("espessura", espessura);
 
   // 🔍 DEBUG
@@ -358,6 +358,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 
