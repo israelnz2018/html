@@ -100,7 +100,6 @@
       console.error("❌ Erro no cadastro:", error);
     }
   }
-</script>
 
   // Primeiro acesso – troca de senha
   async function trocarSenha() {
@@ -129,51 +128,50 @@
     }
   }
 
- // Login normal
-async function fazerLogin() {
-  const email = document.getElementById('email-login').value.trim();
-  const senha = document.getElementById('senha-login').value.trim();
-  const msg = document.getElementById('mensagem-login');
+  // Login normal
+  async function fazerLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
 
-  if (!email || !senha) {
-    msg.style.color = "red";
-    msg.textContent = "❌ Preencha todos os campos.";
-    return;
-  }
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
+    }
 
-  msg.style.color = "#444";
-  msg.textContent = "🔄 Verificando...";
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
 
-  try {
-    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
-    const user = userCredential.user;
-    msg.style.color = "green";
-    msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+    try {
+      const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+      const user = userCredential.user;
+      msg.style.color = "green";
+      msg.textContent = `✅ Bem-vindo, ${user.email}!`;
 
-    document.getElementById("login-box").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
 
-    const displayName = user.displayName || "Aluno";
-    const nomes = displayName.split(" ");
-    const iniciais = nomes[0].charAt(0).toUpperCase() + (nomes[1] ? nomes[1].charAt(0).toUpperCase() : "");
+      const displayName = user.displayName || "Aluno";
+      const nomes = displayName.split(" ");
+      const iniciais = nomes[0].charAt(0).toUpperCase() + (nomes[1] ? nomes[1].charAt(0).toUpperCase() : "");
 
-    document.getElementById("usuario-info").innerHTML = `
-      <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background-color: #142c54; color: white;">
-          ${iniciais}
+      document.getElementById("usuario-info").innerHTML = `
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background-color: #142c54; color: white;">
+            ${iniciais}
+          </div>
+          <span class="text-sm font-medium">Olá, ${displayName}</span>
+          <button onclick="deslogarAluno()" class="text-blue-600 text-xs underline">Deslogar</button>
         </div>
-        <span class="text-sm font-medium">Olá, ${displayName}</span>
-        <button onclick="deslogarAluno()" class="text-blue-600 text-xs underline">Deslogar</button>
-      </div>
-    `;
-  } catch (error) {
-    console.error("Erro no login:", error);
-    msg.style.color = "red";
-    msg.textContent = "❌ Erro ao fazer login: " + error.message;
+      `;
+    } catch (error) {
+      console.error("Erro no login:", error);
+      msg.style.color = "red";
+      msg.textContent = "❌ Erro ao fazer login: " + error.message;
+    }
   }
-}
-
 
   // Recuperar senha
   function recuperarSenha() {
