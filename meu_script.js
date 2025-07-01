@@ -241,15 +241,30 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
-  let cor = document.getElementById("corGrafico").value;
-  let tituloX = document.getElementById("tituloEixoX").value;
-  let tituloY = document.getElementById("tituloEixoY").value;
-  let tituloPrincipal = document.getElementById("tituloGrafico").value;
-  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
-  let inclinacaoX = document.getElementById("inclinacaoX").value;
-  let inclinacaoY = document.getElementById("inclinacaoY").value;
-  let espessura = document.getElementById("espessuraLinha").value;
+  // 🔧 CAPTURA valores com proteção contra null
+  let corEl = document.getElementById("corGrafico");
+  let cor = corEl ? corEl.value : "";
+
+  let tituloXEl = document.getElementById("tituloEixoX");
+  let tituloX = tituloXEl ? tituloXEl.value : "";
+
+  let tituloYEl = document.getElementById("tituloEixoY");
+  let tituloY = tituloYEl ? tituloYEl.value : "";
+
+  let tituloPrincipalEl = document.getElementById("tituloGrafico");
+  let tituloPrincipal = tituloPrincipalEl ? tituloPrincipalEl.value : "";
+
+  let tamanhoFonteEl = document.getElementById("tamanhoFonte");
+  let tamanhoFonte = tamanhoFonteEl ? tamanhoFonteEl.value : "";
+
+  let inclinacaoXEl = document.getElementById("inclinacaoX");
+  let inclinacaoX = inclinacaoXEl ? inclinacaoXEl.value : "";
+
+  let inclinacaoYEl = document.getElementById("inclinacaoY");
+  let inclinacaoY = inclinacaoYEl ? inclinacaoYEl.value : "";
+
+  let espessuraEl = document.getElementById("espessuraLinha");
+  let espessura = espessuraEl ? espessuraEl.value : "";
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
