@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <style>
+    <style>
     nav button { font-size: 0.85rem; }
     nav ul li a { font-size: 0.85rem; }
     nav ul li ul {
@@ -14,7 +14,7 @@
     nav ul li ul li { position: relative; }
     nav ul li ul li a {
       display: block; padding: 0.25rem 1rem;
-      font-size: 0.85rem; /* adicionado para tamanho uniforme */
+      font-size: 0.85rem !important; /* força tamanho igual */
     }
     nav ul li ul ul {
       display: none; position: absolute; left: 100%; top: 0; margin-left: 0.25rem;
@@ -22,6 +22,7 @@
     }
     nav ul li.show > ul, nav ul li ul li.show > ul { display: block; }
   </style>
+
 </head>
 <body>
 
