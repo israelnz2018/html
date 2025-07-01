@@ -241,7 +241,7 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // 🔧 CAPTURA valores com proteção contra null
+  // 🔧 CAPTURA valores com proteção contra null e envia "0" se vazio
   let corEl = document.getElementById("corGrafico");
   let cor = corEl ? corEl.value : "";
 
@@ -258,10 +258,10 @@ async function enviarPersonalizacao() {
   let tamanhoFonte = tamanhoFonteEl ? tamanhoFonteEl.value : "";
 
   let inclinacaoXEl = document.getElementById("inclinacaoX");
-  let inclinacaoX = inclinacaoXEl ? inclinacaoXEl.value : "";
+  let inclinacaoX = inclinacaoXEl ? inclinacaoXEl.value : "0";
 
   let inclinacaoYEl = document.getElementById("inclinacaoY");
-  let inclinacaoY = inclinacaoYEl ? inclinacaoYEl.value : "";
+  let inclinacaoY = inclinacaoYEl ? inclinacaoYEl.value : "0";
 
   let espessuraEl = document.getElementById("espessuraLinha");
   let espessura = espessuraEl ? espessuraEl.value : "";
@@ -297,8 +297,8 @@ async function enviarPersonalizacao() {
   formData.append("titulo_y", tituloY);
   formData.append("titulo_grafico", tituloPrincipal);
   formData.append("tamanho_fonte", tamanhoFonte);
-  formData.append("inclinacao_x", inclinacaoX);
-  formData.append("inclinacao_y", inclinacaoY);
+  formData.append("inclinacao_x", inclinacaoX || "0");
+  formData.append("inclinacao_y", inclinacaoY || "0");
   formData.append("espessura", espessura);
 
   // 🔍 DEBUG
@@ -358,6 +358,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
