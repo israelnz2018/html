@@ -87,6 +87,21 @@
     document.getElementById("loginSection").style.display = "block";
   }
 
+  // 🔧 Função de cadastro com updateProfile para salvar o nome
+  async function cadastrarAluno(email, senha, nomeCompleto) {
+    try {
+      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
+      const user = userCredential.user;
+      await user.updateProfile({
+        displayName: nomeCompleto
+      });
+      console.log("✅ Cadastro concluído com nome:", nomeCompleto);
+    } catch (error) {
+      console.error("❌ Erro no cadastro:", error);
+    }
+  }
+</script>
+
   // Primeiro acesso – troca de senha
   async function trocarSenha() {
     const email = document.getElementById("email").value.trim();
