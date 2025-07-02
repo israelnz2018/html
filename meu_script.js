@@ -344,6 +344,95 @@ async function enviarPersonalizacao() {
   }
 }
 
+async function enviarPersonalizacaoBoxplot() {
+  if (!ultimoGraficoInfo) {
+    alert("❌ Nenhum gráfico carregado para personalizar.");
+    return;
+  }
+
+  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
+  let cor = document.getElementById("corGrafico") ? document.getElementById("corGrafico").value : "";
+  let tituloX = document.getElementById("tituloEixoX") ? document.getElementById("tituloEixoX").value : "";
+  let tituloY = document.getElementById("tituloEixoY") ? document.getElementById("tituloEixoY").value : "";
+  let tituloPrincipal = document.getElementById("tituloGrafico") ? document.getElementById("tituloGrafico").value : "";
+  let tamanhoFonte = document.getElementById("tamanhoFonte") ? document.getElementById("tamanhoFonte").value : "";
+  let inclinacaoX = document.getElementById("inclinacaoX") ? document.getElementById("inclinacaoX").value : "";
+  let inclinacaoY = document.getElementById("inclinacaoY") ? document.getElementById("inclinacaoY").value : "";
+  let espessura = document.getElementById("espessuraLinha") ? document.getElementById("espessuraLinha").value : "";
+
+  const formData = new FormData();
+  formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
+
+  // 🔧 Envia lista_y como array para o boxplot
+  if (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y)) {
+    ultimoGraficoInfo.lista_y.forEach(y => formData.append("lista_y[]", y));
+  } else if (ultimoGraficoInfo.lista_y) {
+    formData.append("lista_y[]", ultimoGraficoInfo.lista_y);
+  }
+
+  // Parâmetros de personalização
+  formData.append("cor", cor);
+  formData.append("titulo_x", tituloX);
+  formData.append("titulo_y", tituloY);
+  formData.append("titulo_grafico", tituloPrincipal);
+  formData.append("tamanho_fonte", tamanhoFonte);
+  formData.append("inclinacao_x", inclinacaoX);
+  formData.append("inclinacao_y", inclinacaoY);
+  formData.append("espessura", espessura);
+
+  // 🔍 DEBUG
+  console.log("📤 FormData Boxplot sendo enviado:");
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ': ' + pair[1]);
+  }
+
+  try {
+    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-boxplot", {
+      method: "POST",
+      body: formData
+    });
+
+    const json = await resposta.json();
+    console.log("✅ Resposta do backend (boxplot personalização):", json);
+
+    const containerGrafico = document.getElementById("conteudoGrafico");
+
+    const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
+    if (imgsPersonalizados.length > 0) {
+      const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
+      containerGrafico.removeChild(ultimo);
+    }
+
+    if (json.grafico_isolado_base64) {
+      const img = document.createElement("img");
+      img.className = "graficoPersonalizado";
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      img.style = "max-width:100%; margin-bottom:10px;";
+
+      const painel = document.getElementById("painelPersonalizacao");
+      containerGrafico.insertBefore(img, painel);
+
+      ultimoGraficoInfo = {
+        ...ultimoGraficoInfo,
+        cor,
+        titulo_x: tituloX,
+        titulo_y: tituloY,
+        titulo_grafico: tituloPrincipal,
+        tamanho_fonte: tamanhoFonte,
+        inclinacao_x: inclinacaoX,
+        inclinacao_y: inclinacaoY,
+        espessura
+      };
+
+    } else {
+      alert("⚠️ Nenhuma imagem retornada do backend.");
+    }
+
+  } catch (e) {
+    console.error("❌ Erro ao atualizar boxplot:", e);
+    alert("❌ Erro ao atualizar boxplot.");
+  }
+}
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
