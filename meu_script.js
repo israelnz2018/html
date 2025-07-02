@@ -361,38 +361,33 @@ async function enviarPersonalizacaoBoxplot() {
   }
 
   // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
-  let cor = document.getElementById("corGrafico").value || "#000000";
-  let tituloX = document.getElementById("tituloEixoX").value || "";
-  let tituloPrincipal = document.getElementById("tituloGrafico").value || "";
-  let tamanhoFonte = document.getElementById("tamanhoFonte").value || 12;
+  let cor = document.getElementById("corGrafico")?.value || "";
+  let tituloX = document.getElementById("tituloEixoX")?.value || "";
+  let tituloPrincipal = document.getElementById("tituloGrafico")?.value || "";
+  let tamanhoFonte = document.getElementById("tamanhoFonte")?.value || "";
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
-  formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
-  formData.append("field", ultimoGraficoInfo.field || "");
-  formData.append("Data", ultimoGraficoInfo.Data || "");
-
-  // ✅ lista_y como string única separada por vírgula
   formData.append("lista_y",
     (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
       ? ultimoGraficoInfo.lista_y.join(",")
       : (ultimoGraficoInfo.lista_y || "")
   );
 
-  // Parâmetros de personalização (boxplot usa apenas estes)
+  // Parâmetros de personalização específicos do boxplot
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_grafico", tituloPrincipal);
   formData.append("tamanho_fonte", tamanhoFonte);
 
   // 🔍 DEBUG
-  console.log("📤 FormData sendo enviado (boxplot):");
+  console.log("📤 FormData sendo enviado (Boxplot):");
   for (var pair of formData.entries()) {
     console.log(pair[0] + ': ' + pair[1]);
   }
 
   try {
-    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-boxplot", {
+    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
       method: "POST",
       body: formData
     });
@@ -410,11 +405,10 @@ async function enviarPersonalizacaoBoxplot() {
     }
 
     // 🔥 Cria o novo gráfico personalizado
-    const imagemBase64 = json.grafico_isolado_base64 || json.grafico;
-    if (imagemBase64) {
+    if (json.grafico_isolado_base64 && json.grafico_isolado_base64.grafico) {
       const img = document.createElement("img");
       img.className = "graficoPersonalizado";
-      img.src = `data:image/png;base64,${imagemBase64}`;
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64.grafico}`;
       img.style = "max-width:100%; margin-bottom:10px;";
 
       // 🔥 Insere o novo gráfico acima do painel de personalização
@@ -430,15 +424,26 @@ async function enviarPersonalizacaoBoxplot() {
         tamanho_fonte: tamanhoFonte
       };
 
+    } else if (json.grafico_isolado_base64 && typeof json.grafico_isolado_base64 === "string") {
+      // Caso venha direto como string base64 (sem objeto interno)
+      const img = document.createElement("img");
+      img.className = "graficoPersonalizado";
+      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+      img.style = "max-width:100%; margin-bottom:10px;";
+
+      const painel = document.getElementById("painelPersonalizacao");
+      containerGrafico.insertBefore(img, painel);
+
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend (boxplot).");
     }
 
   } catch (e) {
-    console.error("❌ Erro ao atualizar boxplot:", e);
-    alert("❌ Erro ao atualizar boxplot.");
+    console.error("❌ Erro ao atualizar gráfico boxplot:", e);
+    alert("❌ Erro ao atualizar gráfico boxplot.");
   }
 }
+
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
