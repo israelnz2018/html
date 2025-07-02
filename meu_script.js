@@ -326,7 +326,7 @@ async function enviarPersonalizacao() {
     }
 
     // 🔥 Cria o novo gráfico personalizado
-    if (json.grafico_isolado_base64) {
+    if (json.grafico_isolado_base64 && typeof json.grafico_isolado_base64 === "string") {
       const img = document.createElement("img");
       img.className = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
@@ -349,6 +349,8 @@ async function enviarPersonalizacao() {
         espessura
       };
 
+    } else if (json.grafico_isolado_base64 && json.grafico_isolado_base64.erro) {
+      alert(`⚠️ Erro no gráfico: ${json.grafico_isolado_base64.erro}`);
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
@@ -358,6 +360,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 
