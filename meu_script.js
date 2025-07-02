@@ -353,7 +353,6 @@ async function enviarPersonalizacao() {
   }
 }
 
-
 async function enviarPersonalizacaoBoxplot() {
   if (!ultimoGraficoInfo) {
     alert("❌ Nenhum gráfico carregado para personalizar.");
@@ -390,13 +389,21 @@ async function enviarPersonalizacaoBoxplot() {
 
     // 🔥 Cria o novo gráfico personalizado
     if (json.grafico_isolado_base64 && json.grafico_isolado_base64.grafico) {
-      const img = document.createElement("img");
-      img.className = "graficoPersonalizado";
-      img.src = `data:image/png;base64,${json.grafico_isolado_base64.grafico}`;
-      img.style = "max-width:100%; margin-bottom:10px;";
+      const graficoBase64 = json.grafico_isolado_base64.grafico;
 
-      const painel = document.getElementById("painelPersonalizacao");
-      containerGrafico.insertBefore(img, painel);
+      // Verifica se a string está correta
+      if (typeof graficoBase64 === "string" && graficoBase64.length > 100) {
+        const img = document.createElement("img");
+        img.className = "graficoPersonalizado";
+        img.src = `data:image/png;base64,${graficoBase64}`;
+        img.style = "max-width:100%; margin-bottom:10px;";
+
+        const painel = document.getElementById("painelPersonalizacao");
+        containerGrafico.insertBefore(img, painel);
+      } else {
+        console.warn("❌ Base64 inválido ou muito curto:", graficoBase64);
+        alert("❌ Erro: Imagem inválida recebida do backend.");
+      }
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend para boxplot.");
     }
@@ -406,6 +413,7 @@ async function enviarPersonalizacaoBoxplot() {
     alert("❌ Erro ao atualizar boxplot.");
   }
 }
+
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
