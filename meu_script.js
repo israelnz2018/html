@@ -367,7 +367,15 @@ async function enviarPersonalizacaoBoxplot() {
       : (ultimoGraficoInfo.lista_y || "")
   );
 
-  // 🔧 Adicione outros campos de personalização conforme sua estrutura se desejar
+  // ✅ Adicione campos de título e tamanho_fonte
+  let tituloPrincipalInput = document.getElementById("tituloGrafico");
+  let tamanhoFonteInput = document.getElementById("tamanhoFonte");
+
+  let tituloPrincipal = tituloPrincipalInput ? tituloPrincipalInput.value : "";
+  let tamanhoFonte = tamanhoFonteInput ? tamanhoFonteInput.value : "";
+
+  formData.append("titulo_grafico", tituloPrincipal);
+  formData.append("tamanho_fonte", tamanhoFonte);
 
   try {
     const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
@@ -391,7 +399,6 @@ async function enviarPersonalizacaoBoxplot() {
     if (json.grafico_isolado_base64 && json.grafico_isolado_base64.grafico) {
       const graficoBase64 = json.grafico_isolado_base64.grafico;
 
-      // Verifica se a string está correta
       if (typeof graficoBase64 === "string" && graficoBase64.length > 100) {
         const img = document.createElement("img");
         img.className = "graficoPersonalizado";
@@ -413,6 +420,7 @@ async function enviarPersonalizacaoBoxplot() {
     alert("❌ Erro ao atualizar boxplot.");
   }
 }
+
 
 
 
