@@ -241,15 +241,24 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
-  let cor = document.getElementById("corGrafico").value;
-  let tituloX = document.getElementById("tituloEixoX").value;
-  let tituloY = document.getElementById("tituloEixoY").value;
-  let tituloPrincipal = document.getElementById("tituloGrafico").value;
-  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
-  let inclinacaoX = document.getElementById("inclinacaoX").value;
-  let inclinacaoY = document.getElementById("inclinacaoY").value;
-  let espessura = document.getElementById("espessuraLinha").value;
+  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar, com verificação
+  let corInput = document.getElementById("corGrafico");
+  let tituloXInput = document.getElementById("tituloEixoX");
+  let tituloYInput = document.getElementById("tituloEixoY");
+  let tituloPrincipalInput = document.getElementById("tituloGrafico");
+  let tamanhoFonteInput = document.getElementById("tamanhoFonte");
+  let inclinacaoXInput = document.getElementById("inclinacaoX");
+  let inclinacaoYInput = document.getElementById("inclinacaoY");
+  let espessuraInput = document.getElementById("espessuraLinha");
+
+  let cor = corInput ? corInput.value : "";
+  let tituloX = tituloXInput ? tituloXInput.value : "";
+  let tituloY = tituloYInput ? tituloYInput.value : "";
+  let tituloPrincipal = tituloPrincipalInput ? tituloPrincipalInput.value : "";
+  let tamanhoFonte = tamanhoFonteInput ? tamanhoFonteInput.value : "";
+  let inclinacaoX = inclinacaoXInput ? inclinacaoXInput.value : "";
+  let inclinacaoY = inclinacaoYInput ? inclinacaoYInput.value : "";
+  let espessura = espessuraInput ? espessuraInput.value : "";
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
@@ -343,6 +352,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 async function enviarPersonalizacaoBoxplot() {
   if (!ultimoGraficoInfo) {
