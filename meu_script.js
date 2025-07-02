@@ -360,12 +360,6 @@ async function enviarPersonalizacaoBoxplot() {
     return;
   }
 
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
-  let cor = document.getElementById("corGrafico")?.value || "";
-  let tituloX = document.getElementById("tituloEixoX")?.value || "";
-  let tituloPrincipal = document.getElementById("tituloGrafico")?.value || "";
-  let tamanhoFonte = document.getElementById("tamanhoFonte")?.value || "";
-
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
   formData.append("lista_y",
@@ -374,17 +368,7 @@ async function enviarPersonalizacaoBoxplot() {
       : (ultimoGraficoInfo.lista_y || "")
   );
 
-  // Parâmetros de personalização específicos do boxplot
-  formData.append("cor", cor);
-  formData.append("titulo_x", tituloX);
-  formData.append("titulo_grafico", tituloPrincipal);
-  formData.append("tamanho_fonte", tamanhoFonte);
-
-  // 🔍 DEBUG
-  console.log("📤 FormData sendo enviado (Boxplot):");
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ': ' + pair[1]);
-  }
+  // 🔧 Adicione outros campos de personalização conforme sua estrutura se desejar
 
   try {
     const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
@@ -393,7 +377,7 @@ async function enviarPersonalizacaoBoxplot() {
     });
 
     const json = await resposta.json();
-    console.log("✅ Resposta do backend (personalização boxplot):", json);
+    console.log("✅ Resposta do backend (personalização BOX):", json);
 
     const containerGrafico = document.getElementById("conteudoGrafico");
 
@@ -411,39 +395,17 @@ async function enviarPersonalizacaoBoxplot() {
       img.src = `data:image/png;base64,${json.grafico_isolado_base64.grafico}`;
       img.style = "max-width:100%; margin-bottom:10px;";
 
-      // 🔥 Insere o novo gráfico acima do painel de personalização
       const painel = document.getElementById("painelPersonalizacao");
       containerGrafico.insertBefore(img, painel);
-
-      // ✅ Atualiza ultimoGraficoInfo
-      ultimoGraficoInfo = {
-        ...ultimoGraficoInfo,
-        cor,
-        titulo_x: tituloX,
-        titulo_grafico: tituloPrincipal,
-        tamanho_fonte: tamanhoFonte
-      };
-
-    } else if (json.grafico_isolado_base64 && typeof json.grafico_isolado_base64 === "string") {
-      // Caso venha direto como string base64 (sem objeto interno)
-      const img = document.createElement("img");
-      img.className = "graficoPersonalizado";
-      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-      img.style = "max-width:100%; margin-bottom:10px;";
-
-      const painel = document.getElementById("painelPersonalizacao");
-      containerGrafico.insertBefore(img, painel);
-
     } else {
-      alert("⚠️ Nenhuma imagem retornada do backend (boxplot).");
+      alert("⚠️ Nenhuma imagem retornada do backend para boxplot.");
     }
 
   } catch (e) {
-    console.error("❌ Erro ao atualizar gráfico boxplot:", e);
-    alert("❌ Erro ao atualizar gráfico boxplot.");
+    console.error("❌ Erro ao atualizar boxplot:", e);
+    alert("❌ Erro ao atualizar boxplot.");
   }
 }
-
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
