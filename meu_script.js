@@ -353,74 +353,55 @@ async function enviarPersonalizacao() {
   }
 }
 
-async function enviarPersonalizacaoBoxplot() {
-  if (!ultimoGraficoInfo) {
-    alert("❌ Nenhum gráfico carregado para personalizar.");
-    return;
-  }
+@app.post("/personalizar-boxplot")
+async def personalizar_boxplot_especifico(
+    request: Request,
+    lista_y: str = Form(None),
+    titulo_grafico: str = Form(""),
+    tamanho_fonte: str = Form("12")
+):
+    try:
+        global df_global
+        from graficos import personalizar_boxplot
 
-  const formData = new FormData();
-  formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
-  formData.append("lista_y",
-    (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
-      ? ultimoGraficoInfo.lista_y.join(",")
-      : (ultimoGraficoInfo.lista_y || "")
-  );
+        if df_global is None or df_global.empty:
+            return JSONResponse({
+                "erro": "Nenhum DataFrame carregado. Gere o gráfico primeiro.",
+                "grafico_isolado_base64": None
+            }, status_code=400)
 
-  // ✅ Adicione campos de título e tamanho_fonte
-  let tituloPrincipalInput = document.getElementById("tituloGrafico");
-  let tamanhoFonteInput = document.getElementById("tamanhoFonte");
+        lista_y_processada = [x.strip() for x in lista_y.split(",")] if lista_y else []
 
-  let tituloPrincipal = tituloPrincipalInput ? tituloPrincipalInput.value : "";
-  let tamanhoFonte = tamanhoFonteInput ? tamanhoFonteInput.value : "";
+        # 🔧 Chama a função com info_colunas se necessário
+        resultado = personalizar_boxplot(
+            df_global,
+            info_colunas={"lista_y": lista_y_processada},
+            titulo_grafico=titulo_grafico,
+            tamanho_fonte=int(tamanho_fonte)
+        )
 
-  formData.append("titulo_grafico", tituloPrincipal);
-  formData.append("tamanho_fonte", tamanhoFonte);
+        if resultado.get("erro"):
+            return JSONResponse({
+                "erro": resultado["erro"],
+                "grafico_isolado_base64": None
+            }, status_code=400)
 
-  try {
-    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
-      method: "POST",
-      body: formData
-    });
+        grafico_base64 = resultado.get("grafico")
+        grafico_completo = f"data:image/png;base64,{grafico_base64}" if grafico_base64 else None
 
-    const json = await resposta.json();
-    console.log("✅ Resposta do backend (personalização BOX):", json);
+        return {
+            "erro": None,
+            "grafico_isolado_base64": grafico_completo
+        }
 
-    const containerGrafico = document.getElementById("conteudoGrafico");
-
-    // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
-    const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
-    if (imgsPersonalizados.length > 0) {
-      const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
-      containerGrafico.removeChild(ultimo);
-    }
-
-    // 🔥 Cria o novo gráfico personalizado
-    if (json.grafico_isolado_base64 && json.grafico_isolado_base64.grafico) {
-      const graficoBase64 = json.grafico_isolado_base64.grafico;
-
-      if (typeof graficoBase64 === "string" && graficoBase64.length > 100) {
-        const img = document.createElement("img");
-        img.className = "graficoPersonalizado";
-        img.src = `data:image/png;base64,${graficoBase64}`;
-        img.style = "max-width:100%; margin-bottom:10px;";
-
-        const painel = document.getElementById("painelPersonalizacao");
-        containerGrafico.insertBefore(img, painel);
-      } else {
-        console.warn("❌ Base64 inválido ou muito curto:", graficoBase64);
-        alert("❌ Erro: Imagem inválida recebida do backend.");
-      }
-    } else {
-      alert("⚠️ Nenhuma imagem retornada do backend para boxplot.");
-    }
-
-  } catch (e) {
-    console.error("❌ Erro ao atualizar boxplot:", e);
-    alert("❌ Erro ao atualizar boxplot.");
-  }
-}
-
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        return JSONResponse({
+            "erro": "Erro interno ao personalizar boxplot.",
+            "detalhe": str(e),
+            "traceback": tb
+        }, status_code=500)
 
 
 
