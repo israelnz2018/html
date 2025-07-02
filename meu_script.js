@@ -241,30 +241,15 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // 🔧 CAPTURA valores com proteção contra null e define padrões seguros
-  let corEl = document.getElementById("corGrafico");
-  let cor = corEl && corEl.value ? corEl.value : "#000000"; // padrão preto
-
-  let tituloXEl = document.getElementById("tituloEixoX");
-  let tituloX = tituloXEl && tituloXEl.value ? tituloXEl.value : "Eixo X";
-
-  let tituloYEl = document.getElementById("tituloEixoY");
-  let tituloY = tituloYEl && tituloYEl.value ? tituloYEl.value : "Eixo Y";
-
-  let tituloPrincipalEl = document.getElementById("tituloGrafico");
-  let tituloPrincipal = tituloPrincipalEl && tituloPrincipalEl.value ? tituloPrincipalEl.value : "Título do Gráfico";
-
-  let tamanhoFonteEl = document.getElementById("tamanhoFonte");
-  let tamanhoFonte = tamanhoFonteEl && tamanhoFonteEl.value ? tamanhoFonteEl.value : "10";
-
-  let inclinacaoXEl = document.getElementById("inclinacaoX");
-  let inclinacaoX = inclinacaoXEl && inclinacaoXEl.value ? inclinacaoXEl.value : "0";
-
-  let inclinacaoYEl = document.getElementById("inclinacaoY");
-  let inclinacaoY = inclinacaoYEl && inclinacaoYEl.value ? inclinacaoYEl.value : "0";
-
-  let espessuraEl = document.getElementById("espessuraLinha");
-  let espessura = espessuraEl && espessuraEl.value ? espessuraEl.value : "1";
+  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
+  let cor = document.getElementById("corGrafico").value;
+  let tituloX = document.getElementById("tituloEixoX").value;
+  let tituloY = document.getElementById("tituloEixoY").value;
+  let tituloPrincipal = document.getElementById("tituloGrafico").value;
+  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
+  let inclinacaoX = document.getElementById("inclinacaoX").value;
+  let inclinacaoY = document.getElementById("inclinacaoY").value;
+  let espessura = document.getElementById("espessuraLinha").value;
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
@@ -291,7 +276,7 @@ async function enviarPersonalizacao() {
       : (ultimoGraficoInfo.lista_x || "")
   );
 
-  // Parâmetros de personalização com padrões
+  // Parâmetros de personalização
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
@@ -326,7 +311,7 @@ async function enviarPersonalizacao() {
     }
 
     // 🔥 Cria o novo gráfico personalizado
-    if (json.grafico_isolado_base64 && typeof json.grafico_isolado_base64 === "string") {
+    if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
       img.className = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
@@ -349,8 +334,6 @@ async function enviarPersonalizacao() {
         espessura
       };
 
-    } else if (json.grafico_isolado_base64 && json.grafico_isolado_base64.erro) {
-      alert(`⚠️ Erro no gráfico: ${json.grafico_isolado_base64.erro}`);
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
@@ -360,9 +343,6 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
-
-
-
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
@@ -392,5 +372,3 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
-
-
