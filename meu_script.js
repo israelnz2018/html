@@ -241,18 +241,15 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // ✅ Garante lista_y preenchida corretamente (suporta único Y ou múltiplos Y)
+  // ✅ Garante lista_y preenchida corretamente (boxplot usa lista_y, não coluna_y)
   if (!ultimoGraficoInfo.lista_y || ultimoGraficoInfo.lista_y.length === 0) {
-    if (ultimoGraficoInfo.coluna_y) {
-      // Se coluna_y existir, cria lista_y com único valor
-      ultimoGraficoInfo.lista_y = [ultimoGraficoInfo.coluna_y];
-    } else if (ultimoGraficoInfo.lista_y && typeof ultimoGraficoInfo.lista_y === "string" && ultimoGraficoInfo.lista_y.length > 0) {
-      // Se lista_y existir como string, transforma em array
-      ultimoGraficoInfo.lista_y = ultimoGraficoInfo.lista_y.split(",");
-    } else {
-      alert("❌ Nenhuma coluna Y definida para personalizar o boxplot.");
-      return;
-    }
+    alert("❌ Nenhuma coluna Y definida em lista_y para personalizar o boxplot.");
+    return;
+  }
+
+  // 🔧 Se lista_y for string, transforma em array
+  if (typeof ultimoGraficoInfo.lista_y === "string") {
+    ultimoGraficoInfo.lista_y = ultimoGraficoInfo.lista_y.split(",");
   }
 
   // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
@@ -265,7 +262,6 @@ async function enviarPersonalizacao() {
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
-  formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
   formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
   formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
   formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
@@ -277,11 +273,7 @@ async function enviarPersonalizacao() {
   formData.append("Data", ultimoGraficoInfo.Data || "");
 
   // ✅ lista_y e lista_x como string única separada por vírgula
-  formData.append("lista_y",
-    (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
-      ? ultimoGraficoInfo.lista_y.join(",")
-      : (ultimoGraficoInfo.lista_y || "")
-  );
+  formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
   formData.append("lista_x",
     (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
       ? ultimoGraficoInfo.lista_x.join(",")
@@ -354,6 +346,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 
