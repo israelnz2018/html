@@ -217,15 +217,25 @@ function atualizarBoxAnalise(colunas) {
   atualizarBoxPersonalizacao(ferramentaAtual);
 }
 
-
-function atualizarBoxPersonalizacao(ferramentaSelecionada) {
+function atualizarBoxPersonalizacao(info_grafico) {
   const painel = document.getElementById("painelPersonalizacao");
   if (!painel) {
     console.error("❌ painelPersonalizacao não encontrado.");
     return;
   }
 
-  // 🔧 Configuração geral (exemplo atual para BoxPlot)
+  // 🔧 Ajusta ferramentaAtual com base na info_grafico recebida
+  if (info_grafico?.lista_y?.length > 1 && info_grafico?.subgrupo) {
+    ferramentaAtual = "BoxPlot 2Y Subgrupo";
+  } else if (info_grafico?.lista_y?.length > 1) {
+    ferramentaAtual = "BoxPlot 2Y";
+  } else {
+    ferramentaAtual = "BoxPlot";
+  }
+
+  console.log("🔧 ferramentaAtual definida como:", ferramentaAtual);
+
+  // 🔧 Configuração geral para BoxPlot
   const CONFIG_PERSONALIZACAO = {
     "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],  // 1Y
     "BoxPlot 2Y": ["titulo_grafico", "titulo_y", "tamanho_fonte", "inclinacao_x"],                 // 2Y
@@ -237,7 +247,7 @@ function atualizarBoxPersonalizacao(ferramentaSelecionada) {
   const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX", "inclinacaoY", "espessuraLinha"];
 
   // 🔧 Obter campos permitidos para esta ferramenta
-  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaSelecionada] || [];
+  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || [];
 
   // 🔧 Loop: mostra ou esconde conforme permitido
   todosCampos.forEach(idCampo => {
@@ -252,8 +262,7 @@ function atualizarBoxPersonalizacao(ferramentaSelecionada) {
     else if (idCampo.includes("tituloEixoY")) nome = "titulo_y";
     else if (idCampo.includes("tamanhoFonte")) nome = "tamanho_fonte";
     else if (idCampo.includes("inclinacaoX")) nome = "inclinacao_x";
-    else if (idCampo.includes("inclinacaoY")) nome = "inclinacao_y";
-    else if (idCampo.includes("espessuraLinha")) nome = "espessura";
+  
 
     if (camposPermitidos.includes(nome)) {
       el.parentElement.style.display = "";  // Mostra
@@ -262,6 +271,7 @@ function atualizarBoxPersonalizacao(ferramentaSelecionada) {
     }
   });
 }
+
 
 
 function registrarFerramenta(ferramenta) {
