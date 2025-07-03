@@ -241,6 +241,16 @@ async function enviarPersonalizacao() {
     return;
   }
 
+  // ✅ Garante lista_y preenchida com coluna_y caso esteja vazia
+  if (!ultimoGraficoInfo.lista_y || ultimoGraficoInfo.lista_y.length === 0) {
+    if (ultimoGraficoInfo.coluna_y) {
+      ultimoGraficoInfo.lista_y = [ultimoGraficoInfo.coluna_y];
+    } else {
+      alert("❌ Nenhuma coluna Y definida para personalizar o boxplot.");
+      return;
+    }
+  }
+
   // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
   const cor = document.getElementById("corGrafico")?.value || "";
   const tituloX = document.getElementById("tituloEixoX")?.value || "";
@@ -340,6 +350,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 
