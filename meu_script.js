@@ -214,6 +214,52 @@ function atualizarBoxAnalise(colunas) {
   });
 }
 
+function atualizarBoxPersonalizacao(ferramentaSelecionada) {
+  const painel = document.getElementById("painelPersonalizacao");
+  if (!painel) {
+    console.error("❌ painelPersonalizacao não encontrado.");
+    return;
+  }
+
+  // 🔧 Configuração geral (exemplo atual para BoxPlot)
+  const CONFIG_PERSONALIZACAO = {
+    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],  // 1Y
+    "BoxPlot 2Y": ["titulo_grafico", "titulo_y", "tamanho_fonte", "inclinacao_x"],                 // 2Y
+    "BoxPlot 2Y Subgrupo": ["titulo_y", "tamanho_fonte", "inclinacao_x"]                          // 2Y + Subgrupo
+    // 🔧 Adicione aqui outros gráficos e análises depois
+  };
+
+  // 🔧 Campos de personalização disponíveis no painel
+  const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX", "inclinacaoY", "espessuraLinha"];
+
+  // 🔧 Obter campos permitidos para esta ferramenta
+  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaSelecionada] || [];
+
+  // 🔧 Loop: mostra ou esconde conforme permitido
+  todosCampos.forEach(idCampo => {
+    const el = document.getElementById(idCampo);
+    if (!el) return;
+
+    // Mapeamento para compatibilizar ids com CONFIG_PERSONALIZACAO
+    let nome = "";
+    if (idCampo.includes("cor")) nome = "cor";
+    else if (idCampo.includes("tituloGrafico")) nome = "titulo_grafico";
+    else if (idCampo.includes("tituloEixoX")) nome = "titulo_x";
+    else if (idCampo.includes("tituloEixoY")) nome = "titulo_y";
+    else if (idCampo.includes("tamanhoFonte")) nome = "tamanho_fonte";
+    else if (idCampo.includes("inclinacaoX")) nome = "inclinacao_x";
+    else if (idCampo.includes("inclinacaoY")) nome = "inclinacao_y";
+    else if (idCampo.includes("espessuraLinha")) nome = "espessura";
+
+    if (camposPermitidos.includes(nome)) {
+      el.parentElement.style.display = "";  // Mostra
+    } else {
+      el.parentElement.style.display = "none";  // Oculta
+    }
+  });
+}
+
+
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
   atualizarInterface();
