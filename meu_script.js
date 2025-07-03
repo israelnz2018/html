@@ -1,6 +1,6 @@
 let workbookGlobal = null;
 let ferramentaAtual = "";
-let ultimoGraficoInfo = null;
+let ultimoGraficoInfo = null; 
 
 function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
