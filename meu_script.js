@@ -241,24 +241,15 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar, com verificação
-  let corInput = document.getElementById("corGrafico");
-  let tituloXInput = document.getElementById("tituloEixoX");
-  let tituloYInput = document.getElementById("tituloEixoY");
-  let tituloPrincipalInput = document.getElementById("tituloGrafico");
-  let tamanhoFonteInput = document.getElementById("tamanhoFonte");
-  let inclinacaoXInput = document.getElementById("inclinacaoX");
-  let inclinacaoYInput = document.getElementById("inclinacaoY");
-  let espessuraInput = document.getElementById("espessuraLinha");
-
-  let cor = corInput ? corInput.value : "";
-  let tituloX = tituloXInput ? tituloXInput.value : "";
-  let tituloY = tituloYInput ? tituloYInput.value : "";
-  let tituloPrincipal = tituloPrincipalInput ? tituloPrincipalInput.value : "";
-  let tamanhoFonte = tamanhoFonteInput ? tamanhoFonteInput.value : "";
-  let inclinacaoX = inclinacaoXInput ? inclinacaoXInput.value : "";
-  let inclinacaoY = inclinacaoYInput ? inclinacaoYInput.value : "";
-  let espessura = espessuraInput ? espessuraInput.value : "";
+  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
+  let cor = document.getElementById("corGrafico").value;
+  let tituloX = document.getElementById("tituloEixoX").value;
+  let tituloY = document.getElementById("tituloEixoY").value;
+  let tituloPrincipal = document.getElementById("tituloGrafico").value;
+  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
+  let inclinacaoX = document.getElementById("inclinacaoX").value;
+  let inclinacaoY = document.getElementById("inclinacaoY").value;
+  let espessura = document.getElementById("espessuraLinha").value;
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
@@ -354,7 +345,6 @@ async function enviarPersonalizacao() {
 }
 
 
-
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
@@ -362,7 +352,7 @@ const opcoes = document.getElementById("opcoesPersonalizacao");
 if (toggleBtn && painel && opcoes) {
   painel.style.display = "block";
   opcoes.style.display = "none";
-  toggleBtn.innerText = "Mostrar Personalização";
+  toggleBtn.innerText = "Mostrar Personalização ▼";
 
   toggleBtn.addEventListener("click", () => {
     const estaVisivel = opcoes.style.display !== "none";
