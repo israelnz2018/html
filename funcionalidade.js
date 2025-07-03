@@ -195,18 +195,17 @@ async function enviarAnaliseCompleta() {
           field_LSE: document.getElementById("box_field_LSE")?.value || "",
           field_LIE: document.getElementById("box_field_LIE")?.value || "",
           Data: document.getElementById("box_Data")?.value || "",
-          cor: "#4682B4", // steelblue
-          // 🔧 Ajuste aqui: usa coluna_x se existir, senão coluna_y
-          titulo_x: "",        // deixar em branco
-          titulo_y: "",        // deixar em branco
-          titulo_grafico: "", // deixar em branco
-          tamanho_fonte: 12,
-          inclinacao_x: 0,
-          inclinacao_y: 0,
-          espessura: 2
+          cor: json.cor || "#4682B4",
+          titulo_x: json.titulo_x || "",
+          titulo_y: json.titulo_y || "",
+          titulo_grafico: json.titulo_grafico || "",
+          tamanho_fonte: json.tamanho_fonte || 12,
+          inclinacao_x: json.inclinacao_x || 0,
+          inclinacao_y: json.inclinacao_y || 0,
+          espessura: json.espessura || 2
         };
 
-        // ✅ Preencher painel de personalização com defaults
+        // ✅ Preencher painel de personalização com dados retornados ou defaults
         if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
         if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
         if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
@@ -215,7 +214,6 @@ async function enviarAnaliseCompleta() {
         if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
         if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
         if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
-
       }
     }
 
@@ -224,8 +222,6 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
-
-
 
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
