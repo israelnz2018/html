@@ -200,11 +200,17 @@ async function enviarAnaliseCompleta() {
 
         // ✅ Preencher painel de personalização com info_grafico
         if (document.getElementById("corGrafico")) {
-          let cor = info.cor || "";
-          // 🔧 Se vier "steelblue", converte para HEX #4682B4
-          if (cor.toLowerCase() === "steelblue") cor = "#4682B4";
+          let cor = json.info_grafico?.cor || "";
+          // 🔧 Se vier como nome de cor (ex: "steelblue"), converte para HEX
+          if (!cor.startsWith("#")) {
+            const ctx = document.createElement("canvas").getContext("2d");
+            ctx.fillStyle = cor;
+            cor = ctx.fillStyle;
+          }
           document.getElementById("corGrafico").value = cor;
         }
+
+        
         if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = (info.titulo_principal !== undefined) ? info.titulo_principal : "";
         if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = (info.titulo_x !== undefined) ? info.titulo_x : "";
         if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = (info.titulo_y !== undefined) ? info.titulo_y : "";
