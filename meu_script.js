@@ -317,16 +317,19 @@ async function enviarPersonalizacao() {
       const painel = document.getElementById("painelPersonalizacao");
       containerGrafico.insertBefore(img, painel);
 
-      // ✅ Atualiza ultimoGraficoInfo
+      // ✅ Atualiza ultimoGraficoInfo com os dados retornados, priorizando json.info_grafico
       ultimoGraficoInfo = {
         ...ultimoGraficoInfo,
-        cor,
-        titulo_x: tituloX,
-        titulo_y: tituloY,
-        titulo_grafico: tituloGrafico,
-        tamanho_fonte: tamanhoFonte,
-        inclinacao_x: inclinacaoX
+        cor: json.info_grafico?.cor || cor,
+        titulo_x: json.info_grafico?.titulo_x || tituloX,
+        titulo_y: json.info_grafico?.titulo_y || tituloY,
+        titulo_grafico: json.info_grafico?.titulo_grafico || tituloGrafico,
+        tamanho_fonte: json.info_grafico?.tamanho_fonte || tamanhoFonte,
+        inclinacao_x: json.info_grafico?.inclinacao_x || inclinacaoX
       };
+
+      // ✅ Preenche o input Título do Gráfico com o valor atualizado
+      document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
 
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
@@ -337,6 +340,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 
