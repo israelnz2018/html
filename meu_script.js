@@ -237,109 +237,106 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function enviarPersonalizacao() {
   if (!ultimoGraficoInfo) {
-    alert("❌ Nenhum gráfico carregado para personalizar.");
-    return;
-  }
-
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
-  let cor = document.getElementById("corGrafico").value;
-  let tituloX = document.getElementById("tituloEixoX").value;
-  let tituloY = document.getElementById("tituloEixoY").value;
-  let tituloPrincipal = document.getElementById("tituloGrafico").value;
-  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
-  let inclinacaoX = document.getElementById("inclinacaoX").value;
-
-
-  const formData = new FormData();
-  formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
-  formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
-  formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
-  formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
-  formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
-  formData.append("field", ultimoGraficoInfo.field || "");
-  formData.append("field_conf", ultimoGraficoInfo.field_conf || "");
-  formData.append("field_dist", ultimoGraficoInfo.field_dist || "");
-  formData.append("field_LSE", ultimoGraficoInfo.field_LSE || "");
-  formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
-  formData.append("Data", ultimoGraficoInfo.Data || "");
-
-  // ✅ lista_y e lista_x como string única separada por vírgula
-  formData.append("lista_y",
-    (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
-      ? ultimoGraficoInfo.lista_y.join(",")
-      : (ultimoGraficoInfo.lista_y || "")
-  );
-  formData.append("lista_x",
-    (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
-      ? ultimoGraficoInfo.lista_x.join(",")
-      : (ultimoGraficoInfo.lista_x || "")
-  );
-
-  // Parâmetros de personalização
-  formData.append("cor", cor);
-  formData.append("titulo_x", tituloX);
-  formData.append("titulo_y", tituloY);
-  formData.append("titulo_grafico", tituloPrincipal);
-  formData.append("tamanho_fonte", tamanhoFonte);
-  formData.append("inclinacao_x", inclinacaoX);
-
-
-  // 🔍 DEBUG
-  console.log("📤 FormData sendo enviado:");
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ': ' + pair[1]);
-  }
-
-  try {
-    const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
-      method: "POST",
-      body: formData
-    });
-
-    const json = await resposta.json();
-    console.log("✅ Resposta do backend (personalização):", json);
-
-    const containerGrafico = document.getElementById("conteudoGrafico");
-
-    // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
-    const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
-    if (imgsPersonalizados.length > 0) {
-      const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
-      containerGrafico.removeChild(ultimo);
-    }
-
-    // 🔥 Cria o novo gráfico personalizado
-    if (json.grafico_isolado_base64) {
-      const img = document.createElement("img");
-      img.className = "graficoPersonalizado";
-      img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
-      img.style = "max-width:100%; margin-bottom:10px;";
-
-      // 🔥 Insere o novo gráfico acima do painel de personalização
-      const painel = document.getElementById("painelPersonalizacao");
-      containerGrafico.insertBefore(img, painel);
-
-      // ✅ Atualiza ultimoGraficoInfo
-      ultimoGraficoInfo = {
-        ...ultimoGraficoInfo,
-        cor,
-        titulo_x: tituloX,
-        titulo_y: tituloY,
-        titulo_grafico: tituloPrincipal,
-        tamanho_fonte: tamanhoFonte,
-        inclinacao_x: inclinacaoX
-      
-      };
-
-    } else {
-      alert("⚠️ Nenhuma imagem retornada do backend.");
-    }
-
-  } catch (e) {
-    console.error("❌ Erro ao atualizar gráfico:", e);
-    alert("❌ Erro ao atualizar gráfico.");
-  }
+  alert("❌ Nenhum gráfico carregado para personalizar.");
+  return;
 }
+
+// 🔧 CAPTURA valores diretamente dos inputs antes de enviar
+let cor = document.getElementById("corGrafico").value;
+let tituloX = document.getElementById("tituloEixoX").value;
+let tituloY = document.getElementById("tituloEixoY").value;
+let tituloGrafico = document.getElementById("tituloGrafico").value;
+let tamanhoFonte = document.getElementById("tamanhoFonte").value;
+let inclinacaoX = document.getElementById("inclinacaoX").value;
+
+const formData = new FormData();
+formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
+formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
+formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
+formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
+formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
+formData.append("field", ultimoGraficoInfo.field || "");
+formData.append("field_conf", ultimoGraficoInfo.field_conf || "");
+formData.append("field_dist", ultimoGraficoInfo.field_dist || "");
+formData.append("field_LSE", ultimoGraficoInfo.field_LSE || "");
+formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
+formData.append("Data", ultimoGraficoInfo.Data || "");
+
+// ✅ lista_y e lista_x como string única separada por vírgula
+formData.append("lista_y",
+  (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
+    ? ultimoGraficoInfo.lista_y.join(",")
+    : (ultimoGraficoInfo.lista_y || "")
+);
+formData.append("lista_x",
+  (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
+    ? ultimoGraficoInfo.lista_x.join(",")
+    : (ultimoGraficoInfo.lista_x || "")
+);
+
+// Parâmetros de personalização
+formData.append("cor", cor);
+formData.append("titulo_x", tituloX);
+formData.append("titulo_y", tituloY);
+formData.append("titulo_grafico", tituloGrafico);
+formData.append("tamanho_fonte", tamanhoFonte);
+formData.append("inclinacao_x", inclinacaoX);
+
+// 🔍 DEBUG
+console.log("📤 FormData sendo enviado:");
+for (var pair of formData.entries()) {
+  console.log(pair[0] + ': ' + pair[1]);
+}
+
+try {
+  const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
+    method: "POST",
+    body: formData
+  });
+
+  const json = await resposta.json();
+  console.log("✅ Resposta do backend (personalização):", json);
+
+  const containerGrafico = document.getElementById("conteudoGrafico");
+
+  // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
+  const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
+  if (imgsPersonalizados.length > 0) {
+    const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
+    containerGrafico.removeChild(ultimo);
+  }
+
+  // 🔥 Cria o novo gráfico personalizado
+  if (json.grafico_isolado_base64) {
+    const img = document.createElement("img");
+    img.className = "graficoPersonalizado";
+    img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
+    img.style = "max-width:100%; margin-bottom:10px;";
+
+    // 🔥 Insere o novo gráfico acima do painel de personalização
+    const painel = document.getElementById("painelPersonalizacao");
+    containerGrafico.insertBefore(img, painel);
+
+    // ✅ Atualiza ultimoGraficoInfo
+    ultimoGraficoInfo = {
+      ...ultimoGraficoInfo,
+      cor,
+      titulo_x: tituloX,
+      titulo_y: tituloY,
+      titulo_grafico: tituloGrafico,
+      tamanho_fonte: tamanhoFonte,
+      inclinacao_x: inclinacaoX
+    };
+
+  } else {
+    alert("⚠️ Nenhuma imagem retornada do backend.");
+  }
+
+} catch (e) {
+  console.error("❌ Erro ao atualizar gráfico:", e);
+  alert("❌ Erro ao atualizar gráfico.");
+}
+
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
