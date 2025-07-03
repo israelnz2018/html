@@ -267,6 +267,7 @@ function atualizarBoxPersonalizacao(ferramentaSelecionada) {
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
   atualizarInterface();
+  atualizarBoxPersonalizacao(ferramentaAtual);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
