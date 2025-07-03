@@ -199,14 +199,14 @@ async function enviarAnaliseCompleta() {
         };
 
         // ✅ Preencher painel de personalização com info_grafico
-        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = info.cor || "";
-        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = info.titulo_principal || "";
-        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = info.titulo_x || "";
-        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = info.titulo_y || "";
-        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = info.tamanho_fonte || "";
-        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = info.inclinacao_x || "";
-        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = info.inclinacao_y || "";
-        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = info.espessura || "";
+        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = (info.cor !== undefined) ? info.cor : "";
+        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = (info.titulo_principal !== undefined) ? info.titulo_principal : "";
+        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = (info.titulo_x !== undefined) ? info.titulo_x : "";
+        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = (info.titulo_y !== undefined) ? info.titulo_y : "";
+        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = (info.tamanho_fonte !== undefined) ? info.tamanho_fonte : "";
+        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = (info.inclinacao_x !== undefined) ? info.inclinacao_x : "";
+        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = (info.inclinacao_y !== undefined) ? info.inclinacao_y : "";
+        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = (info.espessura !== undefined) ? info.espessura : "";
       }
     }
 
