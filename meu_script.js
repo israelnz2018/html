@@ -353,56 +353,6 @@ async function enviarPersonalizacao() {
   }
 }
 
-@app.post("/personalizar-boxplot")
-async def personalizar_boxplot_especifico(
-    request: Request,
-    lista_y: str = Form(None),
-    titulo_grafico: str = Form(""),
-    tamanho_fonte: str = Form("12")
-):
-    try:
-        global df_global
-        from graficos import personalizar_boxplot
-
-        if df_global is None or df_global.empty:
-            return JSONResponse({
-                "erro": "Nenhum DataFrame carregado. Gere o gráfico primeiro.",
-                "grafico_isolado_base64": None
-            }, status_code=400)
-
-        lista_y_processada = [x.strip() for x in lista_y.split(",")] if lista_y else []
-
-        # 🔧 Chama a função com info_colunas se necessário
-        resultado = personalizar_boxplot(
-            df_global,
-            info_colunas={"lista_y": lista_y_processada},
-            titulo_grafico=titulo_grafico,
-            tamanho_fonte=int(tamanho_fonte)
-        )
-
-        if resultado.get("erro"):
-            return JSONResponse({
-                "erro": resultado["erro"],
-                "grafico_isolado_base64": None
-            }, status_code=400)
-
-        grafico_base64 = resultado.get("grafico")
-        grafico_completo = f"data:image/png;base64,{grafico_base64}" if grafico_base64 else None
-
-        return {
-            "erro": None,
-            "grafico_isolado_base64": grafico_completo
-        }
-
-    except Exception as e:
-        import traceback
-        tb = traceback.format_exc()
-        return JSONResponse({
-            "erro": "Erro interno ao personalizar boxplot.",
-            "detalhe": str(e),
-            "traceback": tb
-        }, status_code=500)
-
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
