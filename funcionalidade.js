@@ -176,11 +176,12 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        // ✅ Mostrar painel de personalização somente se houver gráfico isolado
         document.getElementById('painelPersonalizacao').style.display = 'block';
 
-        // ✅ Atualizar ultimoGraficoInfo incluindo defaults de personalização
+        // ✅ Usar info_grafico retornado do backend se existir
+        const info = json.info_grafico || {};
         ultimoGraficoInfo = {
+          ...info,
           arquivo: arquivoInput.files[0],
           aba: abaSelect.value,
           ferramenta: analise,
@@ -194,26 +195,18 @@ async function enviarAnaliseCompleta() {
           field_dist: document.getElementById("box_field_dist")?.value || "",
           field_LSE: document.getElementById("box_field_LSE")?.value || "",
           field_LIE: document.getElementById("box_field_LIE")?.value || "",
-          Data: document.getElementById("box_Data")?.value || "",
-          cor: json.cor || "#4682B4",
-          titulo_x: json.titulo_x || "",
-          titulo_y: json.titulo_y || "",
-          titulo_grafico: json.titulo_grafico || "",
-          tamanho_fonte: json.tamanho_fonte || 12,
-          inclinacao_x: json.inclinacao_x || 0,
-          inclinacao_y: json.inclinacao_y || 0,
-          espessura: json.espessura || 2
+          Data: document.getElementById("box_Data")?.value || ""
         };
 
-        // ✅ Preencher painel de personalização com dados retornados ou defaults
-        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
-        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
-        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
-        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
-        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
-        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
-        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
-        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
+        // ✅ Preencher painel de personalização com info_grafico
+        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = info.cor || "";
+        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = info.titulo_principal || "";
+        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = info.titulo_x || "";
+        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = info.titulo_y || "";
+        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = info.tamanho_fonte || "";
+        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = info.inclinacao_x || "";
+        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = info.inclinacao_y || "";
+        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = info.espessura || "";
       }
     }
 
@@ -222,6 +215,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
