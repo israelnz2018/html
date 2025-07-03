@@ -362,7 +362,7 @@ const opcoes = document.getElementById("opcoesPersonalizacao");
 if (toggleBtn && painel && opcoes) {
   painel.style.display = "block";
   opcoes.style.display = "none";
-  toggleBtn.innerText = "Mostrar Personalização ▼";
+  toggleBtn.innerText = "Mostrar Personalização";
 
   toggleBtn.addEventListener("click", () => {
     const estaVisivel = opcoes.style.display !== "none";
