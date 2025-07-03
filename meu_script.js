@@ -212,7 +212,11 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(input);
     }
   });
+
+  // ✅ 🔥 Atualiza os campos de personalização conforme a ferramenta selecionada
+  atualizarBoxPersonalizacao(ferramentaAtual);
 }
+
 
 function atualizarBoxPersonalizacao(ferramentaSelecionada) {
   const painel = document.getElementById("painelPersonalizacao");
