@@ -241,10 +241,14 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // ✅ Garante lista_y preenchida com coluna_y caso esteja vazia
+  // ✅ Garante lista_y preenchida corretamente (suporta único Y ou múltiplos Y)
   if (!ultimoGraficoInfo.lista_y || ultimoGraficoInfo.lista_y.length === 0) {
     if (ultimoGraficoInfo.coluna_y) {
+      // Se coluna_y existir, cria lista_y com único valor
       ultimoGraficoInfo.lista_y = [ultimoGraficoInfo.coluna_y];
+    } else if (ultimoGraficoInfo.lista_y && typeof ultimoGraficoInfo.lista_y === "string" && ultimoGraficoInfo.lista_y.length > 0) {
+      // Se lista_y existir como string, transforma em array
+      ultimoGraficoInfo.lista_y = ultimoGraficoInfo.lista_y.split(",");
     } else {
       alert("❌ Nenhuma coluna Y definida para personalizar o boxplot.");
       return;
