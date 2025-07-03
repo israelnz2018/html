@@ -248,8 +248,7 @@ async function enviarPersonalizacao() {
   let tituloPrincipal = document.getElementById("tituloGrafico").value;
   let tamanhoFonte = document.getElementById("tamanhoFonte").value;
   let inclinacaoX = document.getElementById("inclinacaoX").value;
-  let inclinacaoY = document.getElementById("inclinacaoY").value;
-  let espessura = document.getElementById("espessuraLinha").value;
+
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
@@ -283,8 +282,7 @@ async function enviarPersonalizacao() {
   formData.append("titulo_grafico", tituloPrincipal);
   formData.append("tamanho_fonte", tamanhoFonte);
   formData.append("inclinacao_x", inclinacaoX);
-  formData.append("inclinacao_y", inclinacaoY);
-  formData.append("espessura", espessura);
+
 
   // 🔍 DEBUG
   console.log("📤 FormData sendo enviado:");
@@ -329,9 +327,8 @@ async function enviarPersonalizacao() {
         titulo_y: tituloY,
         titulo_grafico: tituloPrincipal,
         tamanho_fonte: tamanhoFonte,
-        inclinacao_x: inclinacaoX,
-        inclinacao_y: inclinacaoY,
-        espessura
+        inclinacao_x: inclinacaoX
+      
       };
 
     } else {
