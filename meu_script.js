@@ -424,17 +424,25 @@ async function enviarPersonalizacao() {
   }
 }
 
+<style>
+#painelPersonalizacao {
+  max-height: 1000px !important; /* aumenta o limite de altura */
+  overflow-y: auto; /* adiciona scroll interno se necessário */
+  transition: max-height 0.5s ease-in-out; /* animação suave */
+}
+#opcoesPersonalizacao {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+</style>
 
-const toggleBtn = document.getElementById("togglePersonalizacao");
+<script>
+// 🔧 Define variáveis
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
+const toggleBtn = document.getElementById("togglePersonalizacao");
 
-// 🔧 Inicialmente esconde todo o painel (inclusive o botão)
-if (painel) {
-  painel.style.display = "none";
-}
-
-// ✅ Função para exibir o painel após gerar o primeiro gráfico
 function mostrarPainelPersonalizacao() {
   if (painel) {
     painel.style.display = "block";     // mostra o painel
@@ -465,17 +473,6 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+</script>
 
-<style>
-#painelPersonalizacao {
-  max-height: 1000px !important; /* aumenta o limite de altura */
-  overflow-y: auto; /* adiciona scroll interno se necessário */
-  transition: max-height 0.5s ease-in-out; /* animação suave */
-}
-#opcoesPersonalizacao {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-</style>
 
