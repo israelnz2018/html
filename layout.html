@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
+  <style>
     nav button { font-size: 0.85rem; }
     nav ul li a { font-size: 0.85rem; }
     nav ul li ul {
@@ -21,11 +21,31 @@
       background-color: #374151; border: 1px solid #4b5563; border-radius: 0.25rem;
     }
     nav ul li.show > ul, nav ul li ul li.show > ul { display: block; }
+
+    /* Spinner bolinhas pulando */
+    .spinner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner div {
+      width: 8px;
+      height: 8px;
+      margin: 3px;
+      background-color: white;
+      border-radius: 50%;
+      animation: bounce 0.6s infinite alternate;
+    }
+    .spinner div:nth-child(2) { animation-delay: 0.2s; }
+    .spinner div:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      to { transform: translateY(-8px); opacity: 0.7; }
+    }
   </style>
 
 </head>
 <body>
-
 
 <nav style="background-color: #13294b; color: white;" class="p-2 flex justify-between items-center">
   <div class="flex items-center space-x-2">
@@ -34,8 +54,6 @@
   <ul class="flex space-x-2 items-center"></ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
 </nav>
-
-
 
 <div class="max-w-6xl mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
@@ -58,7 +76,12 @@
   </div>
 
   <div class="text-center mt-4">
-    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
+    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 flex items-center justify-center">
+      <span>Enviar Análise</span>
+      <span id="spinner-enviar" class="spinner ml-2 hidden">
+        <div></div><div></div><div></div>
+      </span>
+    </button>
   </div>
 </div>
 
@@ -66,8 +89,29 @@
   <div class="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
     <label class="font-semibold">Pergunta (apenas estatística):</label>
     <input id="perguntaAluno" type="text" class="flex-1 border rounded p-2" placeholder="Digite sua pergunta..." />
-    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">Perguntar</button>
+    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700 flex items-center justify-center">
+      <span>Perguntar</span>
+      <span id="spinner-perguntar" class="ml-2 hidden">
+        <span class="pulse-loader"></span>
+      </span>
+    </button>
   </div>
+
+  <style>
+    .pulse-loader {
+      width: 12px;
+      height: 12px;
+      background-color: white;
+      border-radius: 50%;
+      animation: pulse 1s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
@@ -78,6 +122,8 @@
     <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
       <h2 class="font-bold text-lg mb-2 text-center">Gráfico</h2>
       <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto">
+
+
         
         <!-- Aqui será inserido o gráfico dinamicamente -->
 
