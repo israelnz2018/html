@@ -150,12 +150,15 @@
   // Função para iniciar animação no botão e parar após 2 segundos
   function iniciarAnimacaoBotao(btnId) {
     const botao = document.getElementById(btnId);
-    botao.classList.add("pulse-animate"); // Inicia a animação
+    
+    if (botao) { // Verifica se o botão existe antes de aplicar a animação
+      botao.classList.add("pulse-animate"); // Inicia a animação
 
-    // Após 2 segundos, parar a animação
-    setTimeout(() => {
-      botao.classList.remove("pulse-animate");
-    }, 2000);
+      // Após 2 segundos, parar a animação
+      setTimeout(() => {
+        botao.classList.remove("pulse-animate");
+      }, 2000);
+    }
   }
 
   // Adicionando eventos aos botões (somente animação nos botões)
@@ -170,6 +173,5 @@
 
 </body>
 </html>
-
 
 
