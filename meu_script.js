@@ -426,19 +426,22 @@ function inicializarPersonalizacao() {
 
   if (toggleBtn && opcoes) {
     toggleBtn.innerText = "Mostrar Personalização ▼";
-    toggleBtn.addEventListener("click", () => {
-      if (opcoes.style.display === "none" || opcoes.style.display === "") {
-        opcoes.style.display = "grid";
-        toggleBtn.innerText = "Ocultar Personalização ▲";
-      } else {
-        opcoes.style.display = "none";
-        toggleBtn.innerText = "Mostrar Personalização ▼";
-      }
+
+    // 🔧 Remove event listeners duplicados antes de adicionar novamente
+    const novoToggleBtn = toggleBtn.cloneNode(true);
+    toggleBtn.parentNode.replaceChild(novoToggleBtn, toggleBtn);
+
+    novoToggleBtn.addEventListener("click", () => {
+      const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
+      opcoes.style.display = estaFechado ? "grid" : "none";
+      novoToggleBtn.innerText = estaFechado
+        ? "Ocultar Personalização ▲"
+        : "Mostrar Personalização ▼";
     });
   }
 }
 
-// ✅ Rode a função após gerar gráfico ou recarregar painel
+// ✅ Rode a função no carregamento inicial
 document.addEventListener("DOMContentLoaded", () => {
   inicializarPersonalizacao();
 });
