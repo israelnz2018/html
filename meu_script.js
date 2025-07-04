@@ -217,7 +217,7 @@ function atualizarBoxPersonalizacao(info_grafico) {
 
   const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
 
-  // 🔧 Mostra todos os campos sempre (versão simplificada até configurar filtros específicos)
+  // 🔧 Mostra todos os campos sempre
   todosCampos.forEach(idCampo => {
     const el = document.getElementById(idCampo);
     if (el) {
@@ -225,7 +225,6 @@ function atualizarBoxPersonalizacao(info_grafico) {
     }
   });
 }
-
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
@@ -316,23 +315,11 @@ function inicializarPersonalizacao() {
   if (opcoes) opcoes.style.display = "none";
 
   if (toggleBtn && opcoes) {
-    // 🔧 Remove listeners antigos antes de adicionar novamente
-    const novoBtn = toggleBtn.cloneNode(true);
-    toggleBtn.parentNode.replaceChild(novoBtn, toggleBtn);
-
-    novoBtn.innerText = "Mostrar Personalização ▼";
-    novoBtn.addEventListener("click", () => {
+    toggleBtn.innerText = "Mostrar Personalização ▼";
+    toggleBtn.onclick = () => {
       const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
       opcoes.style.display = estaFechado ? "grid" : "none";
-      novoBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
-    });
+      toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
+    };
   }
 }
-
-
-
-
-
-
-
-
