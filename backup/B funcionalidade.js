@@ -66,7 +66,6 @@ function deslogar() {
 }
 
 
-
 async function enviarAnaliseCompleta() {
   console.log("🚀 Botão Enviar Análise foi clicado.");
   sessaoAtiva = true;
@@ -96,7 +95,7 @@ async function enviarAnaliseCompleta() {
 
   const GRAFICOS_LIST = [
     "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Superfície - 3D"
+    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Dispersão 3D"
   ];
 
   if (GRAFICOS_LIST.includes(nomeFerramenta)) {
@@ -176,11 +175,11 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        // ✅ Mostrar painel de personalização somente se houver gráfico isolado
         document.getElementById('painelPersonalizacao').style.display = 'block';
 
-        // ✅ Atualizar ultimoGraficoInfo incluindo defaults de personalização
+        const info = json.info_grafico || {};
         ultimoGraficoInfo = {
+          ...info,
           arquivo: arquivoInput.files[0],
           aba: abaSelect.value,
           ferramenta: analise,
@@ -194,28 +193,32 @@ async function enviarAnaliseCompleta() {
           field_dist: document.getElementById("box_field_dist")?.value || "",
           field_LSE: document.getElementById("box_field_LSE")?.value || "",
           field_LIE: document.getElementById("box_field_LIE")?.value || "",
-          Data: document.getElementById("box_Data")?.value || "",
-          cor: "#4682B4", // steelblue
-          // 🔧 Ajuste aqui: usa coluna_x se existir, senão coluna_y
-          titulo_x: "",        // deixar em branco
-          titulo_y: "",        // deixar em branco
-          titulo_grafico: "", // deixar em branco
-          tamanho_fonte: 12,
-          inclinacao_x: 0,
-          inclinacao_y: 0,
-          espessura: 2
+          Data: document.getElementById("box_Data")?.value || ""
         };
 
-        // ✅ Preencher painel de personalização com defaults
-        if (document.getElementById("corGrafico")) document.getElementById("corGrafico").value = ultimoGraficoInfo.cor;
-        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
-        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = ultimoGraficoInfo.titulo_x;
-        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = ultimoGraficoInfo.titulo_y;
-        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = ultimoGraficoInfo.tamanho_fonte;
-        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = ultimoGraficoInfo.inclinacao_x;
-        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = ultimoGraficoInfo.inclinacao_y;
-        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = ultimoGraficoInfo.espessura;
+        // ✅ Preencher painel de personalização com info_grafico
+        if (document.getElementById("corGrafico")) {
+          let cor = info.cor || "";
+          if (!cor.startsWith("#")) {
+            const ctx = document.createElement("canvas").getContext("2d");
+            ctx.fillStyle = cor;
+            cor = ctx.fillStyle;
+          }
+          document.getElementById("corGrafico").value = cor;
+        }
 
+        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = info.titulo_grafico ?? "";
+        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = info.titulo_x ?? "";
+        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = info.titulo_y ?? "";
+        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = info.tamanho_fonte ?? "";
+        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = info.inclinacao_x ?? "";
+        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = info.inclinacao_y ?? "";
+        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = info.espessura ?? "";
+
+        // 🔧 ✅ Reativa o toggle e painel após gerar novo gráfico
+        if (typeof inicializarPersonalizacao === "function") {
+          inicializarPersonalizacao();
+        }
       }
     }
 
@@ -228,11 +231,12 @@ async function enviarAnaliseCompleta() {
 
 
 
+
 document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
 document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 
 async function perguntarIA() {
-  alert('▶️ perguntarIA foi acionado');
+  console.log('▶️ perguntarIA foi acionado');
 
   const promptInput = document.getElementById('perguntaAluno');
   if (!promptInput) {
@@ -246,25 +250,25 @@ async function perguntarIA() {
     return;
   }
 
-  // NOVO MÉTODO MAIS ROBUSTO PARA PEGAR A ÚLTIMA ANÁLISE
-  let textoPlano = "";
+  // 🔍 Determina se vai perguntar sobre análise ou gráfico
+  let tipo = "";
   const blocosAnalise = document.querySelectorAll('.bloco-analise .analise-texto');
-  if (blocosAnalise.length > 0) {
-    const ultima = blocosAnalise[0];
-    textoPlano = ultima?.innerText?.trim() || "";
-  }
+  const containerGrafico = document.getElementById('conteudoGrafico');
 
-  if (!textoPlano) {
-    alert('⚠️ Nenhuma análise encontrada.');
+  if (blocosAnalise.length > 0) {
+    tipo = "analise";
+  } else if (containerGrafico.querySelector('img')) {
+    tipo = "grafico";
+  } else {
+    alert("⚠️ Nenhuma análise ou gráfico encontrado para perguntar.");
     return;
   }
 
-  console.log("🔍 Última análise capturada:", textoPlano);
+  console.log("🔧 Tipo de pergunta:", tipo);
 
-  const payload = {
-    analise: textoPlano,
-    prompt: pergunta
-  };
+  const payload = new FormData();
+  payload.append("pergunta", pergunta);
+  payload.append("tipo", tipo);
 
   const blocoPergunta = document.createElement('div');
   blocoPergunta.className = 'pergunta-resposta';
@@ -272,43 +276,36 @@ async function perguntarIA() {
   blocoPergunta.style.border = '1px solid #007bff';
   blocoPergunta.style.padding = '12px';
   blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><em>Carregando...</em>`;
-  document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+
+  if (tipo === "analise") {
+    document.getElementById('conteudoAnalise').prepend(blocoPergunta);
+  } else {
+    document.getElementById('conteudoGrafico').prepend(blocoPergunta);
+  }
 
   try {
-    const response = await fetch(
-      'https://primary-production-1d53.up.railway.app/webhook/perguntar-ia',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }
-    );
+    const response = await fetch('https://analises-production.up.railway.app/pergunta', {
+      method: 'POST',
+      body: payload
+    });
 
     const data = await response.json();
-    console.log("🟡 Resposta bruta recebida do agente:", data);
+    console.log("🟢 Resposta recebida do backend:", data);
 
-    let respostaFinal = "";
+    if (data.resposta) {
+      let respostaFinal = data.resposta
+        .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+        .replace(/\n/g, "<br>");
 
-    try {
-      if (typeof data === "string") {
-        respostaFinal = data;
-      } else if (data?.analise) {
-        respostaFinal = data.analise;
-      } else {
-        console.warn("⚠️ Nenhum campo 'analise' encontrado em 'data'.", data);
-        respostaFinal = JSON.stringify(data);
-      }
-
-      respostaFinal = (respostaFinal || "").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
-    } catch (erro) {
-      console.error("❌ Erro ao formatar resultado:", erro);
-      console.log("🧪 Resultado recebido:", data);
-      respostaFinal = data?.analise || "❌ Nenhuma resposta formatável recebida.";
+      blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
+    } else if (data.erro) {
+      blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${data.erro}</span>`;
+    } else {
+      blocoPergunta.innerHTML = `<span style="color:red;">❌ Nenhuma resposta recebida.</span>`;
     }
 
-    blocoPergunta.innerHTML = `<strong>Pergunta:</strong> ${pergunta}<br><strong>Resposta:</strong> ${respostaFinal}`;
   } catch (e) {
-    console.error("❌ Erro no fetch ou no processamento:", e);
+    console.error("❌ Erro no fetch ou processamento:", e);
     blocoPergunta.innerHTML = `<span style="color:red;">❌ Erro: ${e.message}</span>`;
   }
 }
