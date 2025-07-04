@@ -399,6 +399,12 @@ async function enviarPersonalizacao() {
       }
 
       document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
+
+      // 🔧 ✅ Reativa o painel e toggle após inserir o novo gráfico
+      if (typeof inicializarPersonalizacao === "function") {
+        inicializarPersonalizacao();
+      }
+
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
     }
@@ -408,6 +414,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 // 🔧 CONFIGURA O TOGGLE
 
