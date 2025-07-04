@@ -273,19 +273,25 @@ function atualizarBoxPersonalizacao(info_grafico) {
     }
   });
 
-  // ✅ 🔧 Adiciona comentário informativo no final do painel
+  // ✅ 🔧 Adiciona comentário informativo com TODAS as configurações no final do painel
   const comentarioId = "comentarioCamposPermitidos";
   let comentario = document.getElementById(comentarioId);
 
   if (!comentario) {
-    comentario = document.createElement("p");
+    comentario = document.createElement("div");
     comentario.id = comentarioId;
-    comentario.className = "text-xs text-gray-500 mt-2";
+    comentario.className = "text-xs text-gray-500 mt-4";
     painel.appendChild(comentario);
   }
 
-  comentario.innerHTML = `ℹ️ <strong>Campos personalizáveis para ${ferramentaAtual}:</strong> ${camposPermitidos.join(", ") || "Nenhum"}`;
+  comentario.innerHTML = `
+    <strong>ℹ️ Campos personalizáveis:</strong><br>
+    <strong>BoxPlot (1Y):</strong> ${CONFIG_PERSONALIZACAO["BoxPlot"].join(", ")}<br>
+    <strong>BoxPlot 2Y:</strong> ${CONFIG_PERSONALIZACAO["BoxPlot 2Y"].join(", ")}<br>
+    <strong>BoxPlot 2Y Subgrupo:</strong> ${CONFIG_PERSONALIZACAO["BoxPlot 2Y Subgrupo"].join(", ")}
+  `;
 }
+
 
 
 
