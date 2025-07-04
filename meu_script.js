@@ -408,15 +408,14 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
-
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
 
 if (toggleBtn && painel && opcoes) {
-  painel.style.display = "block";   // painel sempre aberto
-  opcoes.style.display = "grid";    // opções sempre visíveis inicialmente
-  toggleBtn.innerText = "Ocultar Personalização ▲"; // mostra como aberto
+  painel.style.display = "block";   // painel sempre visível
+  opcoes.style.display = "none";    // opções fechadas inicialmente
+  toggleBtn.innerText = "Mostrar Personalização ▼"; // botão indica fechado
 
   toggleBtn.addEventListener("click", () => {
     const estaVisivel = opcoes.style.display !== "none";
@@ -436,5 +435,6 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+
 
 
