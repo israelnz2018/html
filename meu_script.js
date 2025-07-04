@@ -225,29 +225,25 @@ function atualizarBoxPersonalizacao(info_grafico) {
   }
 
   // 🔧 Ajusta ferramentaAtual com base na info_grafico recebida
-  if (Array.isArray(info_grafico?.lista_y) && info_grafico?.lista_y.length > 1 && info_grafico?.subgrupo) {
-    ferramentaAtual = "BoxPlot 2Y Subgrupo";
-  } else if (Array.isArray(info_grafico?.lista_y) && info_grafico?.lista_y.length > 1) {
-    ferramentaAtual = "BoxPlot 2Y";
+  if (info_grafico?.titulo_grafico) {
+    ferramentaAtual = info_grafico.titulo_grafico;
   } else {
-    ferramentaAtual = "BoxPlot";
+    ferramentaAtual = "";  // 🔧 deixa vazio se não houver título, evitando default fixo
   }
 
   console.log("🔧 ferramentaAtual definida como:", ferramentaAtual);
 
-  // 🔧 Configuração geral para BoxPlot
+  // 🔧 Configuração geral para campos personalizáveis
   const CONFIG_PERSONALIZACAO = {
-    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],  // 1Y
-    "BoxPlot 2Y": ["titulo_grafico", "titulo_y", "tamanho_fonte", "inclinacao_x"],                 // 2Y
-    "BoxPlot 2Y Subgrupo": ["titulo_y", "tamanho_fonte", "inclinacao_x"]                          // 2Y + Subgrupo
-    // 🔧 Adicione aqui outros gráficos e análises depois
+    "DEFAULT": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"]
+    // 🔧 Adicione configurações específicas se quiser restringir por gráfico
   };
 
   // 🔧 Campos de personalização disponíveis no painel
   const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
 
-  // 🔧 Obter campos permitidos para esta ferramenta
-  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || [];
+  // 🔧 Obter campos permitidos para esta ferramenta ou usar DEFAULT
+  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || CONFIG_PERSONALIZACAO["DEFAULT"];
   console.log("🔧 Campos permitidos:", camposPermitidos);
 
   // 🔧 Loop: mostra ou esconde conforme permitido
@@ -273,7 +269,7 @@ function atualizarBoxPersonalizacao(info_grafico) {
     }
   });
 
-  // ✅ 🔧 Adiciona comentário informativo com TODAS as configurações no final do painel
+  // ✅ 🔧 Adiciona mensagem informativa padrão
   const comentarioId = "comentarioCamposPermitidos";
   let comentario = document.getElementById(comentarioId);
 
@@ -285,12 +281,10 @@ function atualizarBoxPersonalizacao(info_grafico) {
   }
 
   comentario.innerHTML = `
-    <strong>ℹ️ Campos personalizáveis:</strong><br>
-    <strong>BoxPlot (1Y):</strong> ${CONFIG_PERSONALIZACAO["BoxPlot"].join(", ")}<br>
-    <strong>BoxPlot 2Y:</strong> ${CONFIG_PERSONALIZACAO["BoxPlot 2Y"].join(", ")}<br>
-    <strong>BoxPlot 2Y Subgrupo:</strong> ${CONFIG_PERSONALIZACAO["BoxPlot 2Y Subgrupo"].join(", ")}
+    ⚠️ <strong>Atenção:</strong> Dependendo do gráfico escolhido, nem todos os campos de personalização serão aplicáveis.
   `;
 }
+
 
 
 
