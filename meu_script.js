@@ -364,7 +364,11 @@ async function enviarPersonalizacao() {
     const json = await resposta.json();
     console.log("✅ Resposta do backend (personalização):", json);
 
-    atualizarBoxPersonalizacao(json.info_grafico);
+    // ✅ Atualiza campos visíveis conforme ferramenta atual
+    if (ultimoGraficoInfo.grafico) {
+      atualizarBoxPersonalizacao(ultimoGraficoInfo.grafico);
+    }
+
 
     const containerGrafico = document.getElementById("conteudoGrafico");
 
