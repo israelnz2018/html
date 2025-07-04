@@ -438,41 +438,47 @@ async function enviarPersonalizacao() {
 </style>
 
 <script>
-// 🔧 Define variáveis
-const painel = document.getElementById("painelPersonalizacao");
-const opcoes = document.getElementById("opcoesPersonalizacao");
-const toggleBtn = document.getElementById("togglePersonalizacao");
-
 function mostrarPainelPersonalizacao() {
+  const painel = document.getElementById("painelPersonalizacao");
+  const opcoes = document.getElementById("opcoesPersonalizacao");
+  const toggleBtn = document.getElementById("togglePersonalizacao");
+
   if (painel) {
     painel.style.display = "block";     // mostra o painel
-    opcoes.style.display = "none";      // mantém as opções escondidas inicialmente
-    toggleBtn.innerText = "Mostrar Personalização ▼";
+    if (opcoes) opcoes.style.display = "none"; // mantém as opções escondidas inicialmente
+    if (toggleBtn) toggleBtn.innerText = "Mostrar Personalização ▼";
   }
 }
 
-// 🔧 Evento toggle corrigido
-if (toggleBtn && opcoes) {
-  toggleBtn.addEventListener("click", () => {
-    if (opcoes.style.display === "none" || opcoes.style.display === "") {
-      opcoes.style.display = "grid";
-      toggleBtn.innerText = "Ocultar Personalização ▲";
-    } else {
-      opcoes.style.display = "none";
-      toggleBtn.innerText = "Mostrar Personalização ▼";
+document.addEventListener("DOMContentLoaded", () => {
+  const painel = document.getElementById("painelPersonalizacao");
+  const opcoes = document.getElementById("opcoesPersonalizacao");
+  const toggleBtn = document.getElementById("togglePersonalizacao");
+
+  // 🔧 Evento toggle corrigido
+  if (toggleBtn && opcoes) {
+    toggleBtn.addEventListener("click", () => {
+      if (opcoes.style.display === "none" || opcoes.style.display === "") {
+        opcoes.style.display = "grid";
+        toggleBtn.innerText = "Ocultar Personalização ▲";
+      } else {
+        opcoes.style.display = "none";
+        toggleBtn.innerText = "Mostrar Personalização ▼";
+      }
+    });
+  }
+
+  // 🔥 Registrar evento no botão de aplicar personalização
+  document.addEventListener("click", function(e) {
+    if (e.target && e.target.id === "btnAplicarPersonalizacao") {
+      enviarPersonalizacao();
     }
   });
-}
+});
 
 // ✅ Torna a função enviarPersonalizacao global
 window.enviarPersonalizacao = enviarPersonalizacao;
-
-// 🔥 Registrar evento no botão de aplicar personalização
-document.addEventListener("click", function(e) {
-  if (e.target && e.target.id === "btnAplicarPersonalizacao") {
-    enviarPersonalizacao();
-  }
-});
 </script>
+
 
 
