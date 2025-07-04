@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
@@ -50,6 +50,7 @@
       background-color: white;
       border-radius: 50%;
       animation: pulse 1s infinite ease-in-out;
+      display: inline-block; /* garantir visibilidade */
     }
 
     @keyframes pulse {
@@ -57,8 +58,23 @@
       50% { transform: scale(1.5); opacity: 0.6; }
       100% { transform: scale(1); opacity: 1; }
     }
-  </style>
 
+    /* Centralizar botão enviar análise */
+    .btn-container {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    /* Espaço entre texto e spinner */
+    #btnEnviarAnalise span,
+    #btnPerguntar span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .spinner, #spinner-perguntar {
+      vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
 
@@ -90,7 +106,7 @@
     </div>
   </div>
 
-  <div class="text-center mt-4">
+  <div class="btn-container">
     <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700 flex items-center justify-center">
       <span>Enviar Análise</span>
       <span id="spinner-enviar" class="spinner ml-2 hidden">
@@ -133,10 +149,11 @@
     spinner.classList.remove("hidden");
 
     try {
-      // Aqui o código para enviar a análise (simulação com timeout)
+      // Coloque aqui a lógica real para enviar a análise
       await new Promise(resolve => setTimeout(resolve, 3000));
 
-      // Após sucesso, você coloca o código que trata a resposta aqui
+      // Exemplo: colocar o resultado da análise aqui
+      document.getElementById("conteudoAnalise").innerText = "Análise finalizada.";
     } catch (error) {
       console.error(error);
     } finally {
@@ -152,10 +169,11 @@
     spinner.classList.remove("hidden");
 
     try {
-      // Aqui o código para enviar a pergunta (simulação com timeout)
+      // Coloque aqui a lógica real para enviar a pergunta
       await new Promise(resolve => setTimeout(resolve, 3000));
 
-      // Após sucesso, você coloca o código que trata a resposta aqui
+      // Exemplo: colocar a resposta aqui
+      alert("Resposta da IA recebida.");
     } catch (error) {
       console.error(error);
     } finally {
@@ -168,10 +186,7 @@
   document.getElementById("btnPerguntar").addEventListener("click", perguntarIA);
 </script>
 
-
-
-        
-        <!-- Aqui será inserido o gráfico dinamicamente -->
+<!-- Aqui será inserido o gráfico dinamicamente -->
 
 <!-- Painel Personalização Gráfico -->
 <div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin:0; width:100%;">
@@ -230,6 +245,10 @@
 
   </div>
 </div>
+
+</body>
+</html>
+
 
 
 
