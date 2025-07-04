@@ -142,60 +142,63 @@
 </div>
 
 <script>
+  // Função para enviar a análise
   async function enviarAnaliseCompleta() {
     const btn = document.getElementById("btnEnviarAnalise");
     const spinner = document.getElementById("spinner-enviar");
     const conteudoAnalise = document.getElementById("conteudoAnalise");
 
-    // Habilitar a animação de carregamento
+    // Exibir o spinner e desabilitar o botão
     spinner.classList.remove("hidden");
     btn.disabled = true;
 
     try {
-      // Coloque aqui a lógica real para enviar a análise
-      await new Promise(resolve => setTimeout(resolve, 3000)); // Simula o envio da análise
+      // Simula o envio da análise
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-      // Exemplo: colocar o resultado da análise aqui
+      // Exibe o conteúdo da análise
       conteudoAnalise.innerText = "Análise finalizada.";
     } catch (error) {
       console.error(error);
     } finally {
-      // Após o término da análise, a animação desaparece
+      // Esconde o spinner e reabilita o botão
       spinner.classList.add("hidden");
       btn.disabled = false;
     }
   }
 
+  // Função para perguntar para o agente IA
   async function perguntarIA() {
     const btn = document.getElementById("btnPerguntar");
     const spinner = document.getElementById("spinner-perguntar");
 
-    // Habilitar a animação de carregamento
+    // Exibir o spinner e desabilitar o botão
     spinner.classList.remove("hidden");
     btn.disabled = true;
 
     try {
-      // Coloque aqui a lógica real para enviar a pergunta
-      await new Promise(resolve => setTimeout(resolve, 3000)); // Simula a resposta da IA
+      // Simula o envio da pergunta ao agente IA
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-      // Exemplo: colocar a resposta da IA aqui
+      // Exibe a resposta da IA
       alert("Resposta da IA recebida.");
     } catch (error) {
       console.error(error);
     } finally {
-      // Após a resposta, a animação desaparece
+      // Esconde o spinner e reabilita o botão
       spinner.classList.add("hidden");
       btn.disabled = false;
     }
   }
 
-  // Vincula as funções aos botões
+  // Adicionando eventos aos botões
   document.getElementById("btnEnviarAnalise").addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar").addEventListener("click", perguntarIA);
 </script>
 
 </body>
 </html>
+
 
 
 
