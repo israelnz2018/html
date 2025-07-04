@@ -139,18 +139,21 @@
   </div>
 </div>
 
-<script>
+document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("togglePersonalizacao");
   const opcoes = document.getElementById("opcoesPersonalizacao");
   const aviso = document.getElementById("avisoPersonalizacao");
 
-  toggleBtn.onclick = () => {
-    const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
-    opcoes.style.display = estaFechado ? "grid" : "none";
-    aviso.style.display = estaFechado ? "block" : "none";
-    toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
-  };
-</script>
+  if (toggleBtn && opcoes && aviso) {
+    toggleBtn.onclick = () => {
+      const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
+      opcoes.style.display = estaFechado ? "grid" : "none";
+      aviso.style.display = estaFechado ? "block" : "none";
+      toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
+    };
+  }
+});
+
 
 
 
