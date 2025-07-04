@@ -409,3 +409,31 @@ async function enviarPersonalizacao() {
   }
 }
 
+
+const toggleBtn = document.getElementById("togglePersonalizacao");
+const painel = document.getElementById("painelPersonalizacao");
+const opcoes = document.getElementById("opcoesPersonalizacao");
+
+if (toggleBtn && painel && opcoes) {
+  painel.style.display = "block";
+  opcoes.style.display = "none";
+  toggleBtn.innerText = "Mostrar Personalização ▼";
+
+  toggleBtn.addEventListener("click", () => {
+    const estaVisivel = opcoes.style.display !== "none";
+    opcoes.style.display = estaVisivel ? "none" : "grid";
+    toggleBtn.innerText = estaVisivel
+      ? "Mostrar Personalização ▼"
+      : "Ocultar Personalização ▲";
+  });
+}
+
+// ✅ Torna a função enviarPersonalizacao global
+window.enviarPersonalizacao = enviarPersonalizacao;
+
+// 🔥 Registrar evento no botão de aplicar personalização
+document.addEventListener("click", function(e) {
+  if (e.target && e.target.id === "btnAplicarPersonalizacao") {
+    enviarPersonalizacao();
+  }
+});
