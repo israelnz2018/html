@@ -272,6 +272,19 @@ function atualizarBoxPersonalizacao(info_grafico) {
       el.parentElement.style.display = "none";  // Oculta
     }
   });
+
+  // ✅ 🔧 Adiciona comentário informativo no final do painel
+  const comentarioId = "comentarioCamposPermitidos";
+  let comentario = document.getElementById(comentarioId);
+
+  if (!comentario) {
+    comentario = document.createElement("p");
+    comentario.id = comentarioId;
+    comentario.className = "text-xs text-gray-500 mt-2";
+    painel.appendChild(comentario);
+  }
+
+  comentario.innerHTML = `ℹ️ <strong>Campos personalizáveis para ${ferramentaAtual}:</strong> ${camposPermitidos.join(", ") || "Nenhum"}`;
 }
 
 
