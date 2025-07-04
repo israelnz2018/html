@@ -176,6 +176,13 @@ async function enviarAnaliseCompleta() {
         containerGrafico.prepend(imgGrafico);
 
         document.getElementById('painelPersonalizacao').style.display = 'block';
+        const painelPersonalizacao = document.getElementById('painelPersonalizacao');
+        if (painelPersonalizacao) {
+          painelPersonalizacao.style.display = 'block';
+        } else {
+          console.log("Elemento 'painelPersonalizacao' não encontrado.");
+        }
+
 
         const info = json.info_grafico || {};
         ultimoGraficoInfo = {
