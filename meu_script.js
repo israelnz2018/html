@@ -312,9 +312,11 @@ function inicializarPersonalizacao() {
   const painel = document.getElementById("painelPersonalizacao");
   const opcoes = document.getElementById("opcoesPersonalizacao");
   const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
+  const aviso = document.getElementById("avisoPersonalizacao");
 
   if (painel) painel.style.display = "block";
   if (opcoes) opcoes.style.display = "none";
+  if (aviso) aviso.style.display = "none";
 
   if (toggleBtn && opcoes) {
     toggleBtn.innerText = "Mostrar Personalização ▼";
@@ -322,6 +324,9 @@ function inicializarPersonalizacao() {
       const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
       opcoes.style.display = estaFechado ? "grid" : "none";
       toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
+
+      // Controle do aviso
+      if (aviso) aviso.style.display = estaFechado ? "block" : "none";
     };
   }
 
@@ -330,5 +335,6 @@ function inicializarPersonalizacao() {
     btnAplicar.addEventListener("click", enviarPersonalizacao);
   }
 }
+
 
 
