@@ -82,7 +82,7 @@
         <!-- Aqui será inserido o gráfico dinamicamente -->
 
 <!-- Painel Personalização Gráfico -->
-<div id="painelPersonalizacao" style="display:block; border:1px solid #ccc; padding:10px; margin:0; width:100%;">
+<div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin:0; width:100%;">
   <button id="togglePersonalizacao" style="font-weight:bold; font-size:0.9rem; padding:4px 8px; margin-bottom:10px;">
     Personalizar Gráfico ▼
   </button>
@@ -95,9 +95,7 @@
       <input type="text" id="tituloGrafico" placeholder="Título do gráfico" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
     </div>
 
-    
-
- <!-- Segunda linha: Título Eixo Y | Título Eixo X (50% cada) -->
+    <!-- Segunda linha: Título Eixo Y | Título Eixo X (50% cada) -->
     <div class="col-span-3 grid grid-cols-2 gap-2">
       <div>
         <label for="tituloEixoY">Título Eixo Y</label>
@@ -109,7 +107,6 @@
         <input type="text" id="tituloEixoX" placeholder="Eixo X" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
       </div>
     </div>
-
 
     <!-- Terceira linha: Cor do Gráfico | Tamanho Fonte | Inclinação X -->
     <div>
