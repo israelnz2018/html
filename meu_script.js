@@ -330,14 +330,19 @@ function inicializarPersonalizacao() {
   if (opcoes) opcoes.style.display = "none";
 
   if (toggleBtn && opcoes) {
-    toggleBtn.innerText = "Mostrar Personalização ▼";
-    toggleBtn.addEventListener("click", () => {
+    // 🔧 Remove listeners antigos antes de adicionar novamente
+    const novoBtn = toggleBtn.cloneNode(true);
+    toggleBtn.parentNode.replaceChild(novoBtn, toggleBtn);
+
+    novoBtn.innerText = "Mostrar Personalização ▼";
+    novoBtn.addEventListener("click", () => {
       const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
       opcoes.style.display = estaFechado ? "grid" : "none";
-      toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
+      novoBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
     });
   }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   inicializarEventos();
