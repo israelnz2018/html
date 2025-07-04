@@ -364,6 +364,8 @@ async function enviarPersonalizacao() {
     const json = await resposta.json();
     console.log("✅ Resposta do backend (personalização):", json);
 
+    atualizarBoxPersonalizacao(json.info_grafico);
+
     const containerGrafico = document.getElementById("conteudoGrafico");
 
     // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
