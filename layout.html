@@ -145,15 +145,17 @@
   async function enviarAnaliseCompleta() {
     const btn = document.getElementById("btnEnviarAnalise");
     const spinner = document.getElementById("spinner-enviar");
+    const conteudoAnalise = document.getElementById("conteudoAnalise");
+
     btn.disabled = true;
     spinner.classList.remove("hidden");
 
     try {
       // Coloque aqui a lógica real para enviar a análise
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Simula o envio da análise
 
       // Exemplo: colocar o resultado da análise aqui
-      document.getElementById("conteudoAnalise").innerText = "Análise finalizada.";
+      conteudoAnalise.innerText = "Análise finalizada.";
     } catch (error) {
       console.error(error);
     } finally {
@@ -165,14 +167,15 @@
   async function perguntarIA() {
     const btn = document.getElementById("btnPerguntar");
     const spinner = document.getElementById("spinner-perguntar");
+
     btn.disabled = true;
     spinner.classList.remove("hidden");
 
     try {
       // Coloque aqui a lógica real para enviar a pergunta
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Simula a resposta da IA
 
-      // Exemplo: colocar a resposta aqui
+      // Exemplo: colocar a resposta da IA aqui
       alert("Resposta da IA recebida.");
     } catch (error) {
       console.error(error);
