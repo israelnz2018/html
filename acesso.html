@@ -1,23 +1,3 @@
-<!-- ✅ Coloque este CSS no <head> do seu HTML -->
-<style>
-.spinner {
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #3498db;
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  animation: spin 0.8s linear infinite;
-  vertical-align: middle;
-  margin-right: 5px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>
-
 <div id="login-box" style="
   max-width: 400px;
   margin: 60px auto;
@@ -43,6 +23,12 @@
       style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
       Entrar
     </button>
+
+    <!-- Spinner Gatinho -->
+    <div id="spinner-login" style="display:none; margin-top:20px;">
+      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Carregando..." style="width:80px; height:auto;">
+      <p style="font-size:14px; color:#555;">Carregando, por favor aguarde...</p>
+    </div>
 
     <div style="margin-top: 16px;">
       <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
@@ -85,6 +71,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
+  // Configuração do Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
     authDomain: "senha-92ce1.firebaseapp.com",
@@ -96,6 +83,7 @@
   };
   firebase.initializeApp(firebaseConfig);
 
+  // Funções de exibição
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
     document.getElementById("primeiroAcesso").style.display = "block";
@@ -105,6 +93,7 @@
     document.getElementById("loginSection").style.display = "block";
   }
 
+  // Primeiro acesso – troca de senha
   async function trocarSenha() {
     const email = document.getElementById("email").value.trim();
     const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
@@ -131,13 +120,13 @@
     }
   }
 
-  // ✅ Função de login atualizada com spinner
+  // Login normal com spinner
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
     const senha = document.getElementById('senha-login').value.trim();
     const msg = document.getElementById('mensagem-login');
-    const btn = document.getElementById('botao-login');
-    const textoOriginal = btn.innerHTML;
+    const spinner = document.getElementById('spinner-login');
+    const botao = document.getElementById('botao-login');
 
     if (!email || !senha) {
       msg.style.color = "red";
@@ -145,10 +134,13 @@
       return;
     }
 
-    btn.innerHTML = '<span class="spinner"></span> Entrando...';
-    btn.disabled = true;
     msg.style.color = "#444";
     msg.textContent = "🔄 Verificando...";
+
+    // 👉 Mostra o spinner e desativa o botão
+    spinner.style.display = "block";
+    botao.disabled = true;
+    botao.style.opacity = "0.6";
 
     try {
       const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
@@ -181,11 +173,14 @@
       msg.style.color = "red";
       msg.textContent = "❌ Erro ao fazer login: " + error.message;
     } finally {
-      btn.innerHTML = textoOriginal;
-      btn.disabled = false;
+      // 👉 Esconde o spinner e reativa o botão
+      spinner.style.display = "none";
+      botao.disabled = false;
+      botao.style.opacity = "1";
     }
   }
 
+  // Recuperar senha
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
@@ -208,5 +203,6 @@
     }).catch((error) => console.error("Erro ao deslogar:", error));
   }
 </script>
+
 
 
