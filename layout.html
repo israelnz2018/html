@@ -27,7 +27,7 @@
       display: none;
     }
 
-    /* Animação pulse para botão Perguntar (REMOVIDO) */
+    /* Animação pulse para botão Perguntar (mantida) */
     .pulse-loader {
       display: none;
     }
@@ -54,7 +54,7 @@
       vertical-align: middle;
     }
 
-    /* Nova animação para o botão */
+    /* Nova animação para ambos os botões */
     .pulse-animate {
       animation: pulse 1s infinite ease-in-out;
     }
@@ -139,13 +139,10 @@
     iniciarAnimacaoBotao("btnEnviarAnalise");
   });
 
-  // Removido a animação do botão Perguntar
   document.getElementById("btnPerguntar").addEventListener("click", () => {
-    // Nenhuma animação para o botão Perguntar
+    iniciarAnimacaoBotao("btnPerguntar");
   });
 </script>
 
 </body>
 </html>
-
-
