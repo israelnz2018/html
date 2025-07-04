@@ -1,3 +1,23 @@
+<!-- ✅ Coloque este CSS no <head> do seu HTML -->
+<style>
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
 <div id="login-box" style="
   max-width: 400px;
   margin: 60px auto;
@@ -65,7 +85,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
-  // Configuração do Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
     authDomain: "senha-92ce1.firebaseapp.com",
@@ -77,7 +96,6 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  // Funções de exibição
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
     document.getElementById("primeiroAcesso").style.display = "block";
@@ -87,21 +105,6 @@
     document.getElementById("loginSection").style.display = "block";
   }
 
-  // 🔧 Função de cadastro com updateProfile para salvar o nome
-  async function cadastrarAluno(email, senha, nomeCompleto) {
-    try {
-      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
-      const user = userCredential.user;
-      await user.updateProfile({
-        displayName: nomeCompleto
-      });
-      console.log("✅ Cadastro concluído com nome:", nomeCompleto);
-    } catch (error) {
-      console.error("❌ Erro no cadastro:", error);
-    }
-  }
-
-  // Primeiro acesso – troca de senha
   async function trocarSenha() {
     const email = document.getElementById("email").value.trim();
     const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
@@ -128,56 +131,61 @@
     }
   }
 
-  // Login normal
-async function fazerLogin() {
-  const email = document.getElementById('email-login').value.trim();
-  const senha = document.getElementById('senha-login').value.trim();
-  const msg = document.getElementById('mensagem-login');
+  // ✅ Função de login atualizada com spinner
+  async function fazerLogin() {
+    const email = document.getElementById('email-login').value.trim();
+    const senha = document.getElementById('senha-login').value.trim();
+    const msg = document.getElementById('mensagem-login');
+    const btn = document.getElementById('botao-login');
+    const textoOriginal = btn.innerHTML;
 
-  if (!email || !senha) {
-    msg.style.color = "red";
-    msg.textContent = "❌ Preencha todos os campos.";
-    return;
-  }
-
-  msg.style.color = "#444";
-  msg.textContent = "🔄 Verificando...";
-
-  try {
-    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
-    const user = userCredential.user;
-    msg.style.color = "green";
-    msg.textContent = `✅ Bem-vindo, ${user.email}!`;
-
-    document.getElementById("login-box").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
-
-    let displayName = user.displayName;
-    if (!displayName || displayName.trim() === "") {
-      displayName = user.email.split("@")[0]; // usa o início do email como nome
+    if (!email || !senha) {
+      msg.style.color = "red";
+      msg.textContent = "❌ Preencha todos os campos.";
+      return;
     }
 
-    const nomes = displayName.split(" ");
-    const iniciais = nomes[0].charAt(0).toUpperCase() + (nomes[1] ? nomes[1].charAt(0).toUpperCase() : "");
+    btn.innerHTML = '<span class="spinner"></span> Entrando...';
+    btn.disabled = true;
+    msg.style.color = "#444";
+    msg.textContent = "🔄 Verificando...";
 
-    document.getElementById("usuario-info").innerHTML = `
-      <div class="flex items-center space-x-2">
-        <span class="text-sm font-medium">Olá, ${displayName}</span>
-        <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
-          Deslogar
-        </button>
-      </div>
-    `;
-  } catch (error) {
-    console.error("Erro no login:", error);
-    msg.style.color = "red";
-    msg.textContent = "❌ Erro ao fazer login: " + error.message;
+    try {
+      const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+      const user = userCredential.user;
+      msg.style.color = "green";
+      msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
+      let displayName = user.displayName;
+      if (!displayName || displayName.trim() === "") {
+        displayName = user.email.split("@")[0];
+      }
+
+      const nomes = displayName.split(" ");
+      const iniciais = nomes[0].charAt(0).toUpperCase() + (nomes[1] ? nomes[1].charAt(0).toUpperCase() : "");
+
+      document.getElementById("usuario-info").innerHTML = `
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-medium">Olá, ${displayName}</span>
+          <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+            Deslogar
+          </button>
+        </div>
+      `;
+    } catch (error) {
+      console.error("Erro no login:", error);
+      msg.style.color = "red";
+      msg.textContent = "❌ Erro ao fazer login: " + error.message;
+    } finally {
+      btn.innerHTML = textoOriginal;
+      btn.disabled = false;
+    }
   }
-}
 
-
-  // Recuperar senha
   function recuperarSenha() {
     const email = prompt("Digite seu e-mail para recuperar a senha:");
     if (!email) return;
@@ -200,4 +208,5 @@ async function fazerLogin() {
     }).catch((error) => console.error("Erro ao deslogar:", error));
   }
 </script>
+
 
