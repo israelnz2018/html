@@ -147,8 +147,9 @@
     const spinner = document.getElementById("spinner-enviar");
     const conteudoAnalise = document.getElementById("conteudoAnalise");
 
-    btn.disabled = true;
+    // Habilitar a animação de carregamento
     spinner.classList.remove("hidden");
+    btn.disabled = true;
 
     try {
       // Coloque aqui a lógica real para enviar a análise
@@ -159,6 +160,7 @@
     } catch (error) {
       console.error(error);
     } finally {
+      // Após o término da análise, a animação desaparece
       spinner.classList.add("hidden");
       btn.disabled = false;
     }
@@ -168,8 +170,9 @@
     const btn = document.getElementById("btnPerguntar");
     const spinner = document.getElementById("spinner-perguntar");
 
-    btn.disabled = true;
+    // Habilitar a animação de carregamento
     spinner.classList.remove("hidden");
+    btn.disabled = true;
 
     try {
       // Coloque aqui a lógica real para enviar a pergunta
@@ -180,11 +183,13 @@
     } catch (error) {
       console.error(error);
     } finally {
+      // Após a resposta, a animação desaparece
       spinner.classList.add("hidden");
       btn.disabled = false;
     }
   }
 
+  // Vincula as funções aos botões
   document.getElementById("btnEnviarAnalise").addEventListener("click", enviarAnaliseCompleta);
   document.getElementById("btnPerguntar").addEventListener("click", perguntarIA);
 </script>
