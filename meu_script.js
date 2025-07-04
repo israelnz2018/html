@@ -224,8 +224,6 @@ function atualizarBoxPersonalizacao(info_grafico) {
     return;
   }
 
-  // 🔧 Torna o painel visível após o primeiro gráfico gerado
-  painel.style.display = "block";
 
   // 🔧 Ajusta ferramentaAtual apenas se ainda não estiver definida
   if (!ferramentaAtual && info_grafico?.titulo_grafico) {
