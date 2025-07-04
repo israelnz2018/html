@@ -204,9 +204,6 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 
-  atualizarBoxPersonalizacao(ferramentaAtual);
-}
-
 function atualizarBoxPersonalizacao(info_grafico) {
   const painel = document.getElementById("painelPersonalizacao");
   if (!painel) {
@@ -218,28 +215,17 @@ function atualizarBoxPersonalizacao(info_grafico) {
     ferramentaAtual = info_grafico.titulo_grafico;
   }
 
-  const CONFIG_PERSONALIZACAO = {
-    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],
-  };
-
   const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
-  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || todosCampos;
 
+  // 🔧 Mostra todos os campos sempre (versão simplificada até configurar filtros específicos)
   todosCampos.forEach(idCampo => {
     const el = document.getElementById(idCampo);
-    if (!el) return;
-
-    let nome = "";
-    if (idCampo.includes("cor")) nome = "cor";
-    else if (idCampo.includes("tituloGrafico")) nome = "titulo_grafico";
-    else if (idCampo.includes("tituloEixoX")) nome = "titulo_x";
-    else if (idCampo.includes("tituloEixoY")) nome = "titulo_y";
-    else if (idCampo.includes("tamanhoFonte")) nome = "tamanho_fonte";
-    else if (idCampo.includes("inclinacaoX")) nome = "inclinacao_x";
-
-    el.parentElement.style.display = camposPermitidos.includes(nome) ? "" : "none";
+    if (el) {
+      el.parentElement.style.display = "";
+    }
   });
 }
+
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
