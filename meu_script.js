@@ -364,12 +364,6 @@ async function enviarPersonalizacao() {
     const json = await resposta.json();
     console.log("✅ Resposta do backend (personalização):", json);
 
-    // ✅ Atualiza campos visíveis conforme ferramenta atual
-    if (ultimoGraficoInfo.grafico) {
-      atualizarBoxPersonalizacao(ultimoGraficoInfo.grafico);
-    }
-
-
     const containerGrafico = document.getElementById("conteudoGrafico");
 
     // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
@@ -401,6 +395,11 @@ async function enviarPersonalizacao() {
         inclinacao_x: json.info_grafico?.inclinacao_x || inclinacaoX
       };
 
+      // ✅ Atualiza campos visíveis conforme ferramenta atual
+      if (ultimoGraficoInfo.grafico) {
+        atualizarBoxPersonalizacao(ultimoGraficoInfo.grafico.replace(" Personalizado", ""));
+      }
+
       // ✅ Preenche o input Título do Gráfico com o valor atualizado
       document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
 
@@ -413,11 +412,6 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
-
-
-
-
-
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
