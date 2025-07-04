@@ -186,78 +186,7 @@
   document.getElementById("btnPerguntar").addEventListener("click", perguntarIA);
 </script>
 
-<!-- Aqui será inserido o gráfico dinamicamente -->
-
-<!-- Painel Personalização Gráfico -->
-<div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin:0; width:100%;">
-  <button id="togglePersonalizacao" style="font-weight:bold; font-size:0.9rem; padding:4px 8px; margin-bottom:10px;">
-    Personalizar Gráfico ▼
-  </button>
-
-  <div id="opcoesPersonalizacao" style="display:none; grid-template-columns: repeat(3, 1fr); gap:10px; width:100%;" class="grid">
-
-    <!-- Primeira linha: Título do Gráfico ocupando 100% -->
-    <div class="col-span-3">
-      <label for="tituloGrafico">Título do Gráfico</label>
-      <input type="text" id="tituloGrafico" placeholder="Título do gráfico" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-    </div>
-
-    <!-- Segunda linha: Título Eixo Y | Título Eixo X (50% cada) -->
-    <div class="col-span-3 grid grid-cols-2 gap-2">
-      <div>
-        <label for="tituloEixoY">Título Eixo Y</label>
-        <input type="text" id="tituloEixoY" placeholder="Eixo Y" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-      </div>
-
-      <div>
-        <label for="tituloEixoX">Título Eixo X</label>
-        <input type="text" id="tituloEixoX" placeholder="Eixo X" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-      </div>
-    </div>
-
-    <!-- Terceira linha: Cor do Gráfico | Tamanho Fonte | Inclinação X -->
-    <div>
-      <label for="corGrafico">Cor do Gráfico</label>
-      <input type="color" id="corGrafico" value="#000000" style="width:100%;">
-    </div>
-
-    <div>
-      <label for="tamanhoFonte">Tamanho Fonte</label>
-      <input type="number" id="tamanhoFonte" value="12" min="8" max="30" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-    </div>
-
-    <div>
-      <label for="inclinacaoX">Inclinação Eixo X</label>
-      <input type="number" id="inclinacaoX" value="0" min="-60" max="60" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-    </div>
-
-    <!-- Botão Aplicar Alterações ocupando 100% -->
-    <div class="col-span-3">
-      <button id="btnAplicarPersonalizacao" style="background-color:green; color:white; padding:6px 12px; border-radius:4px; width:auto;">
-        Aplicar Alterações
-      </button>
-    </div>
-
-    <!-- Frase de atenção -->
-    <div id="avisoPersonalizacao" class="col-span-3" style="display:none; color:red; font-size:0.85rem;">
-      Atenção: Algumas opções de personalização não são aplicáveis em alguns gráficos e subgrupos.
-    </div>
-
-  </div>
-</div>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
 
 
