@@ -126,32 +126,29 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Função para iniciar animação no botão
-    function iniciarAnimacaoBotao(btnId, animacaoClass) {
-      const botao = document.getElementById(btnId);
-      if (botao) {
-        botao.classList.add(animacaoClass); // Inicia a animação
-  
-        // Após 2 segundos, parar a animação
-        setTimeout(() => {
-          botao.classList.remove(animacaoClass);
-        }, 2000);
-      }
-    }
+  // Função para iniciar animação no botão e parar após 2 segundos
+  function iniciarAnimacaoBotao(btnId) {
+    const botao = document.getElementById(btnId);
+    botao.classList.add("pulse-animate"); // Inicia a animação
 
-    // Adicionando eventos aos botões
-    document.getElementById("btnEnviarAnalise").addEventListener("click", () => {
-      iniciarAnimacaoBotao("btnEnviarAnalise", "pulse-animate");
-    });
+    // Após 2 segundos, parar a animação
+    setTimeout(() => {
+      botao.classList.remove("pulse-animate");
+    }, 2000);
+  }
 
-    document.getElementById("btnPerguntar").addEventListener("click", () => {
-      iniciarAnimacaoBotao("btnPerguntar", "pulse-animate");
-    });
+  // Adicionando eventos aos botões
+  document.getElementById("btnEnviarAnalise").addEventListener("click", () => {
+    iniciarAnimacaoBotao("btnEnviarAnalise");
+  });
+
+  document.getElementById("btnPerguntar").addEventListener("click", () => {
+    iniciarAnimacaoBotao("btnPerguntar");
   });
 </script>
 
 </body>
 </html>
+
 
 
