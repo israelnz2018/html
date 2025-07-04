@@ -22,27 +22,6 @@
     }
     nav ul li.show > ul, nav ul li ul li.show > ul { display: block; }
 
-    /* Spinner bolinhas pulando */
-    .spinner {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .spinner div {
-      width: 8px;
-      height: 8px;
-      margin: 3px;
-      background-color: white;
-      border-radius: 50%;
-      animation: bounce 0.6s infinite alternate;
-    }
-    .spinner div:nth-child(2) { animation-delay: 0.2s; }
-    .spinner div:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      to { transform: translateY(-8px); opacity: 0.7; }
-    }
-
     /* Animação pulse para botão Perguntar */
     .pulse-loader {
       width: 12px;
@@ -73,6 +52,11 @@
     }
     .spinner, #spinner-perguntar {
       vertical-align: middle;
+    }
+
+    /* Nova animação para o botão */
+    .pulse-animate {
+      animation: pulse 1s infinite ease-in-out;
     }
   </style>
 </head>
@@ -142,61 +126,27 @@
 </div>
 
 <script>
-  // Função para enviar a análise
-  async function enviarAnaliseCompleta() {
-    const btn = document.getElementById("btnEnviarAnalise");
-    const spinner = document.getElementById("spinner-enviar");
-    const conteudoAnalise = document.getElementById("conteudoAnalise");
+  // Função para iniciar animação no botão
+  function iniciarAnimacaoBotao(btnId, animacaoClass) {
+    const botao = document.getElementById(btnId);
+    botao.classList.add(animacaoClass); // Inicia a animação
 
-    // Exibir o spinner e desabilitar o botão
-    spinner.classList.remove("hidden");
-    btn.disabled = true;
-
-    try {
-      // Simula o envio da análise
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
-      // Exibe o conteúdo da análise
-      conteudoAnalise.innerText = "Análise finalizada.";
-    } catch (error) {
-      console.error(error);
-    } finally {
-      // Esconde o spinner e reabilita o botão
-      spinner.classList.add("hidden");
-      btn.disabled = false;
-    }
-  }
-
-  // Função para perguntar para o agente IA
-  async function perguntarIA() {
-    const btn = document.getElementById("btnPerguntar");
-    const spinner = document.getElementById("spinner-perguntar");
-
-    // Exibir o spinner e desabilitar o botão
-    spinner.classList.remove("hidden");
-    btn.disabled = true;
-
-    try {
-      // Simula o envio da pergunta ao agente IA
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
-      // Exibe a resposta da IA
-      alert("Resposta da IA recebida.");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      // Esconde o spinner e reabilita o botão
-      spinner.classList.add("hidden");
-      btn.disabled = false;
-    }
+    // Após 2 segundos, parar a animação
+    setTimeout(() => {
+      botao.classList.remove(animacaoClass);
+    }, 2000);
   }
 
   // Adicionando eventos aos botões
-  document.getElementById("btnEnviarAnalise").addEventListener("click", enviarAnaliseCompleta);
-  document.getElementById("btnPerguntar").addEventListener("click", perguntarIA);
+  document.getElementById("btnEnviarAnalise").addEventListener("click", () => {
+    iniciarAnimacaoBotao("btnEnviarAnalise", "pulse-animate");
+  });
+  
+  document.getElementById("btnPerguntar").addEventListener("click", () => {
+    iniciarAnimacaoBotao("btnPerguntar", "pulse-animate");
+  });
 </script>
 
 </body>
 </html>
-
 
