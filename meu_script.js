@@ -244,10 +244,11 @@ function atualizarBoxPersonalizacao(info_grafico) {
   };
 
   // 🔧 Campos de personalização disponíveis no painel
-  const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX", "inclinacaoY", "espessuraLinha"];
+  const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
 
   // 🔧 Obter campos permitidos para esta ferramenta
   const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || [];
+  console.log("🔧 Campos permitidos:", camposPermitidos);
 
   // 🔧 Loop: mostra ou esconde conforme permitido
   todosCampos.forEach(idCampo => {
@@ -262,7 +263,8 @@ function atualizarBoxPersonalizacao(info_grafico) {
     else if (idCampo.includes("tituloEixoY")) nome = "titulo_y";
     else if (idCampo.includes("tamanhoFonte")) nome = "tamanho_fonte";
     else if (idCampo.includes("inclinacaoX")) nome = "inclinacao_x";
-  
+
+    console.log(`🔍 Campo: ${nome} | Exibir? ${camposPermitidos.includes(nome)}`);
 
     if (camposPermitidos.includes(nome)) {
       el.parentElement.style.display = "";  // Mostra
@@ -271,6 +273,7 @@ function atualizarBoxPersonalizacao(info_grafico) {
     }
   });
 }
+
 
 
 
