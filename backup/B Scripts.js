@@ -1,6 +1,6 @@
 let workbookGlobal = null;
 let ferramentaAtual = "";
-let ultimoGraficoInfo = null;
+let ultimoGraficoInfo = null; 
 
 function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
@@ -212,12 +212,87 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(input);
     }
   });
+
+  // ✅ 🔥 Atualiza os campos de personalização conforme a ferramenta selecionada
+  atualizarBoxPersonalizacao(ferramentaAtual);
 }
+
+function atualizarBoxPersonalizacao(info_grafico) {
+  const painel = document.getElementById("painelPersonalizacao");
+  if (!painel) {
+    console.error("❌ painelPersonalizacao não encontrado.");
+    return;
+  }
+
+
+  // 🔧 Ajusta ferramentaAtual apenas se ainda não estiver definida
+  if (!ferramentaAtual && info_grafico?.titulo_grafico) {
+    ferramentaAtual = info_grafico.titulo_grafico;
+  }
+
+  console.log("🔧 ferramentaAtual definida como:", ferramentaAtual);
+
+  // 🔧 Configuração geral para personalização de qualquer gráfico (mensagem padrão)
+  const CONFIG_PERSONALIZACAO = {
+    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],  // exemplo
+    // 🔧 Adicione aqui outros gráficos se quiser personalizações específicas
+  };
+
+  // 🔧 Campos de personalização disponíveis no painel
+  const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
+
+  // 🔧 Obter campos permitidos para esta ferramenta
+  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || todosCampos; // 🔧 Se não houver configuração específica, permite todos
+  console.log("🔧 Campos permitidos:", camposPermitidos);
+
+  // 🔧 Loop: mostra ou esconde conforme permitido
+  todosCampos.forEach(idCampo => {
+    const el = document.getElementById(idCampo);
+    if (!el) return;
+
+    // Mapeamento para compatibilizar ids com CONFIG_PERSONALIZACAO
+    let nome = "";
+    if (idCampo.includes("cor")) nome = "cor";
+    else if (idCampo.includes("tituloGrafico")) nome = "titulo_grafico";
+    else if (idCampo.includes("tituloEixoX")) nome = "titulo_x";
+    else if (idCampo.includes("tituloEixoY")) nome = "titulo_y";
+    else if (idCampo.includes("tamanhoFonte")) nome = "tamanho_fonte";
+    else if (idCampo.includes("inclinacaoX")) nome = "inclinacao_x";
+
+    console.log(`🔍 Campo: ${nome} | Exibir? ${camposPermitidos.includes(nome)}`);
+
+    if (camposPermitidos.includes(nome)) {
+      el.parentElement.style.display = "";  // Mostra
+    } else {
+      el.parentElement.style.display = "none";  // Oculta
+    }
+  });
+
+  // ✅ 🔧 Adiciona comentário informativo com mensagem padrão
+  const comentarioId = "comentarioCamposPermitidos";
+  let comentario = document.getElementById(comentarioId);
+
+  if (!comentario) {
+    comentario = document.createElement("div");
+    comentario.id = comentarioId;
+    comentario.className = "text-xs text-gray-500 mt-4";
+    painel.appendChild(comentario);
+  }
+
+  comentario.innerHTML = `
+    <strong>⚠️ Atenção:</strong> Dependendo do gráfico e do subgrupo escolhido, nem todos os campos de personalização serão aplicáveis.
+  `;
+}
+
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
   atualizarInterface();
+  atualizarBoxPersonalizacao(ferramentaAtual);
 }
+
+// 🔧 Torna registrarFerramenta global
+window.registrarFerramenta = registrarFerramenta;
 
 document.addEventListener("DOMContentLoaded", () => {
   inicializarEventos?.();
@@ -232,29 +307,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
-// ✅ Variáveis globais seguras – agora capturando direto dos inputs
-
 async function enviarPersonalizacao() {
   if (!ultimoGraficoInfo) {
     alert("❌ Nenhum gráfico carregado para personalizar.");
     return;
   }
 
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
-  let cor = document.getElementById("corGrafico").value;
-  let tituloX = document.getElementById("tituloEixoX").value;
-  let tituloY = document.getElementById("tituloEixoY").value;
-  let tituloPrincipal = document.getElementById("tituloGrafico").value;
-  let tamanhoFonte = document.getElementById("tamanhoFonte").value;
-  let inclinacaoX = document.getElementById("inclinacaoX").value;
-  let inclinacaoY = document.getElementById("inclinacaoY").value;
-  let espessura = document.getElementById("espessuraLinha").value;
+  const cor = document.getElementById("corGrafico")?.value || "";
+  const tituloX = document.getElementById("tituloEixoX")?.value || "";
+  const tituloY = document.getElementById("tituloEixoY")?.value || "";
+  const tituloGrafico = document.getElementById("tituloGrafico")?.value || "";
+  const tamanhoFonte = document.getElementById("tamanhoFonte")?.value || "";
+  const inclinacaoX = document.getElementById("inclinacaoX")?.value || "";
 
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
-  formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
   formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
+  formData.append("coluna_y", ultimoGraficoInfo.coluna_y || "");
   formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
   formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
   formData.append("field", ultimoGraficoInfo.field || "");
@@ -264,32 +333,31 @@ async function enviarPersonalizacao() {
   formData.append("field_LIE", ultimoGraficoInfo.field_LIE || "");
   formData.append("Data", ultimoGraficoInfo.Data || "");
 
-  // ✅ lista_y e lista_x como string única separada por vírgula
-  formData.append("lista_y",
-    (ultimoGraficoInfo.lista_y && Array.isArray(ultimoGraficoInfo.lista_y))
-      ? ultimoGraficoInfo.lista_y.join(",")
-      : (ultimoGraficoInfo.lista_y || "")
-  );
-  formData.append("lista_x",
-    (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
-      ? ultimoGraficoInfo.lista_x.join(",")
-      : (ultimoGraficoInfo.lista_x || "")
-  );
+  if (ultimoGraficoInfo.lista_y) {
+    if (typeof ultimoGraficoInfo.lista_y === "string") {
+      ultimoGraficoInfo.lista_y = ultimoGraficoInfo.lista_y.split(",");
+    }
+    formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
+  }
 
-  // Parâmetros de personalização
+  if (ultimoGraficoInfo.lista_x) {
+    if (Array.isArray(ultimoGraficoInfo.lista_x)) {
+      formData.append("lista_x", ultimoGraficoInfo.lista_x.join(","));
+    } else {
+      formData.append("lista_x", ultimoGraficoInfo.lista_x || "");
+    }
+  }
+
   formData.append("cor", cor);
   formData.append("titulo_x", tituloX);
   formData.append("titulo_y", tituloY);
-  formData.append("titulo_grafico", tituloPrincipal);
+  formData.append("titulo_grafico", tituloGrafico);
   formData.append("tamanho_fonte", tamanhoFonte);
   formData.append("inclinacao_x", inclinacaoX);
-  formData.append("inclinacao_y", inclinacaoY);
-  formData.append("espessura", espessura);
 
-  // 🔍 DEBUG
   console.log("📤 FormData sendo enviado:");
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ': ' + pair[1]);
+  for (let pair of formData.entries()) {
+    console.log(`${pair[0]}: ${pair[1]}`);
   }
 
   try {
@@ -303,36 +371,39 @@ async function enviarPersonalizacao() {
 
     const containerGrafico = document.getElementById("conteudoGrafico");
 
-    // 🔥 Remove apenas o último gráfico personalizado antes de inserir o novo
+    // 🔥 Remove apenas os gráficos personalizados sem apagar o painel
     const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
-    if (imgsPersonalizados.length > 0) {
-      const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
-      containerGrafico.removeChild(ultimo);
-    }
+    imgsPersonalizados.forEach(img => img.remove());
 
-    // 🔥 Cria o novo gráfico personalizado
     if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
       img.className = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
 
-      // 🔥 Insere o novo gráfico acima do painel de personalização
       const painel = document.getElementById("painelPersonalizacao");
       containerGrafico.insertBefore(img, painel);
 
-      // ✅ Atualiza ultimoGraficoInfo
       ultimoGraficoInfo = {
         ...ultimoGraficoInfo,
-        cor,
-        titulo_x: tituloX,
-        titulo_y: tituloY,
-        titulo_grafico: tituloPrincipal,
-        tamanho_fonte: tamanhoFonte,
-        inclinacao_x: inclinacaoX,
-        inclinacao_y: inclinacaoY,
-        espessura
+        cor: json.info_grafico?.cor || cor,
+        titulo_x: json.info_grafico?.titulo_x || tituloX,
+        titulo_y: json.info_grafico?.titulo_y || tituloY,
+        titulo_grafico: json.info_grafico?.titulo_grafico || tituloGrafico,
+        tamanho_fonte: json.info_grafico?.tamanho_fonte || tamanhoFonte,
+        inclinacao_x: json.info_grafico?.inclinacao_x || inclinacaoX
       };
+
+      if (ultimoGraficoInfo.grafico) {
+        atualizarBoxPersonalizacao(ultimoGraficoInfo.grafico.replace(" Personalizado", ""));
+      }
+
+      document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
+
+      // 🔧 ✅ Reativa o painel e toggle após inserir o novo gráfico
+      if (typeof inicializarPersonalizacao === "function") {
+        inicializarPersonalizacao();
+      }
 
     } else {
       alert("⚠️ Nenhuma imagem retornada do backend.");
@@ -345,23 +416,42 @@ async function enviarPersonalizacao() {
 }
 
 
-const toggleBtn = document.getElementById("togglePersonalizacao");
-const painel = document.getElementById("painelPersonalizacao");
-const opcoes = document.getElementById("opcoesPersonalizacao");
+// 🔧 CONFIGURA O TOGGLE
 
-if (toggleBtn && painel && opcoes) {
-  painel.style.display = "block";
-  opcoes.style.display = "none";
-  toggleBtn.innerText = "Mostrar Personalização ▼";
+function inicializarPersonalizacao() {
+  const toggleBtn = document.getElementById("togglePersonalizacao");
+  const painel = document.getElementById("painelPersonalizacao");
+  const opcoes = document.getElementById("opcoesPersonalizacao");
 
-  toggleBtn.addEventListener("click", () => {
-    const estaVisivel = opcoes.style.display !== "none";
-    opcoes.style.display = estaVisivel ? "none" : "grid";
-    toggleBtn.innerText = estaVisivel
-      ? "Mostrar Personalização ▼"
-      : "Ocultar Personalização ▲";
-  });
+  if (painel) {
+    painel.style.display = "block"; // painel sempre visível
+  }
+
+  if (opcoes) {
+    opcoes.style.display = "none"; // inicia fechado
+  }
+
+  if (toggleBtn && opcoes) {
+    toggleBtn.innerText = "Mostrar Personalização ▼";
+
+    // 🔧 Remove event listeners duplicados antes de adicionar novamente
+    const novoToggleBtn = toggleBtn.cloneNode(true);
+    toggleBtn.parentNode.replaceChild(novoToggleBtn, toggleBtn);
+
+    novoToggleBtn.addEventListener("click", () => {
+      const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
+      opcoes.style.display = estaFechado ? "grid" : "none";
+      novoToggleBtn.innerText = estaFechado
+        ? "Ocultar Personalização ▲"
+        : "Mostrar Personalização ▼";
+    });
+  }
 }
+
+// ✅ Rode a função no carregamento inicial
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarPersonalizacao();
+});
 
 // ✅ Torna a função enviarPersonalizacao global
 window.enviarPersonalizacao = enviarPersonalizacao;
