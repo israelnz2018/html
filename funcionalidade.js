@@ -177,7 +177,6 @@ async function enviarAnaliseCompleta() {
 
         document.getElementById('painelPersonalizacao').style.display = 'block';
 
-        // ✅ Usar info_grafico retornado do backend se existir
         const info = json.info_grafico || {};
         ultimoGraficoInfo = {
           ...info,
@@ -208,13 +207,18 @@ async function enviarAnaliseCompleta() {
           document.getElementById("corGrafico").value = cor;
         }
 
-        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = (info.titulo_grafico !== undefined) ? info.titulo_grafico : "";
-        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = (info.titulo_x !== undefined) ? info.titulo_x : "";
-        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = (info.titulo_y !== undefined) ? info.titulo_y : "";
-        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = (info.tamanho_fonte !== undefined) ? info.tamanho_fonte : "";
-        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = (info.inclinacao_x !== undefined) ? info.inclinacao_x : "";
-        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = (info.inclinacao_y !== undefined) ? info.inclinacao_y : "";
-        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = (info.espessura !== undefined) ? info.espessura : "";
+        if (document.getElementById("tituloGrafico")) document.getElementById("tituloGrafico").value = info.titulo_grafico ?? "";
+        if (document.getElementById("tituloEixoX")) document.getElementById("tituloEixoX").value = info.titulo_x ?? "";
+        if (document.getElementById("tituloEixoY")) document.getElementById("tituloEixoY").value = info.titulo_y ?? "";
+        if (document.getElementById("tamanhoFonte")) document.getElementById("tamanhoFonte").value = info.tamanho_fonte ?? "";
+        if (document.getElementById("inclinacaoX")) document.getElementById("inclinacaoX").value = info.inclinacao_x ?? "";
+        if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = info.inclinacao_y ?? "";
+        if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = info.espessura ?? "";
+
+        // 🔧 ✅ Reativa o toggle e painel após gerar novo gráfico
+        if (typeof inicializarPersonalizacao === "function") {
+          inicializarPersonalizacao();
+        }
       }
     }
 
@@ -223,6 +227,7 @@ async function enviarAnaliseCompleta() {
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 
