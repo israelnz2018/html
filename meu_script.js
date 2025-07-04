@@ -325,18 +325,7 @@ async function enviarPersonalizacao() {
     return;
   }
 
-  // ✅ Garante lista_y preenchida corretamente (boxplot usa lista_y, não coluna_y)
-  if (!ultimoGraficoInfo.lista_y || ultimoGraficoInfo.lista_y.length === 0) {
-    alert("❌ Nenhuma coluna Y definida em lista_y para personalizar o boxplot.");
-    return;
-  }
-
-  // 🔧 Se lista_y for string, transforma em array
-  if (typeof ultimoGraficoInfo.lista_y === "string") {
-    ultimoGraficoInfo.lista_y = ultimoGraficoInfo.lista_y.split(",");
-  }
-
-  // 🔧 CAPTURA valores diretamente dos inputs antes de enviar
+  // ✅ CAPTURA valores diretamente dos inputs antes de enviar
   const cor = document.getElementById("corGrafico")?.value || "";
   const tituloX = document.getElementById("tituloEixoX")?.value || "";
   const tituloY = document.getElementById("tituloEixoY")?.value || "";
@@ -347,6 +336,7 @@ async function enviarPersonalizacao() {
   const formData = new FormData();
   formData.append("grafico", `${ultimoGraficoInfo.grafico} Personalizado`);
   formData.append("coluna_x", ultimoGraficoInfo.coluna_x || "");
+  formData.append("coluna_y", ultimoGraficoInfo.coluna_y || ""); // ✅ ADICIONADO para gráficos como histograma
   formData.append("coluna_z", ultimoGraficoInfo.coluna_z || "");
   formData.append("subgrupo", ultimoGraficoInfo.subgrupo || "");
   formData.append("field", ultimoGraficoInfo.field || "");
@@ -357,12 +347,20 @@ async function enviarPersonalizacao() {
   formData.append("Data", ultimoGraficoInfo.Data || "");
 
   // ✅ lista_y e lista_x como string única separada por vírgula
-  formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
-  formData.append("lista_x",
-    (ultimoGraficoInfo.lista_x && Array.isArray(ultimoGraficoInfo.lista_x))
-      ? ultimoGraficoInfo.lista_x.join(",")
-      : (ultimoGraficoInfo.lista_x || "")
-  );
+  if (ultimoGraficoInfo.lista_y) {
+    if (typeof ultimoGraficoInfo.lista_y === "string") {
+      ultimoGraficoInfo.lista_y = ultimoGraficoInfo.lista_y.split(",");
+    }
+    formData.append("lista_y", ultimoGraficoInfo.lista_y.join(","));
+  }
+
+  if (ultimoGraficoInfo.lista_x) {
+    if (Array.isArray(ultimoGraficoInfo.lista_x)) {
+      formData.append("lista_x", ultimoGraficoInfo.lista_x.join(","));
+    } else {
+      formData.append("lista_x", ultimoGraficoInfo.lista_x || "");
+    }
+  }
 
   // Parâmetros de personalização
   formData.append("cor", cor);
@@ -435,6 +433,7 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
 
 
 const toggleBtn = document.getElementById("togglePersonalizacao");
