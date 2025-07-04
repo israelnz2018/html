@@ -466,4 +466,16 @@ document.addEventListener("click", function(e) {
   }
 });
 
+<style>
+#painelPersonalizacao {
+  max-height: 1000px !important; /* aumenta o limite de altura */
+  overflow-y: auto; /* adiciona scroll interno se necessário */
+  transition: max-height 0.5s ease-in-out; /* animação suave */
+}
+#opcoesPersonalizacao {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+</style>
 
