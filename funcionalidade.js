@@ -175,7 +175,6 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        document.getElementById('painelPersonalizacao').style.display = 'block';
         const painelPersonalizacao = document.getElementById('painelPersonalizacao');
         if (painelPersonalizacao) {
           painelPersonalizacao.style.display = 'block';
