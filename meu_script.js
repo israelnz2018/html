@@ -203,6 +203,7 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(input);
     }
   });
+}
 
 function atualizarBoxPersonalizacao(info_grafico) {
   const painel = document.getElementById("painelPersonalizacao");
