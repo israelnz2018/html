@@ -427,16 +427,26 @@ async function enviarPersonalizacao() {
 }
 
 
-
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
 
-if (toggleBtn && painel && opcoes) {
-  painel.style.display = "block";
-  opcoes.style.display = "none";
-  toggleBtn.innerText = "Mostrar Personalização ▼";
+// 🔧 Inicialmente esconde todo o painel (inclusive o botão)
+if (painel) {
+  painel.style.display = "none";
+}
 
+// ✅ Função para exibir o painel após gerar o primeiro gráfico
+function mostrarPainelPersonalizacao() {
+  if (painel) {
+    painel.style.display = "block";
+    opcoes.style.display = "none";
+    toggleBtn.innerText = "Mostrar Personalização ▼";
+  }
+}
+
+// 🔧 Evento toggle
+if (toggleBtn && opcoes) {
   toggleBtn.addEventListener("click", () => {
     const estaVisivel = opcoes.style.display !== "none";
     opcoes.style.display = estaVisivel ? "none" : "grid";
@@ -455,3 +465,4 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+
