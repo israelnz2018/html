@@ -344,12 +344,7 @@ function inicializarPersonalizacao() {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  inicializarEventos();
-  inicializarPersonalizacao();
-  document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
-  document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
-});
+
 
 
 
