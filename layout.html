@@ -5,7 +5,6 @@
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    /* Seu estilo permanece o mesmo aqui */
     nav button { font-size: 0.85rem; }
     nav ul li a { font-size: 0.85rem; }
     nav ul li ul {
@@ -125,13 +124,18 @@
   function iniciarAnimacaoBotao(btnId) {
     const botao = document.getElementById(btnId);
     
-    if (botao) { // Verifica se o botão existe antes de aplicar a animação
-      botao.classList.add("pulse-animate"); // Inicia a animação
+    try {
+      if (botao) { // Verifica se o botão existe antes de aplicar a animação
+        botao.classList.add("pulse-animate"); // Inicia a animação
 
-      // Após 2 segundos, parar a animação
-      setTimeout(() => {
-        botao.classList.remove("pulse-animate");
-      }, 2000);
+        // Após 2 segundos, parar a animação
+        setTimeout(() => {
+          botao.classList.remove("pulse-animate");
+        }, 2000);
+      }
+    } catch (error) {
+      // Ignorando qualquer erro e não exibindo no console
+      console.error("Erro ao aplicar animação:", error);
     }
   }
 
@@ -154,4 +158,5 @@
 
 </body>
 </html>
+
 
