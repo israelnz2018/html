@@ -370,17 +370,17 @@ async function enviarPersonalizacao() {
     console.log("✅ Resposta do backend (personalização):", json);
 
     const containerGrafico = document.getElementById("conteudoGrafico");
+
+    // 🔥 Remove apenas os gráficos personalizados sem apagar o painel
     const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
-    if (imgsPersonalizados.length > 0) {
-      const ultimo = imgsPersonalizados[imgsPersonalizados.length - 1];
-      containerGrafico.removeChild(ultimo);
-    }
+    imgsPersonalizados.forEach(img => img.remove());
 
     if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
       img.className = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
+
       const painel = document.getElementById("painelPersonalizacao");
       containerGrafico.insertBefore(img, painel);
 
@@ -408,6 +408,9 @@ async function enviarPersonalizacao() {
     alert("❌ Erro ao atualizar gráfico.");
   }
 }
+
+// 🔧 CONFIGURA O TOGGLE
+
 const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
@@ -435,6 +438,7 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+
 
 
 
