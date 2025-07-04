@@ -224,26 +224,24 @@ function atualizarBoxPersonalizacao(info_grafico) {
     return;
   }
 
-  // 🔧 Ajusta ferramentaAtual com base na info_grafico recebida
-  if (info_grafico?.titulo_grafico) {
+  // 🔧 Ajusta ferramentaAtual apenas se ainda não estiver definida
+  if (!ferramentaAtual && info_grafico?.titulo_grafico) {
     ferramentaAtual = info_grafico.titulo_grafico;
-  } else {
-    ferramentaAtual = "";  // 🔧 deixa vazio se não houver título, evitando default fixo
   }
 
   console.log("🔧 ferramentaAtual definida como:", ferramentaAtual);
 
-  // 🔧 Configuração geral para campos personalizáveis
+  // 🔧 Configuração geral para personalização de qualquer gráfico (mensagem padrão)
   const CONFIG_PERSONALIZACAO = {
-    "DEFAULT": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"]
-    // 🔧 Adicione configurações específicas se quiser restringir por gráfico
+    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],  // exemplo
+    // 🔧 Adicione aqui outros gráficos se quiser personalizações específicas
   };
 
   // 🔧 Campos de personalização disponíveis no painel
   const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
 
-  // 🔧 Obter campos permitidos para esta ferramenta ou usar DEFAULT
-  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || CONFIG_PERSONALIZACAO["DEFAULT"];
+  // 🔧 Obter campos permitidos para esta ferramenta
+  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || todosCampos; // 🔧 Se não houver configuração específica, permite todos
   console.log("🔧 Campos permitidos:", camposPermitidos);
 
   // 🔧 Loop: mostra ou esconde conforme permitido
@@ -269,7 +267,7 @@ function atualizarBoxPersonalizacao(info_grafico) {
     }
   });
 
-  // ✅ 🔧 Adiciona mensagem informativa padrão
+  // ✅ 🔧 Adiciona comentário informativo com mensagem padrão
   const comentarioId = "comentarioCamposPermitidos";
   let comentario = document.getElementById(comentarioId);
 
@@ -281,13 +279,9 @@ function atualizarBoxPersonalizacao(info_grafico) {
   }
 
   comentario.innerHTML = `
-    ⚠️ <strong>Atenção:</strong> Dependendo do gráfico escolhido, nem todos os campos de personalização serão aplicáveis.
+    <strong>⚠️ Atenção:</strong> Dependendo do gráfico e do subgrupo escolhido, nem todos os campos de personalização serão aplicáveis.
   `;
 }
-
-
-
-
 
 
 
