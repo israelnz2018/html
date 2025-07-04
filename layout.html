@@ -134,8 +134,9 @@
         }, 2000);
       }
     } catch (error) {
-      // Ignorando qualquer erro e não exibindo no console
-      console.error("Erro ao aplicar animação:", error);
+      // Ignorando o erro para evitar que o pop-up de erro apareça
+      // Esse erro não será mostrado no console ou na interface
+      console.log("Erro ignorado:", error);
     }
   }
 
@@ -158,5 +159,6 @@
 
 </body>
 </html>
+
 
 
