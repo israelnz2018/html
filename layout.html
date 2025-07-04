@@ -124,6 +124,7 @@
   function iniciarAnimacaoBotao(btnId) {
     const botao = document.getElementById(btnId);
     
+    // Suprimir o erro de leitura de estilo (null)
     try {
       if (botao) { // Verifica se o botão existe antes de aplicar a animação
         botao.classList.add("pulse-animate"); // Inicia a animação
@@ -134,8 +135,7 @@
         }, 2000);
       }
     } catch (error) {
-      // Ignorando o erro para evitar que o pop-up de erro apareça
-      // Esse erro não será mostrado no console ou na interface
+      // Logar o erro no console mas não exibir na interface
       console.log("Erro ignorado:", error);
     }
   }
@@ -147,8 +147,6 @@
     // Simula a geração de gráfico ou análise
     setTimeout(() => {
       console.log('Gráfico gerado ou análise processada');
-      
-      // Aqui você pode adicionar a lógica que precisa após a conclusão do gráfico
     }, 1000); // Atraso de 1 segundo para simular a geração do gráfico
   });
 
@@ -159,6 +157,7 @@
 
 </body>
 </html>
+
 
 
 
