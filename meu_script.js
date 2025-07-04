@@ -411,23 +411,37 @@ async function enviarPersonalizacao() {
 
 // 🔧 CONFIGURA O TOGGLE
 
-const toggleBtn = document.getElementById("togglePersonalizacao");
-const painel = document.getElementById("painelPersonalizacao");
-const opcoes = document.getElementById("opcoesPersonalizacao");
+function inicializarPersonalizacao() {
+  const toggleBtn = document.getElementById("togglePersonalizacao");
+  const painel = document.getElementById("painelPersonalizacao");
+  const opcoes = document.getElementById("opcoesPersonalizacao");
 
-if (toggleBtn && painel && opcoes) {
-  painel.style.display = "block";   // painel sempre visível
-  opcoes.style.display = "none";    // opções fechadas inicialmente
-  toggleBtn.innerText = "Mostrar Personalização ▼"; // botão indica fechado
+  if (painel) {
+    painel.style.display = "block"; // painel sempre visível
+  }
 
-  toggleBtn.addEventListener("click", () => {
-    const estaVisivel = opcoes.style.display !== "none";
-    opcoes.style.display = estaVisivel ? "none" : "grid";
-    toggleBtn.innerText = estaVisivel
-      ? "Mostrar Personalização ▼"
-      : "Ocultar Personalização ▲";
-  });
+  if (opcoes) {
+    opcoes.style.display = "none"; // inicia fechado
+  }
+
+  if (toggleBtn && opcoes) {
+    toggleBtn.innerText = "Mostrar Personalização ▼";
+    toggleBtn.addEventListener("click", () => {
+      if (opcoes.style.display === "none" || opcoes.style.display === "") {
+        opcoes.style.display = "grid";
+        toggleBtn.innerText = "Ocultar Personalização ▲";
+      } else {
+        opcoes.style.display = "none";
+        toggleBtn.innerText = "Mostrar Personalização ▼";
+      }
+    });
+  }
 }
+
+// ✅ Rode a função após gerar gráfico ou recarregar painel
+document.addEventListener("DOMContentLoaded", () => {
+  inicializarPersonalizacao();
+});
 
 // ✅ Torna a função enviarPersonalizacao global
 window.enviarPersonalizacao = enviarPersonalizacao;
@@ -438,6 +452,7 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+
 
 
 
