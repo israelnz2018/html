@@ -5,6 +5,7 @@
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
+    /* Seu estilo permanece o mesmo aqui */
     nav button { font-size: 0.85rem; }
     nav ul li a { font-size: 0.85rem; }
     nav ul li ul {
@@ -137,6 +138,13 @@
   // Adicionando eventos aos botões (somente animação nos botões)
   document.getElementById("btnEnviarAnalise").addEventListener("click", () => {
     iniciarAnimacaoBotao("btnEnviarAnalise");
+
+    // Simula a geração de gráfico ou análise
+    setTimeout(() => {
+      console.log('Gráfico gerado ou análise processada');
+      
+      // Aqui você pode adicionar a lógica que precisa após a conclusão do gráfico
+    }, 1000); // Atraso de 1 segundo para simular a geração do gráfico
   });
 
   document.getElementById("btnPerguntar").addEventListener("click", () => {
@@ -146,3 +154,4 @@
 
 </body>
 </html>
+
