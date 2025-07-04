@@ -311,6 +311,7 @@ function inicializarPersonalizacao() {
   const toggleBtn = document.getElementById("togglePersonalizacao");
   const painel = document.getElementById("painelPersonalizacao");
   const opcoes = document.getElementById("opcoesPersonalizacao");
+  const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
 
   if (painel) painel.style.display = "block";
   if (opcoes) opcoes.style.display = "none";
@@ -323,5 +324,11 @@ function inicializarPersonalizacao() {
       toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
     };
   }
+
+  // ✅ Adiciona event listener ao botão verde Aplicar Alterações
+  if (btnAplicar) {
+    btnAplicar.addEventListener("click", enviarPersonalizacao);
+  }
 }
+
 
