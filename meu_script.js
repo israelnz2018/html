@@ -437,20 +437,22 @@ if (painel) {
 // ✅ Função para exibir o painel após gerar o primeiro gráfico
 function mostrarPainelPersonalizacao() {
   if (painel) {
-    painel.style.display = "block";
-    opcoes.style.display = "none";
+    painel.style.display = "block";     // mostra o painel
+    opcoes.style.display = "none";      // mantém as opções escondidas inicialmente
     toggleBtn.innerText = "Mostrar Personalização ▼";
   }
 }
 
-// 🔧 Evento toggle
+// 🔧 Evento toggle corrigido
 if (toggleBtn && opcoes) {
   toggleBtn.addEventListener("click", () => {
-    const estaVisivel = opcoes.style.display !== "none";
-    opcoes.style.display = estaVisivel ? "none" : "grid";
-    toggleBtn.innerText = estaVisivel
-      ? "Mostrar Personalização ▼"
-      : "Ocultar Personalização ▲";
+    if (opcoes.style.display === "none" || opcoes.style.display === "") {
+      opcoes.style.display = "grid";
+      toggleBtn.innerText = "Ocultar Personalização ▲";
+    } else {
+      opcoes.style.display = "none";
+      toggleBtn.innerText = "Mostrar Personalização ▼";
+    }
   });
 }
 
@@ -463,4 +465,5 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+
 
