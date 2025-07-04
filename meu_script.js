@@ -480,5 +480,6 @@ document.addEventListener("DOMContentLoaded", () => {
 window.enviarPersonalizacao = enviarPersonalizacao;
 </script>
 
+window.registrarFerramenta = registrarFerramenta;
 
 
