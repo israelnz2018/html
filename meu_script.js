@@ -409,23 +409,18 @@ async function enviarPersonalizacao() {
   }
 }
 
-
-const toggleBtn = document.getElementById("togglePersonalizacao");
 const painel = document.getElementById("painelPersonalizacao");
 const opcoes = document.getElementById("opcoesPersonalizacao");
+const toggleBtn = document.getElementById("togglePersonalizacao");
 
-if (toggleBtn && painel && opcoes) {
+if (painel && opcoes) {
   painel.style.display = "block";
-  opcoes.style.display = "none";
-  toggleBtn.innerText = "Mostrar Personalização ▼";
+  opcoes.style.display = "grid";
+}
 
-  toggleBtn.addEventListener("click", () => {
-    const estaVisivel = opcoes.style.display !== "none";
-    opcoes.style.display = estaVisivel ? "none" : "grid";
-    toggleBtn.innerText = estaVisivel
-      ? "Mostrar Personalização ▼"
-      : "Ocultar Personalização ▲";
-  });
+if (toggleBtn) {
+  toggleBtn.innerText = "Personalizar Gráfico ▼";
+  toggleBtn.style.display = "none"; // oculta o botão de toggle
 }
 
 // ✅ Torna a função enviarPersonalizacao global
@@ -437,3 +432,4 @@ document.addEventListener("click", function(e) {
     enviarPersonalizacao();
   }
 });
+
