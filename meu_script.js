@@ -225,9 +225,9 @@ function atualizarBoxPersonalizacao(info_grafico) {
   }
 
   // 🔧 Ajusta ferramentaAtual com base na info_grafico recebida
-  if (info_grafico?.lista_y?.length > 1 && info_grafico?.subgrupo) {
+  if (Array.isArray(info_grafico?.lista_y) && info_grafico?.lista_y.length > 1 && info_grafico?.subgrupo) {
     ferramentaAtual = "BoxPlot 2Y Subgrupo";
-  } else if (info_grafico?.lista_y?.length > 1) {
+  } else if (Array.isArray(info_grafico?.lista_y) && info_grafico?.lista_y.length > 1) {
     ferramentaAtual = "BoxPlot 2Y";
   } else {
     ferramentaAtual = "BoxPlot";
@@ -273,6 +273,7 @@ function atualizarBoxPersonalizacao(info_grafico) {
     }
   });
 }
+
 
 
 
