@@ -131,13 +131,26 @@
       </button>
     </div>
 
-    <!-- Frase de atenção visível apenas quando toggle abrir -->
+    <!-- Frase de atenção -->
     <div id="avisoPersonalizacao" class="col-span-3" style="display:none; color:red; font-size:0.85rem;">
       Atenção: Algumas opções de personalização não são aplicáveis em alguns gráficos e subgrupos.
     </div>
 
   </div>
 </div>
+
+<script>
+  const toggleBtn = document.getElementById("togglePersonalizacao");
+  const opcoes = document.getElementById("opcoesPersonalizacao");
+  const aviso = document.getElementById("avisoPersonalizacao");
+
+  toggleBtn.onclick = () => {
+    const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
+    opcoes.style.display = estaFechado ? "grid" : "none";
+    aviso.style.display = estaFechado ? "block" : "none";
+    toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
+  };
+</script>
 
 
 
