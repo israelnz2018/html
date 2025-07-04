@@ -1,6 +1,6 @@
 let workbookGlobal = null;
 let ferramentaAtual = "";
-let ultimoGraficoInfo = null; 
+let ultimoGraficoInfo = null;
 
 function inicializarEventos() {
   const fileEl = document.getElementById('fileInput');
@@ -133,13 +133,11 @@ function atualizarBoxAnalise(colunas) {
     const campoLimpo = campoOriginal.trim();
     const campoInterno = mapaCampos[campoLimpo] || campoLimpo;
 
-    // Label
     const label = document.createElement("label");
     label.className = "block font-medium mb-1";
     label.textContent = `Variável ${campoLimpo}`;
     box.appendChild(label);
 
-    // Dropdowns simples
     const dropdownSimples = ["coluna_y", "coluna_x", "coluna_z", "Data", "subgrupo"];
     if (dropdownSimples.includes(campoInterno)) {
       const select = document.createElement("select");
@@ -161,7 +159,6 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(select);
     }
 
-    // Dropdowns múltiplos
     const dropdownMultiplos = ["lista_y", "lista_x", "lista_z"];
     if (dropdownMultiplos.includes(campoInterno)) {
       const select = document.createElement("select");
@@ -180,17 +177,12 @@ function atualizarBoxAnalise(colunas) {
       new SlimSelect({ select: `#${select.id}` });
     }
 
-    // Dropdown de distribuições
     if (campoInterno === "field_dist") {
       const select = document.createElement("select");
       select.id = `box_${campoInterno}`;
       select.className = "border rounded p-1 mb-2 w-full";
 
-      const distribs = [
-        "Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p",
-        "Weibull", "Weibull 3p", "Smallest Extreme Value", "Largest Extreme Value",
-        "Gamma", "Gamma 3p", "Logistic", "Loglogística", "Loglogística 3p"
-      ];
+      const distribs = ["Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p", "Weibull", "Weibull 3p", "Smallest Extreme Value", "Largest Extreme Value", "Gamma", "Gamma 3p", "Logistic", "Loglogística", "Loglogística 3p"];
 
       distribs.forEach(d => {
         const opt = document.createElement("option");
@@ -202,7 +194,6 @@ function atualizarBoxAnalise(colunas) {
       box.appendChild(select);
     }
 
-    // Campos numéricos diretos
     const camposNumericos = ["field", "field_conf", "field_LSE", "field_LIE"];
     if (camposNumericos.includes(campoInterno)) {
       const input = document.createElement("input");
@@ -213,7 +204,6 @@ function atualizarBoxAnalise(colunas) {
     }
   });
 
-  // ✅ 🔥 Atualiza os campos de personalização conforme a ferramenta selecionada
   atualizarBoxPersonalizacao(ferramentaAtual);
 }
 
@@ -224,33 +214,21 @@ function atualizarBoxPersonalizacao(info_grafico) {
     return;
   }
 
-
-  // 🔧 Ajusta ferramentaAtual apenas se ainda não estiver definida
   if (!ferramentaAtual && info_grafico?.titulo_grafico) {
     ferramentaAtual = info_grafico.titulo_grafico;
   }
 
-  console.log("🔧 ferramentaAtual definida como:", ferramentaAtual);
-
-  // 🔧 Configuração geral para personalização de qualquer gráfico (mensagem padrão)
   const CONFIG_PERSONALIZACAO = {
-    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],  // exemplo
-    // 🔧 Adicione aqui outros gráficos se quiser personalizações específicas
+    "BoxPlot": ["cor", "titulo_grafico", "titulo_x", "titulo_y", "tamanho_fonte", "inclinacao_x"],
   };
 
-  // 🔧 Campos de personalização disponíveis no painel
   const todosCampos = ["corGrafico", "tituloGrafico", "tituloEixoX", "tituloEixoY", "tamanhoFonte", "inclinacaoX"];
+  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || todosCampos;
 
-  // 🔧 Obter campos permitidos para esta ferramenta
-  const camposPermitidos = CONFIG_PERSONALIZACAO[ferramentaAtual] || todosCampos; // 🔧 Se não houver configuração específica, permite todos
-  console.log("🔧 Campos permitidos:", camposPermitidos);
-
-  // 🔧 Loop: mostra ou esconde conforme permitido
   todosCampos.forEach(idCampo => {
     const el = document.getElementById(idCampo);
     if (!el) return;
 
-    // Mapeamento para compatibilizar ids com CONFIG_PERSONALIZACAO
     let nome = "";
     if (idCampo.includes("cor")) nome = "cor";
     else if (idCampo.includes("tituloGrafico")) nome = "titulo_grafico";
@@ -259,31 +237,9 @@ function atualizarBoxPersonalizacao(info_grafico) {
     else if (idCampo.includes("tamanhoFonte")) nome = "tamanho_fonte";
     else if (idCampo.includes("inclinacaoX")) nome = "inclinacao_x";
 
-    console.log(`🔍 Campo: ${nome} | Exibir? ${camposPermitidos.includes(nome)}`);
-
-    if (camposPermitidos.includes(nome)) {
-      el.parentElement.style.display = "";  // Mostra
-    } else {
-      el.parentElement.style.display = "none";  // Oculta
-    }
+    el.parentElement.style.display = camposPermitidos.includes(nome) ? "" : "none";
   });
-
-  // ✅ 🔧 Adiciona comentário informativo com mensagem padrão
-  const comentarioId = "comentarioCamposPermitidos";
-  let comentario = document.getElementById(comentarioId);
-
-  if (!comentario) {
-    comentario = document.createElement("div");
-    comentario.id = comentarioId;
-    comentario.className = "text-xs text-gray-500 mt-4";
-    painel.appendChild(comentario);
-  }
-
-  comentario.innerHTML = `
-    <strong>⚠️ Atenção:</strong> Dependendo do gráfico e do subgrupo escolhido, nem todos os campos de personalização serão aplicáveis.
-  `;
 }
-
 
 function registrarFerramenta(ferramenta) {
   ferramentaAtual = ferramenta;
@@ -291,21 +247,7 @@ function registrarFerramenta(ferramenta) {
   atualizarBoxPersonalizacao(ferramentaAtual);
 }
 
-// 🔧 Torna registrarFerramenta global
 window.registrarFerramenta = registrarFerramenta;
-
-document.addEventListener("DOMContentLoaded", () => {
-  inicializarEventos?.();
-  document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
-  document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
-
-  const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
-  if (btnAplicar) {
-    btnAplicar.addEventListener("click", enviarPersonalizacao);
-  } else {
-    console.warn("⚠️ Botão btnAplicarPersonalizacao não encontrado no DOM no carregamento.");
-  }
-});
 
 async function enviarPersonalizacao() {
   if (!ultimoGraficoInfo) {
@@ -355,11 +297,6 @@ async function enviarPersonalizacao() {
   formData.append("tamanho_fonte", tamanhoFonte);
   formData.append("inclinacao_x", inclinacaoX);
 
-  console.log("📤 FormData sendo enviado:");
-  for (let pair of formData.entries()) {
-    console.log(`${pair[0]}: ${pair[1]}`);
-  }
-
   try {
     const resposta = await fetch("https://analises-production.up.railway.app/personalizar-grafico", {
       method: "POST",
@@ -367,100 +304,46 @@ async function enviarPersonalizacao() {
     });
 
     const json = await resposta.json();
-    console.log("✅ Resposta do backend (personalização):", json);
 
     const containerGrafico = document.getElementById("conteudoGrafico");
-
-    // 🔥 Remove apenas os gráficos personalizados sem apagar o painel
-    const imgsPersonalizados = containerGrafico.querySelectorAll("img.graficoPersonalizado");
-    imgsPersonalizados.forEach(img => img.remove());
+    containerGrafico.querySelectorAll("img.graficoPersonalizado").forEach(img => img.remove());
 
     if (json.grafico_isolado_base64) {
       const img = document.createElement("img");
       img.className = "graficoPersonalizado";
       img.src = `data:image/png;base64,${json.grafico_isolado_base64}`;
       img.style = "max-width:100%; margin-bottom:10px;";
-
       const painel = document.getElementById("painelPersonalizacao");
       containerGrafico.insertBefore(img, painel);
-
-      ultimoGraficoInfo = {
-        ...ultimoGraficoInfo,
-        cor: json.info_grafico?.cor || cor,
-        titulo_x: json.info_grafico?.titulo_x || tituloX,
-        titulo_y: json.info_grafico?.titulo_y || tituloY,
-        titulo_grafico: json.info_grafico?.titulo_grafico || tituloGrafico,
-        tamanho_fonte: json.info_grafico?.tamanho_fonte || tamanhoFonte,
-        inclinacao_x: json.info_grafico?.inclinacao_x || inclinacaoX
-      };
-
-      if (ultimoGraficoInfo.grafico) {
-        atualizarBoxPersonalizacao(ultimoGraficoInfo.grafico.replace(" Personalizado", ""));
-      }
-
-      document.getElementById("tituloGrafico").value = ultimoGraficoInfo.titulo_grafico;
-
-      // 🔧 ✅ Reativa o painel e toggle após inserir o novo gráfico
-      if (typeof inicializarPersonalizacao === "function") {
-        inicializarPersonalizacao();
-      }
-
-    } else {
-      alert("⚠️ Nenhuma imagem retornada do backend.");
     }
-
   } catch (e) {
     console.error("❌ Erro ao atualizar gráfico:", e);
-    alert("❌ Erro ao atualizar gráfico.");
   }
 }
-
-
-// 🔧 CONFIGURA O TOGGLE
 
 function inicializarPersonalizacao() {
   const toggleBtn = document.getElementById("togglePersonalizacao");
   const painel = document.getElementById("painelPersonalizacao");
   const opcoes = document.getElementById("opcoesPersonalizacao");
 
-  if (painel) {
-    painel.style.display = "block"; // painel sempre visível
-  }
-
-  if (opcoes) {
-    opcoes.style.display = "none"; // inicia fechado
-  }
+  if (painel) painel.style.display = "block";
+  if (opcoes) opcoes.style.display = "none";
 
   if (toggleBtn && opcoes) {
     toggleBtn.innerText = "Mostrar Personalização ▼";
-
-    // 🔧 Remove event listeners duplicados antes de adicionar novamente
-    const novoToggleBtn = toggleBtn.cloneNode(true);
-    toggleBtn.parentNode.replaceChild(novoToggleBtn, toggleBtn);
-
-    novoToggleBtn.addEventListener("click", () => {
+    toggleBtn.addEventListener("click", () => {
       const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
       opcoes.style.display = estaFechado ? "grid" : "none";
-      novoToggleBtn.innerText = estaFechado
-        ? "Ocultar Personalização ▲"
-        : "Mostrar Personalização ▼";
+      toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
     });
   }
 }
 
-// ✅ Rode a função no carregamento inicial
 document.addEventListener("DOMContentLoaded", () => {
+  inicializarEventos();
   inicializarPersonalizacao();
-});
-
-// ✅ Torna a função enviarPersonalizacao global
-window.enviarPersonalizacao = enviarPersonalizacao;
-
-// 🔥 Registrar evento no botão de aplicar personalização
-document.addEventListener("click", function(e) {
-  if (e.target && e.target.id === "btnAplicarPersonalizacao") {
-    enviarPersonalizacao();
-  }
+  document.getElementById("btnEnviarAnalise")?.addEventListener("click", enviarAnaliseCompleta);
+  document.getElementById("btnPerguntar")?.addEventListener("click", perguntarIA);
 });
 
 
