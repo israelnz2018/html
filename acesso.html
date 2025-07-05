@@ -92,7 +92,7 @@
   firebase.initializeApp(firebaseConfig);
 
   // Tempo do spinner (gatinho) em milissegundos – 🛠️ você pode ajustar aqui
-  const tempoSpinnerLogin = 3000;
+  const tempoSpinnerLogin = 2000;
 
   window.onload = () => {
     if (localStorage.getItem('sessaoAtiva') === 'true') {
@@ -167,6 +167,7 @@ async function fazerLogin() {
   msg.style.color = "#444";
   msg.textContent = "🔄 Verificando...";
 
+  // 👉 Mostra o spinner e desativa o botão
   spinner.style.display = "block";
   botao.disabled = true;
   botao.style.opacity = "0.6";
@@ -176,6 +177,11 @@ async function fazerLogin() {
     const user = userCredential.user;
     msg.style.color = "green";
     msg.textContent = `✅ Bem-vindo, ${user.email}!`;
+
+    // ✅ SALVA NO LOCALSTORAGE PARA PERSISTÊNCIA APÓS RELOAD
+    localStorage.setItem('sessaoAtiva', 'true');
+    localStorage.setItem('usuarioEmail', user.email);
+    localStorage.setItem('usuarioNome', user.displayName || user.email.split("@")[0]);
 
     document.getElementById("login-box").style.display = "none";
     document.getElementById("app").style.display = "block";
@@ -191,24 +197,24 @@ async function fazerLogin() {
         <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
           Deslogar
         </button>
-      </div>`;
-
-    localStorage.setItem('sessaoAtiva', 'true');
-    localStorage.setItem('usuarioEmail', user.email);
-    localStorage.setItem('usuarioNome', displayName);
+      </div>
+    `;
 
   } catch (error) {
     console.error("Erro no login:", error);
     msg.style.color = "red";
     msg.textContent = "❌ Erro ao fazer login: " + error.message;
   } finally {
+    // 👉 MANTÉM O SPINNER VISÍVEL POR MAIS TEMPO (usando a variável tempoSpinnerLogin se desejar)
+    const tempoSpinnerLogin = 3000; // ajuste aqui o tempo do gatinho em ms
     setTimeout(() => {
       spinner.style.display = "none";
       botao.disabled = false;
       botao.style.opacity = "1";
-    }, 1500);
+    }, tempoSpinnerLogin);
   }
 }
+
 
 function recuperarSenha() {
   const email = prompt("Digite seu e-mail para recuperar a senha:");
