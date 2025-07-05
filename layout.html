@@ -14,7 +14,7 @@
     nav ul li ul li { position: relative; }
     nav ul li ul li a {
       display: block; padding: 0.25rem 1rem;
-      font-size: 0.80rem !important; /* força tamanho igual */
+      font-size: 0.80rem !important;
     }
     nav ul li ul ul {
       display: none; position: absolute; left: 100%; top: 0; margin-left: 0.25rem;
@@ -22,15 +22,8 @@
     }
     nav ul li.show > ul, nav ul li ul li.show > ul { display: block; }
 
-    /* Spinner bolinhas pulando - REMOVIDO */
-    .spinner {
-      display: none;
-    }
-
-    /* Animação pulse para botão Perguntar (mantida) */
-    .pulse-loader {
-      display: none;
-    }
+    .spinner { display: none; }
+    .pulse-loader { display: none; }
 
     @keyframes pulse {
       0% { transform: scale(1); opacity: 1; }
@@ -38,26 +31,13 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* Centralizar botão enviar análise */
-    .btn-container {
-      text-align: center;
-      margin-top: 1rem;
-    }
+    .btn-container { text-align: center; margin-top: 1rem; }
 
-    /* Espaço entre texto e spinner */
     #btnEnviarAnalise span,
-    #btnPerguntar span {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .spinner, #spinner-perguntar {
-      vertical-align: middle;
-    }
+    #btnPerguntar span { display: inline-block; vertical-align: middle; }
+    .spinner, #spinner-perguntar { vertical-align: middle; }
 
-    /* Nova animação para ambos os botões */
-    .pulse-animate {
-      animation: pulse 1s infinite ease-in-out;
-    }
+    .pulse-animate { animation: pulse 1s infinite ease-in-out; }
   </style>
 </head>
 <body>
@@ -119,35 +99,42 @@
   </div>
 </div>
 
+<!-- Painel de Personalização -->
+<div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin-top:10px;">
+  <h3>Personalização do Gráfico</h3>
+  <div id="opcoesPersonalizacao" style="display:none;">
+    <label>Título do Gráfico: <input type="text" id="tituloGrafico" /></label><br>
+    <label>Título Eixo X: <input type="text" id="tituloEixoX" /></label><br>
+    <label>Título Eixo Y: <input type="text" id="tituloEixoY" /></label><br>
+    <label>Cor do Gráfico: <input type="color" id="corGrafico" /></label><br>
+    <label>Tamanho da Fonte: <input type="number" id="tamanhoFonte" /></label><br>
+    <label>Inclinação X: <input type="number" id="inclinacaoX" /></label><br>
+    <button id="btnAplicarPersonalizacao" style="background:green; color:white; padding:5px 10px; margin-top:10px;">
+      Aplicar Alterações
+    </button>
+  </div>
+</div>
+
 <script>
-  // Função para iniciar animação no botão e parar após 2 segundos
   function iniciarAnimacaoBotao(btnId) {
     const botao = document.getElementById(btnId);
-    
-    // Suprimir o erro de leitura de estilo (null)
     try {
-      if (botao) { // Verifica se o botão existe antes de aplicar a animação
-        botao.classList.add("pulse-animate"); // Inicia a animação
-
-        // Após 2 segundos, parar a animação
+      if (botao) {
+        botao.classList.add("pulse-animate");
         setTimeout(() => {
           botao.classList.remove("pulse-animate");
         }, 2000);
       }
     } catch (error) {
-      // Logar o erro no console mas não exibir na interface
       console.log("Erro ignorado:", error);
     }
   }
 
-  // Adicionando eventos aos botões (somente animação nos botões)
   document.getElementById("btnEnviarAnalise").addEventListener("click", () => {
     iniciarAnimacaoBotao("btnEnviarAnalise");
-
-    // Simula a geração de gráfico ou análise
     setTimeout(() => {
       console.log('Gráfico gerado ou análise processada');
-    }, 1000); // Atraso de 1 segundo para simular a geração do gráfico
+    }, 1000);
   });
 
   document.getElementById("btnPerguntar").addEventListener("click", () => {
@@ -157,7 +144,5 @@
 
 </body>
 </html>
-
-
 
 
