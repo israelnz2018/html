@@ -224,6 +224,14 @@ async function enviarAnaliseCompleta() {
         if (document.getElementById("inclinacaoY")) document.getElementById("inclinacaoY").value = info.inclinacao_y ?? "";
         if (document.getElementById("espessuraLinha")) document.getElementById("espessuraLinha").value = info.espessura ?? "";
 
+        const painel = document.getElementById('painelPersonalizacao');
+        if (painel) {
+          painel.style.display = 'block';
+        } else {
+          console.warn("⚠️ painelPersonalizacao não encontrado no DOM no momento de exibir.");
+        }
+
+
         // 🔧 ✅ Reativa o toggle e painel após gerar novo gráfico
         if (typeof inicializarPersonalizacao === "function") {
           inicializarPersonalizacao();
