@@ -178,8 +178,8 @@ async function enviarAnaliseCompleta() {
         containerGrafico.prepend(imgGrafico);
 
 
-        const painel = document.getElementById('painelPersonalizacao');
-        if (painel) painel.style.display = 'block';
+        document.getElementById('painelPersonalizacao').style.display = 'block';
+
 
 
         const info = json.info_grafico || {};
