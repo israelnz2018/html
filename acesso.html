@@ -113,6 +113,14 @@
     }
   };
 
+<script>
+  window.addEventListener('beforeunload', function (e) {
+    const mensagem = "⚠️ Salve suas análises e gráficos agora, pois serão perdidos ao sair!";
+    e.preventDefault();
+    e.returnValue = mensagem;
+    return mensagem;
+  });
+</script>
 
 
   function showPrimeiroAcesso() {
