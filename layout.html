@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
+  <style>
     nav button { font-size: 0.85rem; }
     nav ul li a { font-size: 0.85rem; }
     nav ul li ul {
@@ -21,11 +21,49 @@
       background-color: #374151; border: 1px solid #4b5563; border-radius: 0.25rem;
     }
     nav ul li.show > ul, nav ul li ul li.show > ul { display: block; }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .spin {
+      animation: spin 2s linear;
+    }
+
+    @keyframes dots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+      100% { content: ''; }
+    }
+
+    .pontinhos::after {
+      content: '';
+      animation: dots 2s steps(4) infinite;
+    }
   </style>
 
+  <script>
+    function animarBotao(botaoId, tipo) {
+      const botao = document.getElementById(botaoId);
+      if (tipo === 'spin') {
+        botao.classList.add('spin');
+        setTimeout(() => {
+          botao.classList.remove('spin');
+        }, 2000);
+      } else if (tipo === 'pontinhos') {
+        botao.classList.add('pontinhos');
+        setTimeout(() => {
+          botao.classList.remove('pontinhos');
+          botao.textContent = 'Perguntar'; // volta texto normal
+        }, 2000);
+      }
+    }
+  </script>
 </head>
 <body>
-
 
 <nav style="background-color: #13294b; color: white;" class="p-2 flex justify-between items-center">
   <div class="flex items-center space-x-2">
@@ -34,8 +72,6 @@
   <ul class="flex space-x-2 items-center"></ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
 </nav>
-
-
 
 <div class="max-w-6xl mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
@@ -58,7 +94,7 @@
   </div>
 
   <div class="text-center mt-4">
-    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
+    <button id="btnEnviarAnalise" onclick="animarBotao('btnEnviarAnalise', 'spin')" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
   </div>
 </div>
 
@@ -66,18 +102,9 @@
   <div class="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
     <label class="font-semibold">Pergunta (apenas estatística):</label>
     <input id="perguntaAluno" type="text" class="flex-1 border rounded p-2" placeholder="Digite sua pergunta..." />
-    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">Perguntar</button>
+    <button id="btnPerguntar" onclick="animarBotao('btnPerguntar', 'pontinhos')" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">Perguntar</button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
-      <h2 class="font-bold text-lg mb-2 text-center">Análise Estatística</h2>
-      <div id="conteudoAnalise" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
-    </div>
-
-    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
-      <h2 class="font-bold text-lg mb-2 text-center">Gráfico</h2>
-      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto">
         
         <!-- Aqui será inserido o gráfico dinamicamente -->
 
