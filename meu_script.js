@@ -68,6 +68,9 @@ function atualizarInterface() {
   const colunas = jsonData[0] || [];
 
   previewDiv.innerHTML = '';
+  previewDiv.style.maxHeight = '200px'; // altura máxima para scroll vertical
+  previewDiv.style.overflowY = 'auto'; // ativa scroll vertical
+
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
@@ -75,7 +78,7 @@ function atualizarInterface() {
   colunas.forEach(t => {
     const th = document.createElement('th');
     th.className = 'border px-2 py-1 bg-gray-200';
-    th.style.minWidth = '120px'; // largura mínima para caber ~5 colunas visíveis
+    th.style.minWidth = '120px';
     th.textContent = t;
     trHeader.appendChild(th);
   });
@@ -88,7 +91,7 @@ function atualizarInterface() {
     colunas.forEach((_, i) => {
       const td = document.createElement('td');
       td.className = 'border px-2 py-1';
-      td.style.minWidth = '120px'; // largura mínima igual ao header
+      td.style.minWidth = '120px';
       td.textContent = linha[i] !== undefined ? linha[i] : '';
       trData.appendChild(td);
     });
@@ -99,6 +102,7 @@ function atualizarInterface() {
 
   atualizarBoxAnalise(colunas);
 }
+
 
 
 function atualizarBoxAnalise(colunas) {
