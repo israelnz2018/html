@@ -178,7 +178,10 @@ async function enviarAnaliseCompleta() {
         containerGrafico.prepend(imgGrafico);
 
 
-        document.getElementById('painelPersonalizacao').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('painelPersonalizacao').style.display = 'block';
+        }, 1000); // ajusta o tempo conforme necessidade
+
 
 
 
