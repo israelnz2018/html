@@ -175,12 +175,17 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        const painelPersonalizacao = document.getElementById('painelPersonalizacao');
-        if (painelPersonalizacao) {
-          painelPersonalizacao.style.display = 'block';
-        } else {
-          console.log("Elemento 'painelPersonalizacao' não encontrado.");
-        }
+        // Tentativa de encontrar o painel de personalização
+      const painelPersonalizacao = document.getElementById('painelPersonalizacao');
+
+      // Verificação mais robusta
+      if (painelPersonalizacao) {
+        painelPersonalizacao.style.display = 'block'; // Exibe o painel
+      } else {
+        // Se o painel não for encontrado, logar uma mensagem mas continuar com o fluxo
+        console.warn("Elemento 'painelPersonalizacao' não encontrado. Não é possível exibir o painel.");
+      }
+
 
 
         const info = json.info_grafico || {};
