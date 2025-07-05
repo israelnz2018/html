@@ -26,22 +26,20 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-
     .spin {
       animation: spin 2s linear;
     }
 
     @keyframes dots {
-      0% { content: ''; }
-      25% { content: '.'; }
-      50% { content: '..'; }
-      75% { content: '...'; }
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80% { content: '...'; }
       100% { content: ''; }
     }
-
     .pontinhos::after {
       content: '';
-      animation: dots 2s steps(4) infinite;
+      animation: dots 2s steps(5) infinite;
     }
   </style>
 
@@ -57,7 +55,6 @@
         botao.classList.add('pontinhos');
         setTimeout(() => {
           botao.classList.remove('pontinhos');
-          botao.textContent = 'Perguntar'; // volta texto normal
         }, 2000);
       }
     }
@@ -105,7 +102,16 @@
     <button id="btnPerguntar" onclick="animarBotao('btnPerguntar', 'pontinhos')" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">Perguntar</button>
   </div>
 
-        
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
+      <h2 class="font-bold text-lg mb-2 text-center">Análise Estatística</h2>
+      <div id="conteudoAnalise" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
+    </div>
+
+    <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
+      <h2 class="font-bold text-lg mb-2 text-center">Gráfico</h2>
+      <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto"></div>
+
         <!-- Aqui será inserido o gráfico dinamicamente -->
 
 <!-- Painel Personalização Gráfico -->
