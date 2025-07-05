@@ -180,7 +180,6 @@ async function enviarAnaliseCompleta() {
 
 
 
-        document.getElementById('painelPersonalizacao').style.display = 'block';
 
 
 
