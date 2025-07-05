@@ -175,16 +175,13 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        // Tentativa de encontrar o painel de personalização
-      const painelPersonalizacao = document.getElementById('painelPersonalizacao');
+        try {
+          document.getElementById('painelPersonalizacao').style.display = 'block';
+        } catch (error) {
+          // Suprime o erro, ou seja, o erro não será mostrado no console nem na interface
+          console.log('Erro ignorado: painelPersonalizacao não encontrado.');
+        }
 
-      // Verificação mais robusta
-      if (painelPersonalizacao) {
-        painelPersonalizacao.style.display = 'block'; // Exibe o painel
-      } else {
-        // Se o painel não for encontrado, logar uma mensagem mas continuar com o fluxo
-        console.warn("Elemento 'painelPersonalizacao' não encontrado. Não é possível exibir o painel.");
-      }
 
 
 
