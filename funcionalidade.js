@@ -178,10 +178,7 @@ async function enviarAnaliseCompleta() {
         containerGrafico.prepend(imgGrafico);
 
 
-        if (!document.getElementById('painelPersonalizacao')) {
-          console.log("❌ painelPersonalizacao não encontrado.");
-          return; // sai da função se não existir
-        }
+
 
         document.getElementById('painelPersonalizacao').style.display = 'block';
 
