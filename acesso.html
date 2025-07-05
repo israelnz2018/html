@@ -91,24 +91,29 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  // ✅ Verifica se já está logado
-  if (localStorage.getItem('sessaoAtiva') === 'true') {
-    document.getElementById("login-box").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+  // Tempo do spinner (gatinho) em milissegundos – 🛠️ você pode ajustar aqui
+  const tempoSpinnerLogin = 3000;
 
-    // 🔥 Recupera nome e email salvos e exibe no topo
-    const nome = localStorage.getItem('usuarioNome') || localStorage.getItem('usuarioEmail');
-    if (nome) {
-      document.getElementById("usuario-info").innerHTML = `
-        <div class="flex items-center space-x-2">
-          <span class="text-sm font-medium">Olá, ${nome}</span>
-          <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
-            Deslogar
-          </button>
-        </div>`;
+  window.onload = () => {
+    if (localStorage.getItem('sessaoAtiva') === 'true') {
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
+      const nome = localStorage.getItem('usuarioNome') || localStorage.getItem('usuarioEmail');
+      if (nome) {
+        document.getElementById("usuario-info").innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-medium">Olá, ${nome}</span>
+            <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+              Deslogar
+            </button>
+          </div>`;
+      }
     }
-  }
+  };
+</script>
+
 
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
