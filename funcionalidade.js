@@ -178,7 +178,10 @@ async function enviarAnaliseCompleta() {
         const painel = document.getElementById('painelPersonalizacao');
         if (painel !== null) {
           painel.style.display = 'block';
+        } else {
+          console.log('❌ painelPersonalizacao não encontrado.');
         }
+
 
 
 
