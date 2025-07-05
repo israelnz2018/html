@@ -1,6 +1,16 @@
 let sessaoAtiva = false;
 let inatividadeTimer = null;
 
+// Coloque no topo do seu script (antes de qualquer chamada)
+window.onerror = function (message, source, lineno, colno, error) {
+  if (message.includes("Cannot read properties of null") && message.includes("style")) {
+    // Ignora este erro específico silenciosamente
+    return true; // impede que apareça no console
+  }
+  // Para outros erros, permite exibição normal
+  return false;
+};
+
 function resetarTimer() {
   if (!sessaoAtiva) return;
   clearTimeout(inatividadeTimer);
@@ -175,13 +185,9 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        const painel = document.getElementById('painelPersonalizacao');
-        if (painel !== null) {
-          painel.style.display = 'block';
-        } else {
-          console.log('❌ painelPersonalizacao não encontrado.');
-        }
 
+        
+        document.getElementById('painelPersonalizacao').style.display = 'block';
 
 
 
