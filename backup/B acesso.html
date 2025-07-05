@@ -8,6 +8,14 @@
   font-family: Arial, sans-serif;
   text-align: center;
 ">
+  <!-- Logo + Nome Empresa -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+      <img src="https://i.postimg.cc/7PgJFtZK/logo-LBW.png" alt="Logo" style="height: 50px; width: auto;">
+      <span style="font-size: 20px; font-weight: bold; color: #333;">Learning by Working</span>
+    </div>
+  </div>
+
   <h2 style="margin-bottom: 24px; color: #333;">🔐 Acesso do Aluno</h2>
 
   <div id="loginSection" style="text-align: left;">
@@ -23,6 +31,12 @@
       style="width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
       Entrar
     </button>
+
+    <!-- Spinner Gatinho -->
+    <div id="spinner-login" style="display:none; margin-top:20px;">
+      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Carregando..." style="width:80px; height:auto;">
+      <p style="font-size:14px; color:#555;">Carregando, por favor aguarde...</p>
+    </div>
 
     <div style="margin-top: 16px;">
       <a href="#" onclick="recuperarSenha()" style="color: #007BFF; text-decoration: none; font-size: 14px;">
@@ -62,6 +76,7 @@
   </div>
 </div>
 
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
@@ -85,20 +100,6 @@
   function showLogin() {
     document.getElementById("primeiroAcesso").style.display = "none";
     document.getElementById("loginSection").style.display = "block";
-  }
-
-  // 🔧 Função de cadastro com updateProfile para salvar o nome
-  async function cadastrarAluno(email, senha, nomeCompleto) {
-    try {
-      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
-      const user = userCredential.user;
-      await user.updateProfile({
-        displayName: nomeCompleto
-      });
-      console.log("✅ Cadastro concluído com nome:", nomeCompleto);
-    } catch (error) {
-      console.error("❌ Erro no cadastro:", error);
-    }
   }
 
   // Primeiro acesso – troca de senha
@@ -128,11 +129,13 @@
     }
   }
 
-  // Login normal
+ // Login normal com spinner com tempo extra
 async function fazerLogin() {
   const email = document.getElementById('email-login').value.trim();
   const senha = document.getElementById('senha-login').value.trim();
   const msg = document.getElementById('mensagem-login');
+  const spinner = document.getElementById('spinner-login');
+  const botao = document.getElementById('botao-login');
 
   if (!email || !senha) {
     msg.style.color = "red";
@@ -142,6 +145,11 @@ async function fazerLogin() {
 
   msg.style.color = "#444";
   msg.textContent = "🔄 Verificando...";
+
+  // 👉 Mostra o spinner e desativa o botão
+  spinner.style.display = "block";
+  botao.disabled = true;
+  botao.style.opacity = "0.6";
 
   try {
     const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
@@ -153,11 +161,7 @@ async function fazerLogin() {
     document.getElementById("app").style.display = "block";
     document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
 
-    let displayName = user.displayName;
-    if (!displayName || displayName.trim() === "") {
-      displayName = user.email.split("@")[0]; // usa o início do email como nome
-    }
-
+    let displayName = user.displayName || user.email.split("@")[0];
     const nomes = displayName.split(" ");
     const iniciais = nomes[0].charAt(0).toUpperCase() + (nomes[1] ? nomes[1].charAt(0).toUpperCase() : "");
 
@@ -173,6 +177,13 @@ async function fazerLogin() {
     console.error("Erro no login:", error);
     msg.style.color = "red";
     msg.textContent = "❌ Erro ao fazer login: " + error.message;
+  } finally {
+    // 👉 MANTÉM O SPINNER VISÍVEL POR MAIS 1.5 SEGUNDOS ANTES DE SUMIR
+    setTimeout(() => {
+      spinner.style.display = "none";
+      botao.disabled = false;
+      botao.style.opacity = "1";
+    }, 1500);
   }
 }
 
