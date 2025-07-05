@@ -192,15 +192,19 @@
   }
 
   function deslogarAluno() {
-    firebase.auth().signOut().then(() => {
-      localStorage.removeItem('sessaoAtiva');
-      localStorage.removeItem('usuarioEmail');
-      localStorage.removeItem('usuarioNome');
-      document.getElementById("app").style.display = "none";
-      document.getElementById("login-box").style.display = "block";
-      document.getElementById("mensagem-login").textContent = "";
-    }).catch((error) => console.error("Erro ao deslogar:", error));
-  }
+  const confirmar = confirm("⚠️ Tem certeza que deseja sair? Suas análises e gráficos não serão salvos.");
+  if (!confirmar) return;
+
+  firebase.auth().signOut().then(() => {
+    localStorage.removeItem('sessaoAtiva');
+    localStorage.removeItem('usuarioEmail');
+    localStorage.removeItem('usuarioNome');
+    document.getElementById("app").style.display = "none";
+    document.getElementById("login-box").style.display = "block";
+    document.getElementById("mensagem-login").textContent = "";
+  }).catch((error) => console.error("Erro ao deslogar:", error));
+}
+
 </script>
 
 
