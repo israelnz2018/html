@@ -80,7 +80,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
-  // Configuração do Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyB9LDdd9E6wZOb5LQ1oLfU3BP5_69rLmvE",
     authDomain: "senha-92ce1.firebaseapp.com",
@@ -97,19 +96,30 @@
     document.getElementById("login-box").style.display = "none";
     document.getElementById("app").style.display = "block";
     document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
+    // 🔥 Recupera nome e email salvos e exibe no topo
+    const nome = localStorage.getItem('usuarioNome') || localStorage.getItem('usuarioEmail');
+    if (nome) {
+      document.getElementById("usuario-info").innerHTML = `
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-medium">Olá, ${nome}</span>
+          <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+            Deslogar
+          </button>
+        </div>`;
+    }
   }
 
-  // Funções de exibição
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
     document.getElementById("primeiroAcesso").style.display = "block";
   }
+
   function showLogin() {
     document.getElementById("primeiroAcesso").style.display = "none";
     document.getElementById("loginSection").style.display = "block";
   }
 
-  // Primeiro acesso – troca de senha
   async function trocarSenha() {
     const email = document.getElementById("email").value.trim();
     const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
@@ -136,7 +146,6 @@
     }
   }
 
- // Login normal com spinner com tempo extra
 async function fazerLogin() {
   const email = document.getElementById('email-login').value.trim();
   const senha = document.getElementById('senha-login').value.trim();
@@ -177,10 +186,11 @@ async function fazerLogin() {
         <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
           Deslogar
         </button>
-      </div>
-    `;
+      </div>`;
 
-    localStorage.setItem('sessaoAtiva', 'true'); // ✅ login persistente
+    localStorage.setItem('sessaoAtiva', 'true');
+    localStorage.setItem('usuarioEmail', user.email);
+    localStorage.setItem('usuarioNome', displayName);
 
   } catch (error) {
     console.error("Erro no login:", error);
@@ -195,30 +205,32 @@ async function fazerLogin() {
   }
 }
 
-  // Recuperar senha
-  function recuperarSenha() {
-    const email = prompt("Digite seu e-mail para recuperar a senha:");
-    if (!email) return;
+function recuperarSenha() {
+  const email = prompt("Digite seu e-mail para recuperar a senha:");
+  if (!email) return;
 
-    firebase.auth().sendPasswordResetEmail(email)
-      .then(() => {
-        alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
-      })
-      .catch((error) => {
-        console.error("Erro ao enviar email de redefinição:", error);
-        alert("❌ Erro ao enviar email de redefinição: " + error.message);
-      });
-  }
+  firebase.auth().sendPasswordResetEmail(email)
+    .then(() => {
+      alert("📧 Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha.");
+    })
+    .catch((error) => {
+      console.error("Erro ao enviar email de redefinição:", error);
+      alert("❌ Erro ao enviar email de redefinição: " + error.message);
+    });
+}
 
-  function deslogarAluno() {
-    firebase.auth().signOut().then(() => {
-      localStorage.removeItem('sessaoAtiva'); // ✅ remove login persistente
-      document.getElementById("app").style.display = "none";
-      document.getElementById("login-box").style.display = "block";
-      document.getElementById("mensagem-login").textContent = "";
-    }).catch((error) => console.error("Erro ao deslogar:", error));
-  }
+function deslogarAluno() {
+  firebase.auth().signOut().then(() => {
+    localStorage.removeItem('sessaoAtiva');
+    localStorage.removeItem('usuarioEmail');
+    localStorage.removeItem('usuarioNome');
+    document.getElementById("app").style.display = "none";
+    document.getElementById("login-box").style.display = "block";
+    document.getElementById("mensagem-login").textContent = "";
+  }).catch((error) => console.error("Erro ao deslogar:", error));
+}
 </script>
+
 
 
 
