@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
+  <style>
     nav button { font-size: 0.85rem; }
     nav ul li a { font-size: 0.85rem; }
     nav ul li ul {
@@ -21,11 +21,48 @@
       background-color: #374151; border: 1px solid #4b5563; border-radius: 0.25rem;
     }
     nav ul li.show > ul, nav ul li ul li.show > ul { display: block; }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spin {
+      animation: spin 2s linear;
+    }
+
+    @keyframes dots {
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80% { content: '...'; }
+      100% { content: ''; }
+    }
+    .pontinhos::after {
+      content: '';
+      animation: dots 2s steps(5) infinite;
+    }
   </style>
 
+  <script>
+    function animarBotao(botaoId, tipo) {
+      const botao = document.getElementById(botaoId);
+      if (tipo === 'spin') {
+        botao.classList.add('spin');
+        setTimeout(() => {
+          botao.classList.remove('spin');
+        }, 2000);
+      } else if (tipo === 'pontinhos') {
+        botao.classList.add('pontinhos');
+        setTimeout(() => {
+          botao.classList.remove('pontinhos');
+        }, 2000);
+      }
+    }
+  </script>
 </head>
-<body>
 
+
+  <body>
 
 <nav style="background-color: #13294b; color: white;" class="p-2 flex justify-between items-center">
   <div class="flex items-center space-x-2">
@@ -34,8 +71,6 @@
   <ul class="flex space-x-2 items-center"></ul>
   <div id="usuario-info" class="flex items-center space-x-2"></div>
 </nav>
-
-
 
 <div class="max-w-6xl mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
@@ -58,7 +93,7 @@
   </div>
 
   <div class="text-center mt-4">
-    <button id="btnEnviarAnalise" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
+    <button id="btnEnviarAnalise" onclick="animarBotao('btnEnviarAnalise', 'spin')" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
   </div>
 </div>
 
@@ -66,7 +101,7 @@
   <div class="flex flex-col md:flex-row md:items-center md:space-x-2 space-y-2 md:space-y-0">
     <label class="font-semibold">Pergunta (apenas estatística):</label>
     <input id="perguntaAluno" type="text" class="flex-1 border rounded p-2" placeholder="Digite sua pergunta..." />
-    <button id="btnPerguntar" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">Perguntar</button>
+    <button id="btnPerguntar" onclick="animarBotao('btnPerguntar', 'pontinhos')" class="bg-green-600 text-white rounded px-4 py-2 hover:bg-green-700">Perguntar</button>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -78,63 +113,66 @@
     <div class="border rounded-lg p-4 bg-white shadow min-h-[300px] flex flex-col">
       <h2 class="font-bold text-lg mb-2 text-center">Gráfico</h2>
       <div id="conteudoGrafico" class="flex-1 p-2 border rounded bg-gray-50 text-sm overflow-y-auto">
-        
         <!-- Aqui será inserido o gráfico dinamicamente -->
 
-<!-- Painel Personalização Gráfico -->
-<div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin:0; width:100%;">
-  <button id="togglePersonalizacao" style="font-weight:bold; font-size:0.9rem; padding:4px 8px; margin-bottom:10px;">
-    Personalizar Gráfico ▼
-  </button>
+        <!-- Painel Personalização Gráfico -->
+        <div id="painelPersonalizacao" style="display:none; border:1px solid #ccc; padding:10px; margin-top:10px; width:100%;">
+          <button id="togglePersonalizacao" style="font-weight:bold; font-size:0.9rem; padding:4px 8px; margin-bottom:10px;">
+            Personalizar Gráfico ▼
+          </button>
 
-  <div id="opcoesPersonalizacao" style="display:none; grid-template-columns: repeat(3, 1fr); gap:10px; width:100%;" class="grid">
+          <div id="opcoesPersonalizacao" style="display:none; grid-template-columns: repeat(3, 1fr); gap:10px; width:100%;" class="grid">
 
-    <!-- Primeira linha: Título do Gráfico ocupando 100% -->
-    <div class="col-span-3">
-      <label for="tituloGrafico">Título do Gráfico</label>
-      <input type="text" id="tituloGrafico" placeholder="Título do gráfico" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-    </div>
+            <!-- Primeira linha: Título do Gráfico ocupando 100% -->
+            <div class="col-span-3">
+              <label for="tituloGrafico">Título do Gráfico</label>
+              <input type="text" id="tituloGrafico" placeholder="Título do gráfico" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
+            </div>
 
-    <!-- Segunda linha: Título Eixo Y | Título Eixo X (50% cada) -->
-    <div class="col-span-3 grid grid-cols-2 gap-2">
-      <div>
-        <label for="tituloEixoY">Título Eixo Y</label>
-        <input type="text" id="tituloEixoY" placeholder="Eixo Y" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
+            <!-- Segunda linha: Título Eixo Y | Título Eixo X (50% cada) -->
+            <div class="col-span-3 grid grid-cols-2 gap-2">
+              <div>
+                <label for="tituloEixoY">Título Eixo Y</label>
+                <input type="text" id="tituloEixoY" placeholder="Eixo Y" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
+              </div>
+
+              <div>
+                <label for="tituloEixoX">Título Eixo X</label>
+                <input type="text" id="tituloEixoX" placeholder="Eixo X" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
+              </div>
+            </div>
+
+            <!-- Terceira linha: Cor do Gráfico | Tamanho Fonte | Inclinação X -->
+            <div>
+              <label for="corGrafico">Cor do Gráfico</label>
+              <input type="color" id="corGrafico" value="#000000" style="width:100%;">
+            </div>
+
+            <div>
+              <label for="tamanhoFonte">Tamanho Fonte</label>
+              <input type="number" id="tamanhoFonte" value="12" min="8" max="30" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
+            </div>
+
+            <div>
+              <label for="inclinacaoX">Inclinação Eixo X</label>
+              <input type="number" id="inclinacaoX" value="0" min="-60" max="60" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
+            </div>
+
+            <!-- Botão Aplicar Alterações ocupando 100% -->
+            <div class="col-span-3">
+              <button id="btnAplicarPersonalizacao" style="background-color:green; color:white; padding:6px 12px; border-radius:4px; width:auto;">
+                Aplicar Alterações
+              </button>
+            </div>
+
+            <!-- Frase de atenção -->
+            <div id="avisoPersonalizacao" class="col-span-3" style="display:none; color:red; font-size:0.85rem;">
+              Atenção: Algumas opções de personalização não são aplicáveis em alguns gráficos e subgrupos.
+            </div>
+
+          </div>
+        </div>
       </div>
-
-      <div>
-        <label for="tituloEixoX">Título Eixo X</label>
-        <input type="text" id="tituloEixoX" placeholder="Eixo X" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-      </div>
     </div>
-
-    <!-- Terceira linha: Cor do Gráfico | Tamanho Fonte | Inclinação X -->
-    <div>
-      <label for="corGrafico">Cor do Gráfico</label>
-      <input type="color" id="corGrafico" value="#000000" style="width:100%;">
-    </div>
-
-    <div>
-      <label for="tamanhoFonte">Tamanho Fonte</label>
-      <input type="number" id="tamanhoFonte" value="12" min="8" max="30" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-    </div>
-
-    <div>
-      <label for="inclinacaoX">Inclinação Eixo X</label>
-      <input type="number" id="inclinacaoX" value="0" min="-60" max="60" style="width:100%; background-color:#fff; border:1px solid #ccc; color:#333;">
-    </div>
-
-    <!-- Botão Aplicar Alterações ocupando 100% -->
-    <div class="col-span-3">
-      <button id="btnAplicarPersonalizacao" style="background-color:green; color:white; padding:6px 12px; border-radius:4px; width:auto;">
-        Aplicar Alterações
-      </button>
-    </div>
-
-    <!-- Frase de atenção -->
-    <div id="avisoPersonalizacao" class="col-span-3" style="display:none; color:red; font-size:0.85rem;">
-      Atenção: Algumas opções de personalização não são aplicáveis em alguns gráficos e subgrupos.
-    </div>
-
   </div>
 </div>
