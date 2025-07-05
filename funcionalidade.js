@@ -1,15 +1,7 @@
 let sessaoAtiva = false;
 let inatividadeTimer = null;
 
-// Coloque no topo do seu script (antes de qualquer chamada)
-window.onerror = function (message, source, lineno, colno, error) {
-  if (message.includes("Cannot read properties of null") && message.includes("style")) {
-    // Ignora este erro específico silenciosamente
-    return true; // impede que apareça no console
-  }
-  // Para outros erros, permite exibição normal
-  return false;
-};
+
 
 function resetarTimer() {
   if (!sessaoAtiva) return;
@@ -186,9 +178,8 @@ async function enviarAnaliseCompleta() {
         containerGrafico.prepend(imgGrafico);
 
 
-        
-        document.getElementById('painelPersonalizacao').style.display = 'block';
-
+        const painel = document.getElementById('painelPersonalizacao');
+        if (painel) painel.style.display = 'block';
 
 
         const info = json.info_grafico || {};
