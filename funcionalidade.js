@@ -175,16 +175,10 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-        try {
-          const painel = document.getElementById('painelPersonalizacao');
-          if (painel) {
-            painel.style.display = 'block';
-          }
-        } catch (error) {
-          // Não faz nada. Silencia completamente o erro.
+        const painel = document.getElementById('painelPersonalizacao');
+        if (painel !== null) {
+          painel.style.display = 'block';
         }
-
-
 
 
 
