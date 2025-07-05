@@ -92,6 +92,13 @@
   };
   firebase.initializeApp(firebaseConfig);
 
+  // ✅ Verifica se já está logado
+  if (localStorage.getItem('sessaoAtiva') === 'true') {
+    document.getElementById("login-box").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+  }
+
   // Funções de exibição
   function showPrimeiroAcesso() {
     document.getElementById("loginSection").style.display = "none";
@@ -146,7 +153,6 @@ async function fazerLogin() {
   msg.style.color = "#444";
   msg.textContent = "🔄 Verificando...";
 
-  // 👉 Mostra o spinner e desativa o botão
   spinner.style.display = "block";
   botao.disabled = true;
   botao.style.opacity = "0.6";
@@ -173,12 +179,14 @@ async function fazerLogin() {
         </button>
       </div>
     `;
+
+    localStorage.setItem('sessaoAtiva', 'true'); // ✅ login persistente
+
   } catch (error) {
     console.error("Erro no login:", error);
     msg.style.color = "red";
     msg.textContent = "❌ Erro ao fazer login: " + error.message;
   } finally {
-    // 👉 MANTÉM O SPINNER VISÍVEL POR MAIS 1.5 SEGUNDOS ANTES DE SUMIR
     setTimeout(() => {
       spinner.style.display = "none";
       botao.disabled = false;
@@ -186,7 +194,6 @@ async function fazerLogin() {
     }, 1500);
   }
 }
-
 
   // Recuperar senha
   function recuperarSenha() {
@@ -205,12 +212,14 @@ async function fazerLogin() {
 
   function deslogarAluno() {
     firebase.auth().signOut().then(() => {
+      localStorage.removeItem('sessaoAtiva'); // ✅ remove login persistente
       document.getElementById("app").style.display = "none";
       document.getElementById("login-box").style.display = "block";
       document.getElementById("mensagem-login").textContent = "";
     }).catch((error) => console.error("Erro ao deslogar:", error));
   }
 </script>
+
 
 
 
