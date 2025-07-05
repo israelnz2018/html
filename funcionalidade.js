@@ -176,11 +176,14 @@ async function enviarAnaliseCompleta() {
         containerGrafico.prepend(imgGrafico);
 
         try {
-          document.getElementById('painelPersonalizacao').style.display = 'block';
+          const painel = document.getElementById('painelPersonalizacao');
+          if (painel) {
+            painel.style.display = 'block';
+          }
         } catch (error) {
-          // Suprime o erro, ou seja, o erro não será mostrado no console nem na interface
-          console.log('Erro ignorado: painelPersonalizacao não encontrado.');
+          // Não faz nada. Silencia completamente o erro.
         }
+
 
 
 
