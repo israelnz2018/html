@@ -38,8 +38,8 @@ const configuracoesFerramentas = {
   "Brown-Forsythe": ["Ys", "Subgrupo", "Field_conf"],
   "1 Intervalo de Confianca Variancia": ["Y", "Field_conf"],
   "1 Proporcao": ["X", "Field_conf"],
-  "2 Proporcoes": ["Xs", "Field_conf"],
-  "K Proporcoes": ["Xs", "Field_conf"],
+  "2 Proporcoes": ["X", "Y"],
+  "K Proporcoes": ["X", "Y"],
   "Qui-quadrado": ["Y", "Xs", "Subgrupo"],
 
   // Análise Preditiva
