@@ -39,7 +39,7 @@ const configuracoesFerramentas = {
   "1 Intervalo de Confianca Variancia": ["Y", "Field_conf"],
   "1 Proporcao": ["X", "Field_conf"],
   "2 Proporções": ["X", "Y"],
-  "K Proporcoes": ["X", "Y"],
+  "K Proporcoes": ["Ys"],
   "Qui-quadrado": ["Y", "Xs", "Subgrupo"],
 
   // Análise Preditiva
