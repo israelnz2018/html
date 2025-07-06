@@ -28,7 +28,7 @@ const configuracoesFerramentas = {
   "1 Wilcoxon": ["Y", "Field", "Field_conf"],
   "2 Mann-Whitney": ["Ys", "Field_conf"],
   "2 Wilcoxon Paired": ["Ys", "Field_conf"],
-  "Kruskal-Wallis": ["Y", "Subgrupo", "Field_conf"],
+  "Kruskal-Wallis": ["Ys", "Subgrupo", "Field_conf"],
   "Friedman Pareado": ["Ys", "Subgrupo", "Field_conf"],
   "1 Intervalo de Confianca": ["Y", "Field_conf"],
   "1 Intervalo Interquartilico": ["Y","Field_conf"],
