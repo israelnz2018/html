@@ -37,9 +37,9 @@ const configuracoesFerramentas = {
   "Bartlett": ["Ys", "Subgrupo", "Field_conf"],
   "Brown-Forsythe": ["Ys", "Subgrupo", "Field_conf"],
   "1 Intervalo de Confianca Variancia": ["Y", "Field_conf"],
-  "1 Proporcao": ["Y", "Field_conf"],
-  "2 Proporcoes": ["Ys", "Field_conf"],
-  "K Proporcoes": ["Ys", "Field_conf"],
+  "1 Proporcao": ["X", "Field_conf"],
+  "2 Proporcoes": ["Xs", "Field_conf"],
+  "K Proporcoes": ["Xs", "Field_conf"],
   "Qui-quadrado": ["Y", "Xs", "Subgrupo"],
 
   // Análise Preditiva
