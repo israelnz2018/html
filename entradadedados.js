@@ -41,6 +41,7 @@ const configuracoesFerramentas = {
   "2 Proporções": ["X", "Y"],
   "K Proporcoes": ["Ys"],
   "Qui-quadrado de Associação": ["Y", "X"],
+  "Qui-quadrado de Ajuste": ["Y", "X"],
 
   // Análise Preditiva
   "Tipo de modelo de regressão": ["Y"],
