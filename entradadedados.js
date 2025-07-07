@@ -48,7 +48,7 @@ const configuracoesFerramentas = {
   "Regressão Simples": ["Y", "X"],
   "Regressão Quadrática": ["Y", "X"],
   "Regressão Cúbica": ["Y", "X"],
-  "Regressão Múltipla": ["Y", "Xs"],
+  "Regressão Linear Múltipla": ["Y", "Xs"],
   "Regressão Binária": ["Y", "Xs"],
   "Regressão Ordinal": ["Y", "Xs"],
   "Regressão Nominal": ["Y", "Xs"],
