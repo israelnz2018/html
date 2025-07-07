@@ -28,10 +28,10 @@ const configuracoesAnalises = {
   
   "Análise Preditiva": [
     { nome: "Tipo de modelo de regressão" },
-    { nome: "Regressão simples", subitens: ["Regressão linear", "Regressão Quadrática", "Regressão Cúbica"] },
-    { nome: "Regressão linear múltipla" },
+    { nome: "Regressão simples", subitens: ["Regressão Linear", "Regressão Quadrática", "Regressão Cúbica"] },
+    { nome: "Regressão Linear Múltipla" },
     { nome: "Regressão logística", subitens: ["Regressão Binária", "Regressão Ordinal", "Regressão Nominal"] },
-    { nome: "Árvore de decisão" },
+    { nome: "Árvore de Decisão" },
     { nome: "Random Forest" },
     { nome: "ARIMA" },
     { nome: "Holt-Winters"}
