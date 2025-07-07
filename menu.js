@@ -25,13 +25,12 @@ const configuracoesAnalises = {
     { nome: "Análise de Proporção", subitens: ["1 Proporcao", "2 Proporções", "K Proporcoes"] },
     { nome: "Análise de Associação", subitens: ["Qui-quadrado de Associação", "Qui-quadrado de Ajuste"] }
   ],
+  
   "Análise Preditiva": [
     { nome: "Tipo de modelo de regressão" },
-    { nome: "Regressão linear simples" },
+    { nome: "Regressão simples", subitens: ["Regressão linear", "Regressão Quadrática", "Regressão Cúbica"] },
     { nome: "Regressão linear múltipla" },
-    { nome: "Regressão logística binária" },
-    { nome: "Regressão logística ordinal" },
-    { nome: "Regressão logística nominal" },
+    { nome: "Regressão logística", subitens: ["Regressão Binária", "Regressão Ordinal", "Regressão Nominal"] },
     { nome: "Árvore de decisão" },
     { nome: "Random Forest" },
     { nome: "ARIMA" },
