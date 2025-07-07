@@ -55,7 +55,7 @@ const configuracoesFerramentas = {
   "Árvore de Decisão - CART": ["Y", "Xs"],
   "Random Forest": ["Y", "Xs"],
   "Série Temporal - ARIMA": ["Y", "Data", "Field"],
-  "Holt-Winters": ["Y", "Field"],
+ 
 
   // Análise Controle de Processo
   "Carta I-MR": ["Y"],
