@@ -52,7 +52,7 @@ const configuracoesFerramentas = {
   "Regressão Binária": ["Y", "Xs"],
   "Regressão Ordinal": ["Y", "Xs"],
   "Regressão Nominal": ["Y", "Xs"],
-  "Árvore de decisão": ["Y", "Xs"],
+  "Árvore de Decisão": ["Y", "Xs"],
   "Random Forest": ["Y", "Xs"],
   "ARIMA": ["Y", "Field"],
   "Holt-Winters": ["Y", "Field"],
