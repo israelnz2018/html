@@ -44,7 +44,7 @@ const configuracoesFerramentas = {
   "Qui-quadrado de Ajuste": ["Y", "X"],
 
   // Análise Preditiva
-  "Tipo de modelo de regressão": ["Y"],
+  "Tipo de modelo de regressão": ["Y", "X"],
   "Regressão linear simples": ["Y", "X"],
   "Regressão linear múltipla": ["Y", "Xs"],
   "Regressão logística binária": ["Y", "Xs"],
