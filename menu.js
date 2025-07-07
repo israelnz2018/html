@@ -31,7 +31,7 @@ const configuracoesAnalises = {
     { nome: "Regressão simples", subitens: ["Regressão Linear", "Regressão Quadrática", "Regressão Cúbica"] },
     { nome: "Regressão Linear Múltipla" },
     { nome: "Regressão logística", subitens: ["Regressão Binária", "Regressão Ordinal", "Regressão Nominal"] },
-    { nome: "Árvore de Decisão" },
+    { nome: "Árvore de Decisão - CART" },
     { nome: "Random Forest" },
     { nome: "ARIMA" },
     { nome: "Holt-Winters"}
