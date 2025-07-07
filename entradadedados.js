@@ -45,11 +45,13 @@ const configuracoesFerramentas = {
 
   // Análise Preditiva
   "Tipo de modelo de regressão": ["Y", "X"],
-  "Regressão linear simples": ["Y", "X"],
-  "Regressão linear múltipla": ["Y", "Xs"],
-  "Regressão logística binária": ["Y", "Xs"],
-  "Regressão logística ordinal": ["Y", "Xs"],
-  "Regressão logística nominal": ["Y", "Xs"],
+  "Regressão Simples": ["Y", "X"],
+  "Regressão Quadrática": ["Y", "X"],
+  "Regressão Cúbica": ["Y", "X"],
+  "Regressão Múltipla": ["Y", "Xs"],
+  "Regressão Binária": ["Y", "Xs"],
+  "Regressão Ordinal": ["Y", "Xs"],
+  "Regressão Nominal": ["Y", "Xs"],
   "Árvore de decisão": ["Y", "Xs"],
   "Random Forest": ["Y", "Xs"],
   "ARIMA": ["Y", "Field"],
