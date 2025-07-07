@@ -45,7 +45,7 @@ const configuracoesFerramentas = {
 
   // Análise Preditiva
   "Tipo de modelo de regressão": ["Y", "X"],
-  "Regressão Simples": ["Y", "X"],
+  "Regressão Linear": ["Y", "X"],
   "Regressão Quadrática": ["Y", "X"],
   "Regressão Cúbica": ["Y", "X"],
   "Regressão Linear Múltipla": ["Y", "Xs"],
