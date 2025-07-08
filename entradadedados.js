@@ -78,7 +78,7 @@ const configuracoesFerramentas = {
   "Capabilidade - com dados discretizados": ["Y", "Field_LIE", "Field_LSE"],
 
   // Outras Análises
-  "Cálculo de Probabilidade": ["Y", "Field"]
+  "Cálculo de probabilidade": ["Y", "Field"],
 };
 
 
