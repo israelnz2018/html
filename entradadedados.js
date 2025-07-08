@@ -65,6 +65,9 @@ const configuracoesFerramentas = {
   "Carta NP": ["Y", "Subgrupo"],
   "Carta C": ["Y"],
   "Carta U": ["Y", "Subgrupo"],
+  "Carta EWMA": ["Y"],
+
+  
 
   // Análise de Capabilidade
   "Teste de normalidade": ["Y"],
