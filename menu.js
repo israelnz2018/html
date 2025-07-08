@@ -44,7 +44,9 @@ const configuracoesAnalises = {
     { nome: "Carta P" },
     { nome: "Carta NP" },
     { nome: "Carta C" },
-    { nome: "Carta U" }
+    { nome: "Carta U" },
+    { nome: "Carta EWMA" }
+    
   ],
   "Análises de Capabilidade": [
     { nome: "Teste de normalidade" },
