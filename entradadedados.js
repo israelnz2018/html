@@ -4,7 +4,7 @@ const configuracoesFerramentas = {
   "Análise de outliers": ["Ys"],
   "Correlação de person": ["Y", "Xs"],
   "Matrix de dispersão": ["Y", "Xs"],
-  "Análise de estabilidade": ["Y"],
+  "Análise de estabilidade": ["Y"], 
   "Análise de limpeza dos dados": [],
 
   // Análise Descritiva (Gráficos)
