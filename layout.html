@@ -9,56 +9,43 @@
       font-family: "Segoe UI", Tahoma, sans-serif;
       font-size: 13px;
       color: #000;
-      background-color: #f0f2f5; /* fundo geral do site, ajuste se quiser */
+      background-color: #f0f2f5;
     }
 
     nav {
       background-color: #1f2937; /* fundo escuro painel principal */
     }
 
-    nav * {
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      color: #fff !important; /* letras brancas no painel principal */
-    }
-
-    nav button {
+    nav > ul > li > a {
+      color: #fff !important; /* texto branco no painel principal */
+      background: none;
       font-size: 0.85rem;
-      background: none;
-      border: none;
-    }
-
-    nav ul li a {
-      font-size: 0.80rem;
-      background: none;
-      border: none;
     }
 
     nav ul li ul {
       display: none;
       position: absolute;
-      background-color: #f9f9f9 !important; /* fundo claro menus suspensos */
+      background-color: #f9f9f9 !important; /* fundo claro menus */
       border: 1px solid #ccc;
       border-radius: 0;
       z-index: 10;
       min-width: 180px;
     }
 
-    nav ul li ul li {
-      position: relative;
-    }
-
     nav ul li ul li a {
       display: block;
       padding: 4px 12px;
-      color: #000 !important; /* texto preto em menus suspensos */
+      color: #000 !important; /* texto preto menus */
+      background-color: #f9f9f9 !important;
+      font-size: 0.80rem;
     }
 
     nav ul li ul li a:hover {
       background-color: #e0e0e0 !important; /* hover cinza claro */
+      color: #000 !important;
     }
 
-    nav ul li ul li.has-submenu > a::after,
-    nav ul li ul li ul li.has-submenu > a::after {
+    nav ul li ul li.has-submenu > a::after {
       content: " ▶";
       float: right;
       font-size: 0.7rem;
@@ -75,6 +62,29 @@
       border: 1px solid #ccc;
       border-radius: 0;
       min-width: 180px;
+    }
+
+    nav ul li ul li ul li a {
+      color: #000 !important; /* força texto preto sub-submenus */
+      background-color: #f9f9f9 !important;
+      font-size: 0.80rem;
+    }
+
+    nav ul li ul li ul li a:hover {
+      background-color: #e0e0e0 !important;
+      color: #000 !important;
+    }
+
+    nav ul li ul li.has-submenu > a,
+    nav ul li ul li ul li.has-submenu > a {
+      color: #000 !important; /* força texto preto itens com submenu */
+      background-color: #f9f9f9 !important;
+    }
+
+    nav ul li ul li.has-submenu > a:hover,
+    nav ul li ul li ul li.has-submenu > a:hover {
+      background-color: #e0e0e0 !important;
+      color: #000 !important;
     }
 
     nav ul li.show > ul,
@@ -123,8 +133,6 @@
     }
   </script>
 </head>
-
-
 
 
 
