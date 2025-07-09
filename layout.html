@@ -6,30 +6,32 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     nav button { font-size: 0.85rem; }
-    nav ul li a { font-size: 0.85rem; }
+    nav ul li a { font-size: 0.80rem; color: #000; }
 
-    /* 🔧 Estilo Minitab nos menus */
     nav ul li ul {
       display: none;
       position: absolute;
       background-color: #f9f9f9; /* fundo claro estilo Minitab */
-      border: 1px solid #ccc; /* borda leve */
+      border: 1px solid #ccc;
       border-radius: 0;
       z-index: 10;
-      width: auto; /* largura ajustada ao texto */
+      width: auto;
+      min-width: 180px; /* largura mínima para consistência */
     }
 
-    nav ul li ul li { position: relative; }
+    nav ul li ul li {
+      position: relative;
+    }
 
     nav ul li ul li a {
       display: block;
-      padding: 4px 12px; /* padding menor estilo Minitab */
+      padding: 4px 12px;
       font-size: 0.80rem;
-      color: #000; /* texto preto */
+      color: #000;
     }
 
     nav ul li ul li a:hover {
-      background-color: #e0e0e0; /* hover cinza claro */
+      background-color: #e0e0e0;
     }
 
     nav ul li ul ul {
@@ -41,11 +43,20 @@
       background-color: #f9f9f9;
       border: 1px solid #ccc;
       border-radius: 0;
+      min-width: 180px;
     }
 
     nav ul li.show > ul,
     nav ul li ul li.show > ul {
       display: block;
+    }
+
+    /* 🔧 Adiciona setinha para itens com submenu */
+    nav ul li ul li.has-submenu > a::after {
+      content: " ▶";
+      float: right;
+      font-size: 0.7rem;
+      margin-left: 5px;
     }
 
     @keyframes spin {
@@ -60,9 +71,8 @@
       0%, 20% { content: ''; }
       40% { content: '.'; }
       60% { content: '..'; }
-      70% { content: '...'; }
-      80% { content: '....'; }
-      90% { content: '.....'; }
+      80% { content: '...'; }
+      90% { content: '....'; }
       100% { content: ''; }
     }
     .pontinhos::after {
@@ -90,6 +100,7 @@
     }
   </script>
 </head>
+
 
 
 
