@@ -237,13 +237,26 @@ function atualizarBoxPersonalizacao(info_grafico) {
   });
 }
 
+function validarPlanilhaSelecionada() {
+  const arquivoInput = document.getElementById('fileInput');
+  if (!arquivoInput || !arquivoInput.files[0]) {
+    alert("⚠️ Você precisa selecionar uma planilha antes de usar esta ferramenta.");
+    return false;
+  }
+  return true;
+}
+
 function registrarFerramenta(ferramenta) {
+  if (!validarPlanilhaSelecionada()) {
+    return; // não prossegue se não tiver planilha
+  }
   ferramentaAtual = ferramenta;
   atualizarInterface();
   atualizarBoxPersonalizacao(ferramentaAtual);
 }
 
 window.registrarFerramenta = registrarFerramenta;
+
 
 async function enviarPersonalizacao() {
   if (!ultimoGraficoInfo) {
