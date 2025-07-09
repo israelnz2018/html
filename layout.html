@@ -82,6 +82,17 @@
       margin-left: 5px;
     }
 
+    /* ✅ Correção específica para itens com submenus que estavam brancos */
+    nav ul li ul li.has-submenu > a {
+      color: #000 !important;
+      background-color: #f9f9f9 !important;
+    }
+
+    nav ul li ul li.has-submenu > a:hover {
+      color: #000 !important;
+      background-color: #e0e0e0 !important;
+    }
+
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
