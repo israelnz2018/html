@@ -17,10 +17,12 @@
       color: #000 !important;
     }
 
-    nav ul li a {
+    /* 🔧 Define cor de todos os links dentro de nav como preto, qualquer nível */
+    nav a {
       font-size: 0.80rem;
       font-family: "Segoe UI", Tahoma, sans-serif;
       color: #000 !important;
+      background-color: #f9f9f9 !important;
     }
 
     nav ul li ul {
@@ -38,16 +40,17 @@
       position: relative;
     }
 
-    nav ul li ul li a,
-    nav ul li ul li.has-submenu > a,
-    nav ul li ul li ul li a,
-    nav ul li ul li ul li.has-submenu > a {
+    nav ul li ul li a {
       display: block;
       padding: 4px 12px;
-      font-size: 0.80rem;
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      color: #000 !important; /* força texto preto em todos os níveis */
-      background-color: #f9f9f9 !important; /* garante fundo claro */
+    }
+
+    nav ul li ul li.has-submenu > a::after,
+    nav ul li ul li ul li.has-submenu > a::after {
+      content: " ▶";
+      float: right;
+      font-size: 0.7rem;
+      margin-left: 5px;
     }
 
     nav ul li ul li a:hover,
@@ -71,26 +74,6 @@
     nav ul li.show > ul,
     nav ul li ul li.show > ul {
       display: block;
-    }
-
-    /* 🔧 Adiciona setinha para itens com submenu */
-    nav ul li ul li.has-submenu > a::after,
-    nav ul li ul li ul li.has-submenu > a::after {
-      content: " ▶";
-      float: right;
-      font-size: 0.7rem;
-      margin-left: 5px;
-    }
-
-    /* ✅ Correção específica para itens com submenus que estavam brancos */
-    nav ul li ul li.has-submenu > a {
-      color: #000 !important;
-      background-color: #f9f9f9 !important;
-    }
-
-    nav ul li ul li.has-submenu > a:hover {
-      color: #000 !important;
-      background-color: #e0e0e0 !important;
     }
 
     @keyframes spin {
@@ -134,6 +117,7 @@
     }
   </script>
 </head>
+
 
 
 
