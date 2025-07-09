@@ -69,11 +69,17 @@
       color: #000 !important;
     }
 
-    /* 🔷 Novo hover azul clarinho */
     nav ul li ul li a:hover,
     nav ul li ul li ul li a:hover {
-      background-color: #d0e7ff !important; /* azul clarinho */
+      background-color: #d0e7ff !important;
       color: #000 !important;
+    }
+
+    /* 🔷 Itens com subitem em negrito */
+    nav ul li.has-submenu > a,
+    nav ul li ul li.has-submenu > a,
+    nav ul li ul li ul li.has-submenu > a {
+      font-weight: bold !important;
     }
 
     @keyframes spin {
@@ -117,6 +123,7 @@
     }
   </script>
 </head>
+
 
 
 
