@@ -60,7 +60,7 @@ const configuracoesAnalises = {
     { nome: "Capabilidade - com dados discretizados" }
   ],
 
-    ],
+
   "Análises Diversas": [
     { nome: "Cálculo de probabilidade" },
   ]
