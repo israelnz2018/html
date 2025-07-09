@@ -11,8 +11,17 @@
       color: #000; /* cor padrão texto */
     }
 
-    nav button { font-size: 0.85rem; font-family: "Segoe UI", Tahoma, sans-serif; color: #000 !important; }
-    nav ul li a { font-size: 0.80rem; color: #000 !important; font-family: "Segoe UI", Tahoma, sans-serif; }
+    nav button {
+      font-size: 0.85rem;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: #000 !important;
+    }
+
+    nav ul li a {
+      font-size: 0.80rem;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: #000 !important;
+    }
 
     nav ul li ul {
       display: none;
@@ -29,22 +38,22 @@
       position: relative;
     }
 
-    nav ul li ul li a {
+    nav ul li ul li a,
+    nav ul li ul li.has-submenu > a,
+    nav ul li ul li ul li a,
+    nav ul li ul li ul li.has-submenu > a {
       display: block;
       padding: 4px 12px;
       font-size: 0.80rem;
-      color: #000 !important; /* texto preto */
       font-family: "Segoe UI", Tahoma, sans-serif;
+      color: #000 !important; /* força texto preto em todos os níveis */
+      background-color: #f9f9f9 !important; /* garante fundo claro */
     }
 
-    /* 🔧 Garante texto preto em todos os níveis de submenu */
-    nav ul li ul li.has-submenu > a,
-    nav ul li ul li.has-submenu ul li a {
-      color: #000 !important;
-    }
-
-    nav ul li ul li a:hover {
+    nav ul li ul li a:hover,
+    nav ul li ul li ul li a:hover {
       background-color: #e0e0e0 !important; /* hover cinza claro */
+      color: #000 !important; /* mantém preto ao hover */
     }
 
     nav ul li ul ul {
@@ -65,7 +74,8 @@
     }
 
     /* 🔧 Adiciona setinha para itens com submenu */
-    nav ul li ul li.has-submenu > a::after {
+    nav ul li ul li.has-submenu > a::after,
+    nav ul li ul li ul li.has-submenu > a::after {
       content: " ▶";
       float: right;
       font-size: 0.7rem;
@@ -113,6 +123,7 @@
     }
   </script>
 </head>
+
 
 
   <body>
