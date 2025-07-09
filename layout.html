@@ -11,7 +11,7 @@
       color: #000; /* cor padrão texto */
     }
 
-    nav button { font-size: 0.85rem; font-family: "Segoe UI", Tahoma, sans-serif; color: #000; }
+    nav button { font-size: 0.85rem; font-family: "Segoe UI", Tahoma, sans-serif; color: #000 !important; }
     nav ul li a { font-size: 0.80rem; color: #000 !important; font-family: "Segoe UI", Tahoma, sans-serif; }
 
     nav ul li ul {
@@ -37,8 +37,10 @@
       font-family: "Segoe UI", Tahoma, sans-serif;
     }
 
-    nav ul li ul li.has-submenu > a {
-      color: #000 !important; /* força preto nos itens com submenu */
+    /* 🔧 Garante texto preto em todos os níveis de submenu */
+    nav ul li ul li.has-submenu > a,
+    nav ul li ul li.has-submenu ul li a {
+      color: #000 !important;
     }
 
     nav ul li ul li a:hover {
@@ -111,7 +113,6 @@
     }
   </script>
 </head>
-
 
 
   <body>
