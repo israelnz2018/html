@@ -5,8 +5,14 @@
   <title>Learning by Working</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    nav button { font-size: 0.85rem; }
-    nav ul li a { font-size: 0.80rem; color: #000 !important; }
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif; /* fonte padrão Minitab */
+      font-size: 13px;
+      color: #000; /* cor padrão texto */
+    }
+
+    nav button { font-size: 0.85rem; font-family: "Segoe UI", Tahoma, sans-serif; color: #000; }
+    nav ul li a { font-size: 0.80rem; color: #000 !important; font-family: "Segoe UI", Tahoma, sans-serif; }
 
     nav ul li ul {
       display: none;
@@ -28,6 +34,11 @@
       padding: 4px 12px;
       font-size: 0.80rem;
       color: #000 !important; /* texto preto */
+      font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    nav ul li ul li.has-submenu > a {
+      color: #000 !important; /* força preto nos itens com submenu */
     }
 
     nav ul li ul li a:hover {
@@ -100,8 +111,6 @@
     }
   </script>
 </head>
-
-
 
 
 
