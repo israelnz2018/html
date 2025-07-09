@@ -6,6 +6,8 @@ const configuracoesFerramentas = {
   "Matrix de dispersão": ["Y", "Xs"],
   "Análise de estabilidade": ["Y"], 
   "Análise de limpeza dos dados": [],
+  "Análise de cluster": ["Xs"],
+  
 
   // Análise Descritiva (Gráficos)
   "Histograma": ["Y", "Subgrupo"],
