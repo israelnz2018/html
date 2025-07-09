@@ -177,14 +177,6 @@ async function enviarAnaliseCompleta() {
         imgGrafico.style = 'max-width:100%; margin-bottom:10px;';
         containerGrafico.prepend(imgGrafico);
 
-
-
-
-
-
-
-
-
         const info = json.info_grafico || {};
         ultimoGraficoInfo = {
           ...info,
@@ -230,7 +222,6 @@ async function enviarAnaliseCompleta() {
           console.warn("⚠️ painelPersonalizacao não encontrado no DOM no momento de exibir.");
         }
 
-
         // 🔧 ✅ Reativa o toggle e painel após gerar novo gráfico
         if (typeof inicializarPersonalizacao === "function") {
           inicializarPersonalizacao();
@@ -238,11 +229,23 @@ async function enviarAnaliseCompleta() {
       }
     }
 
+    // 🛑 Se não veio nenhuma análise nem nenhum gráfico, mostra pop-up de aviso
+    if (
+      !json.analise &&
+      (!json.grafico_base64 || json.grafico_base64.length === 0) &&
+      (!json.grafico_isolado_base64 || (Array.isArray(json.grafico_isolado_base64)
+        ? json.grafico_isolado_base64.filter(v => v && v.length > 50).length === 0
+        : json.grafico_isolado_base64.length === 0))
+    ) {
+      exibirModalErro("⚠️ Nenhuma informação foi retornada pelo backend. Verifique os dados enviados ou tente novamente.");
+    }
+
   } catch (e) {
     exibirModalErro(`❌ Erro ao enviar: ${e.message}`);
     console.error("❌ Erro detalhado:", e);
   }
 }
+
 
 
 
