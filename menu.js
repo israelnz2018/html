@@ -3,7 +3,9 @@ const configuracoesAnalises = {
     { nome: "Análise de variabilidade", subitens: ["Gráfico Sumario", "Análise de outliers"] },
     { nome: "Análise de correlação", subitens: ["Correlação de person", "Matrix de dispersão"] },
     { nome: "Análise de estabilidade" },
-    { nome: "Análise de limpeza dos dados" }
+    { nome: "Análise de limpeza dos dados" },
+    { nome: "Análise de cluster" },
+    
   ],
   "Análise Descritiva (Gráficos)": [
     { nome: "Histograma" },
@@ -57,10 +59,10 @@ const configuracoesAnalises = {
     { nome: "Capabilidade - com dados transformados" },
     { nome: "Capabilidade - com dados discretizados" }
   ],
+
+    ],
   "Análises Diversas": [
-    { nome: "Análise quantitativa", subitens: ["Cálculo de probabilidade"] },
-    { nome: "Análise qualitativa", subitens: ["Análise de cluster (mista)"] },
-    // { nome: "Análise Inteligente" }
+    { nome: "Cálculo de probabilidade" },
   ]
 };
 
