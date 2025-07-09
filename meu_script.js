@@ -240,7 +240,7 @@ function atualizarBoxPersonalizacao(info_grafico) {
 function validarPlanilhaSelecionada() {
   const arquivoInput = document.getElementById('fileInput');
   if (!arquivoInput || !arquivoInput.files[0]) {
-    alert("⚠️ Você precisa selecionar uma planilha antes de usar esta ferramenta.");
+    exibirModalErro("⚠️ Você precisa selecionar uma planilha antes de usar esta ferramenta.");
     return false;
   }
   return true;
@@ -256,6 +256,7 @@ function registrarFerramenta(ferramenta) {
 }
 
 window.registrarFerramenta = registrarFerramenta;
+
 
 
 async function enviarPersonalizacao() {
