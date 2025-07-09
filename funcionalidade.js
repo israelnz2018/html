@@ -237,7 +237,7 @@ async function enviarAnaliseCompleta() {
         ? json.grafico_isolado_base64.filter(v => v && v.length > 50).length === 0
         : json.grafico_isolado_base64.length === 0))
     ) {
-      exibirModalErro("⚠️ Nenhuma informação foi retornada pelo backend. Verifique os dados enviados ou tente novamente.");
+      exibirModalErro("⚠️ Nenhuma informação foi retornada. Verifique se escolheu corretamente as opções de análise e seus respectivos campos de preenchimento.");
     }
 
   } catch (e) {
