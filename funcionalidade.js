@@ -9,7 +9,7 @@ function resetarTimer() {
   inatividadeTimer = setTimeout(() => {
     deslogar();
     exibirModalErro("⏱ Sessão expirada por inatividade.");
-  }, 10 * 60 * 1000);
+  }, 60 * 60 * 1000);
 }
 
 function iniciarMonitoramentoInatividade() {
