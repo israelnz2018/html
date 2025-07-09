@@ -66,9 +66,11 @@ function atualizarInterface() {
 
   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   const colunas = jsonData[0] || [];
-  const primeiraLinha = jsonData[1] || [];
 
   previewDiv.innerHTML = '';
+  previewDiv.style.maxHeight = '200px'; // altura máxima para scroll vertical
+  previewDiv.style.overflowY = 'auto'; // ativa scroll vertical
+
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
@@ -76,24 +78,32 @@ function atualizarInterface() {
   colunas.forEach(t => {
     const th = document.createElement('th');
     th.className = 'border px-2 py-1 bg-gray-200';
+    th.style.minWidth = '120px';
     th.textContent = t;
     trHeader.appendChild(th);
   });
   table.appendChild(trHeader);
 
-  const trData = document.createElement('tr');
-  colunas.forEach((_, i) => {
-    const td = document.createElement('td');
-    td.className = 'border px-2 py-1';
-    td.textContent = primeiraLinha[i] !== undefined ? primeiraLinha[i] : '';
-    trData.appendChild(td);
-  });
-  table.appendChild(trData);
+  // Mostra até 4 linhas de dados
+  for (let r = 1; r <= 4; r++) {
+    const linha = jsonData[r] || [];
+    const trData = document.createElement('tr');
+    colunas.forEach((_, i) => {
+      const td = document.createElement('td');
+      td.className = 'border px-2 py-1';
+      td.style.minWidth = '120px';
+      td.textContent = linha[i] !== undefined ? linha[i] : '';
+      trData.appendChild(td);
+    });
+    table.appendChild(trData);
+  }
 
   previewDiv.appendChild(table);
 
   atualizarBoxAnalise(colunas);
 }
+
+
 
 function atualizarBoxAnalise(colunas) {
   const box = document.getElementById('boxAnalise');
@@ -182,7 +192,7 @@ function atualizarBoxAnalise(colunas) {
       select.id = `box_${campoInterno}`;
       select.className = "border rounded p-1 mb-2 w-full";
 
-      const distribs = ["Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p", "Weibull", "Weibull 3p", "Smallest Extreme Value", "Largest Extreme Value", "Gamma", "Gamma 3p", "Logistic", "Loglogística", "Loglogística 3p"];
+      const distribs = ["Lognormal", "Exponencial", "Weibull", "Gamma", "Logistica"];
 
       distribs.forEach(d => {
         const opt = document.createElement("option");
@@ -312,9 +322,11 @@ function inicializarPersonalizacao() {
   const painel = document.getElementById("painelPersonalizacao");
   const opcoes = document.getElementById("opcoesPersonalizacao");
   const btnAplicar = document.getElementById("btnAplicarPersonalizacao");
+  const aviso = document.getElementById("avisoPersonalizacao");
 
   if (painel) painel.style.display = "block";
   if (opcoes) opcoes.style.display = "none";
+  if (aviso) aviso.style.display = "none";
 
   if (toggleBtn && opcoes) {
     toggleBtn.innerText = "Mostrar Personalização ▼";
@@ -322,6 +334,9 @@ function inicializarPersonalizacao() {
       const estaFechado = opcoes.style.display === "none" || opcoes.style.display === "";
       opcoes.style.display = estaFechado ? "grid" : "none";
       toggleBtn.innerText = estaFechado ? "Ocultar Personalização ▲" : "Mostrar Personalização ▼";
+
+      // Controle do aviso
+      if (aviso) aviso.style.display = estaFechado ? "block" : "none";
     };
   }
 
