@@ -6,33 +6,37 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     body {
-      font-family: "Segoe UI", Tahoma, sans-serif; /* fonte padrão Minitab */
-      font-size: 13px;
-      color: #000; /* cor padrão texto */
-    }
-
-    nav button {
-      font-size: 0.85rem;
       font-family: "Segoe UI", Tahoma, sans-serif;
-      color: #000 !important;
+      font-size: 13px;
+      color: #000;
     }
 
-    /* 🔧 Define cor de todos os links dentro de nav como preto, qualquer nível */
-    nav a {
-      font-size: 0.80rem;
+    nav * {
       font-family: "Segoe UI", Tahoma, sans-serif;
       color: #000 !important;
       background-color: #f9f9f9 !important;
     }
 
+    nav *:hover,
+    nav *:focus,
+    nav *:active {
+      color: #000 !important;
+    }
+
+    nav button {
+      font-size: 0.85rem;
+    }
+
+    nav ul li a {
+      font-size: 0.80rem;
+    }
+
     nav ul li ul {
       display: none;
       position: absolute;
-      background-color: #f9f9f9 !important; /* fundo claro estilo Minitab */
       border: 1px solid #ccc;
       border-radius: 0;
       z-index: 10;
-      width: auto;
       min-width: 180px;
     }
 
@@ -53,19 +57,12 @@
       margin-left: 5px;
     }
 
-    nav ul li ul li a:hover,
-    nav ul li ul li ul li a:hover {
-      background-color: #e0e0e0 !important; /* hover cinza claro */
-      color: #000 !important; /* mantém preto ao hover */
-    }
-
     nav ul li ul ul {
       display: none;
       position: absolute;
       left: 100%;
       top: 0;
       margin-left: 0.25rem;
-      background-color: #f9f9f9 !important;
       border: 1px solid #ccc;
       border-radius: 0;
       min-width: 180px;
@@ -117,6 +114,7 @@
     }
   </script>
 </head>
+
 
 
 
