@@ -35,6 +35,7 @@
       40% { content: '.'; }
       60% { content: '..'; }
       80% { content: '...'; }
+      90% { content: '....'; }
       100% { content: ''; }
     }
     .pontinhos::after {
@@ -42,6 +43,8 @@
       animation: dots 2s steps(5) infinite;
     }
   </style>
+
+  <link rel="icon" href="https://i.postimg.cc/yxwWTr2w/android-chrome-512x512.png" type="image/png" sizes="512x512">
 
   <script>
     function animarBotao(botaoId, tipo) {
@@ -93,7 +96,7 @@
   </div>
 
   <div class="text-center mt-4">
-    <button id="btnEnviarAnalise" onclick="animarBotao('btnEnviarAnalise', 'spin')" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
+    <button id="btnEnviarAnalise" onclick="animarBotao('btnEnviarAnalise', 'pontinhos')" class="bg-blue-600 text-white rounded px-6 py-2 hover:bg-blue-700">Enviar Análise</button>
   </div>
 </div>
 
