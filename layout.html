@@ -36,6 +36,8 @@
       display: block;
       padding: 4px 12px;
       font-size: 0.80rem;
+      background-color: #f9f9f9 !important;
+      color: #000 !important;
     }
 
     nav ul li ul li.has-submenu > a::after {
@@ -62,15 +64,17 @@
     }
 
     nav ul li ul *,
-    nav ul li ul *:hover,
     nav ul li ul *:focus,
     nav ul li ul *:active {
       background-color: #f9f9f9 !important;
       color: #000 !important;
     }
 
+    /* 🔷 Hover azul clarinho para todos os itens de submenu */
     nav ul li ul li a:hover,
-    nav ul li ul li ul li a:hover {
+    nav ul li ul li ul li a:hover,
+    nav ul li ul li.has-submenu > a:hover,
+    nav ul li ul li ul li.has-submenu > a:hover {
       background-color: #d0e7ff !important;
       color: #000 !important;
     }
@@ -80,6 +84,8 @@
     nav ul li ul li.has-submenu > a,
     nav ul li ul li ul li.has-submenu > a {
       font-weight: bold !important;
+      background-color: #f9f9f9 !important;
+      color: #000 !important;
     }
 
     @keyframes spin {
@@ -123,6 +129,7 @@
     }
   </script>
 </head>
+
 
 
 
