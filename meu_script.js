@@ -192,7 +192,7 @@ function atualizarBoxAnalise(colunas) {
       select.id = `box_${campoInterno}`;
       select.className = "border rounded p-1 mb-2 w-full";
 
-      const distribs = ["Normal", "Lognormal", "Lognormal 3p", "Exponencial", "Exponencial 2p", "Weibull", "Weibull 3p", "Smallest Extreme Value", "Largest Extreme Value", "Gamma", "Gamma 3p", "Logistic", "Loglogística", "Loglogística 3p"];
+      const distribs = ["Normal", "Lognormal", "Exponencial", "Weibull", "Gamma", "Logistica"];
 
       distribs.forEach(d => {
         const opt = document.createElement("option");
