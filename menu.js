@@ -1,6 +1,6 @@
 const configuracoesAnalises = {
   "Análise Exploratória": [
-    { nome: "Análise de variabilidade →", subitens: ["Gráfico Sumario", "Análise de outliers"] },
+    { nome: "Análise de variabilidade ➡️ ", subitens: ["Gráfico Sumario", "Análise de outliers"] },
     { nome: "Análise de correlação ➡️ ", subitens: ["Correlação de person", "Matrix de dispersão"] },
     { nome: "Análise de estabilidade" },
     { nome: "Análise de limpeza dos dados" },
@@ -21,18 +21,18 @@ const configuracoesAnalises = {
     
   ],
   "Análise Inferencial": [
-    { nome: "Análise de Médias", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA", "1 Intervalo de Confianca"] },
-    { nome: "Análise de Medianas", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Kruskal-Wallis", "Friedman Pareado", "1 Intervalo Interquartilico"] },
-    { nome: "Análise de Varianças", subitens: ["2 Varianças", "2 Variancas Brown-Forsythe", "Bartlett", "Brown-Forsythe", "1 Intervalo de Confianca Variancia"] },
-    { nome: "Análise de Proporção", subitens: ["1 Proporcao", "2 Proporções", "K Proporcoes"] },
-    { nome: "Análise de Associação", subitens: ["Qui-quadrado de Associação", "Qui-quadrado de Ajuste"] }
+    { nome: "Análise de Médias ➡️ ", subitens: ["1 Sample T", "2 Sample T", "2 Paired Test", "One way ANOVA", "1 Intervalo de Confianca"] },
+    { nome: "Análise de Medianas ➡️ ", subitens: ["1 Wilcoxon","2 Mann-Whitney", "2 Wilcoxon Paired", "Kruskal-Wallis", "Friedman Pareado", "1 Intervalo Interquartilico"] },
+    { nome: "Análise de Varianças ➡️ ", subitens: ["2 Varianças", "2 Variancas Brown-Forsythe", "Bartlett", "Brown-Forsythe", "1 Intervalo de Confianca Variancia"] },
+    { nome: "Análise de Proporção ➡️ ", subitens: ["1 Proporcao", "2 Proporções", "K Proporcoes"] },
+    { nome: "Análise de Associação ➡️ ", subitens: ["Qui-quadrado de Associação", "Qui-quadrado de Ajuste"] }
   ],
   
   "Análise Preditiva": [
     { nome: "Tipo de modelo de regressão" },
-    { nome: "Regressão simples", subitens: ["Regressão Linear", "Regressão Quadrática", "Regressão Cúbica"] },
+    { nome: "Regressão simples ➡️ ", subitens: ["Regressão Linear", "Regressão Quadrática", "Regressão Cúbica"] },
     { nome: "Regressão Linear Múltipla" },
-    { nome: "Regressão logística", subitens: ["Regressão Binária", "Regressão Ordinal", "Regressão Nominal"] },
+    { nome: "Regressão logística ➡️ ", subitens: ["Regressão Binária", "Regressão Ordinal", "Regressão Nominal"] },
     { nome: "Árvore de Decisão - CART" },
     { nome: "Random Forest" },
     { nome: "Série Temporal - ARIMA" }
