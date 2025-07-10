@@ -1,7 +1,7 @@
 const configuracoesAnalises = {
   "Análise Exploratória": [
     { nome: "Análise de variabilidade →", subitens: ["Gráfico Sumario", "Análise de outliers"] },
-    { nome: "Análise de correlação", subitens: ["Correlação de person", "Matrix de dispersão"] },
+    { nome: "Análise de correlação ➡️ ", subitens: ["Correlação de person", "Matrix de dispersão"] },
     { nome: "Análise de estabilidade" },
     { nome: "Análise de limpeza dos dados" },
     { nome: "Análise de cluster" },
