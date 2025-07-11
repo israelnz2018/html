@@ -56,7 +56,7 @@ const configuracoesFerramentas = {
   "Regressão Nominal": ["Y", "Xs"],
   "Árvore de Decisão - CART": ["Y", "Xs"],
   "Random Forest": ["Y", "Xs"],
-  "Série Temporal - ARIMA": ["Y", "Data", "Field"],
+  "Série Temporal": ["Y", "Data", "Field"],
  
 
   // Análise Controle de Processo
