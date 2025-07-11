@@ -29,13 +29,15 @@
       border: 1px solid #ccc;
       border-radius: 0;
       z-index: 10;
-      min-width: 180px;
+      min-width: 195px;
     }
 
     nav ul li ul li a {
       display: block;
       padding: 4px 12px;
       font-size: 0.80rem;
+      background-color: #f9f9f9 !important;
+      color: #000 !important;
     }
 
     nav ul li ul li.has-submenu > a::after {
@@ -53,7 +55,7 @@
       margin-left: 0.25rem;
       border: 1px solid #ccc;
       border-radius: 0;
-      min-width: 180px;
+      min-width: 190px;
     }
 
     nav ul li.show > ul,
@@ -62,17 +64,27 @@
     }
 
     nav ul li ul *,
-    nav ul li ul *:hover,
     nav ul li ul *:focus,
     nav ul li ul *:active {
       background-color: #f9f9f9 !important;
       color: #000 !important;
     }
 
-    /* 🔷 Novo hover azul clarinho */
+    /* 🔷 Hover azul clarinho para todos os itens de submenu */
     nav ul li ul li a:hover,
-    nav ul li ul li ul li a:hover {
-      background-color: #d0e7ff !important; /* azul clarinho */
+    nav ul li ul li ul li a:hover,
+    nav ul li ul li.has-submenu > a:hover,
+    nav ul li ul li ul li.has-submenu > a:hover {
+      background-color: #d0e7ff !important;
+      color: #000 !important;
+    }
+
+    /* 🔷 Itens com subitem em negrito */
+    nav ul li.has-submenu > a,
+    nav ul li ul li.has-submenu > a,
+    nav ul li ul li ul li.has-submenu > a {
+      font-weight: bold !important;
+      background-color: #f9f9f9 !important;
       color: #000 !important;
     }
 
@@ -90,6 +102,7 @@
       60% { content: '..'; }
       80% { content: '...'; }
       90% { content: '....'; }
+      95% { content: '.....'; }
       100% { content: ''; }
     }
     .pontinhos::after {
@@ -98,7 +111,9 @@
     }
   </style>
 
-  <link rel="icon" href="https://i.postimg.cc/yxwWTr2w/android-chrome-512x512.png" type="image/png" sizes="512x512">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
 
   <script>
     function animarBotao(botaoId, tipo) {
@@ -117,6 +132,13 @@
     }
   </script>
 </head>
+
+
+
+
+
+
+
 
 
   <body>
