@@ -35,7 +35,7 @@ const configuracoesAnalises = {
     { nome: "Regressão logística ➡️ ", subitens: ["Regressão Binária", "Regressão Ordinal", "Regressão Nominal"] },
     { nome: "Árvore de Decisão - CART" },
     { nome: "Random Forest" },
-    { nome: "Série Temporal - ARIMA" }
+    { nome: "Série Temporal" }
 
     
   ],
