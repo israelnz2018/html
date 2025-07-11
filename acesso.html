@@ -193,7 +193,7 @@
 
   function deslogarAluno() {
   // Mostra popup de confirmação antes de deslogar
-  if (confirm("⚠️ Já vai nos deixar? Salve suas análises e gráficos antes de sair.")) {
+  if (confirm("⚠️ Já vai nos deixar? So aperte OK depois de ter salvo suas análises e gráficos.")) {
     firebase.auth().signOut().then(() => {
       localStorage.removeItem('sessaoAtiva');
       localStorage.removeItem('usuarioEmail');
