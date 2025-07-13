@@ -68,8 +68,11 @@ function atualizarInterface() {
   const colunas = jsonData[0] || [];
 
   previewDiv.innerHTML = '';
-  previewDiv.style.maxHeight = '200px'; // altura máxima para scroll vertical
-  previewDiv.style.overflowY = 'auto'; // ativa scroll vertical
+  previewDiv.style.maxHeight = '200px';        // altura máxima para rolagem vertical
+  previewDiv.style.overflowY = 'auto';         // ativa rolagem vertical
+  previewDiv.style.overflowX = 'auto';         // ativa rolagem horizontal
+  previewDiv.style.border = '1px solid #ccc';  // borda para visual
+  previewDiv.style.padding = '8px';            // padding interno
 
   const table = document.createElement('table');
   table.className = 'min-w-full border';
@@ -102,6 +105,7 @@ function atualizarInterface() {
 
   atualizarBoxAnalise(colunas);
 }
+
 
 
 
