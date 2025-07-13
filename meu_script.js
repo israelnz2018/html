@@ -68,11 +68,11 @@ function atualizarInterface() {
   const colunas = jsonData[0] || [];
 
   previewDiv.innerHTML = '';
-  previewDiv.style.maxHeight = '200px';        // altura máxima para rolagem vertical
-  previewDiv.style.overflowY = 'auto';         // ativa rolagem vertical
-  previewDiv.style.overflowX = 'auto';         // ativa rolagem horizontal
-  previewDiv.style.border = '1px solid #ccc';  // borda para visual
-  previewDiv.style.padding = '8px';            // padding interno
+  previewDiv.style.maxHeight = '200px';
+  previewDiv.style.overflowY = 'auto'; // scroll aparece só se necessário
+  previewDiv.style.overflowX = 'auto';
+  previewDiv.style.border = '1px solid #ccc';
+  previewDiv.style.padding = '8px';
 
   const table = document.createElement('table');
   table.className = 'min-w-full border';
@@ -87,8 +87,8 @@ function atualizarInterface() {
   });
   table.appendChild(trHeader);
 
-  // Mostra até 4 linhas de dados
-  for (let r = 1; r <= 4; r++) {
+  // Mostra todas as linhas disponíveis na planilha
+  for (let r = 1; r < jsonData.length; r++) {
     const linha = jsonData[r] || [];
     const trData = document.createElement('tr');
     colunas.forEach((_, i) => {
