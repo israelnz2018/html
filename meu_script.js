@@ -69,8 +69,8 @@ function atualizarInterface() {
 
   previewDiv.innerHTML = '';
   previewDiv.style.maxHeight = '200px';
-  previewDiv.style.overflowY = 'auto'; // scroll aparece só se necessário
-  previewDiv.style.overflowX = 'auto';
+  previewDiv.style.overflowY = 'scroll'; // scroll aparece só se necessário
+  previewDiv.style.overflowX = 'scroll';
   previewDiv.style.border = '1px solid #ccc';
   previewDiv.style.padding = '8px';
 
