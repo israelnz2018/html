@@ -33,7 +33,7 @@ const configuracoesFerramentas = {
   "Kruskal-Wallis": ["Ys", "Subgrupo", "Field_conf"],
   "Friedman Pareado": ["Ys", "Subgrupo", "Field_conf"],
   "1 Intervalo de Confianca": ["Y", "Field_conf"],
-  "1 Intervalo Interquartilico": ["Y","Field_conf"],
+  "1 Intervalo Interquartilico": ["Y"],
   "2 Varianças": ["Ys", "Field_conf"],
   "2 Variancas Brown-Forsythe": ["Ys", "Field_conf"],
   "Bartlett": ["Ys", "Subgrupo", "Field_conf"],
