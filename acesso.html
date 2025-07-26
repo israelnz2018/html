@@ -100,30 +100,42 @@
   }
 
   async function trocarSenha() {
-    const email = document.getElementById("email").value.trim();
-    const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
-    const nova_senha = document.getElementById("nova_senha").value.trim();
-    const confirmar_senha = document.getElementById("confirmar_senha").value.trim();
-    if (nova_senha !== confirmar_senha) { alert("As senhas não coincidem."); return; }
+  const email = document.getElementById("email").value.trim();
+  const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
+  const nova_senha = document.getElementById("nova_senha").value.trim();
+  const confirmar_senha = document.getElementById("confirmar_senha").value.trim();
+  if (nova_senha !== confirmar_senha) { alert("As senhas não coincidem."); return; }
 
-    try {
-      const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/senhaprovisoria", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha_provisoria, nova_senha })
-      });
-      const resultado = await resposta.json();
-      if (resultado.sucesso || (resultado.mensagem && resultado.mensagem.includes("correta"))) {
-        alert("Senha alterada com sucesso! Faça login.");
+  try {
+    const resposta = await fetch("https://primary-production-1d53.up.railway.app/webhook/senhaprovisoria", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha_provisoria, nova_senha })
+    });
+    const resultado = await resposta.json();
+
+    if (resultado.sucesso || (resultado.mensagem && resultado.mensagem.includes("correta"))) {
+      // 🔒 Cria o usuário no Firebase
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, nova_senha);
+        alert("Senha alterada e usuário criado com sucesso! Faça login.");
         showLogin();
-      } else {
-        alert(resultado.mensagem || "Erro na troca de senha.");
+      } catch (firebaseError) {
+        if (firebaseError.code === 'auth/email-already-in-use') {
+          alert("Este e-mail já foi cadastrado. Tente fazer login normalmente ou use 'Esqueci minha senha'.");
+        } else {
+          alert("Erro ao criar usuário: " + firebaseError.message);
+        }
       }
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao processar: " + error.message);
+    } else {
+      alert(resultado.mensagem || "Erro na troca de senha.");
     }
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao processar: " + error.message);
   }
+}
+
 
   async function fazerLogin() {
     const email = document.getElementById('email-login').value.trim();
