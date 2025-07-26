@@ -99,7 +99,7 @@
     document.getElementById("loginSection").style.display = "block";
   }
 
-  async function trocarSenha() {
+ async function trocarSenha() {
   const email = document.getElementById("email").value.trim();
   const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
   const nova_senha = document.getElementById("nova_senha").value.trim();
@@ -114,8 +114,8 @@
     });
     const resultado = await resposta.json();
 
-    if (resultado.sucesso || (resultado.mensagem && resultado.mensagem.includes("correta"))) {
-      // 🔒 Cria o usuário no Firebase
+    // ⚠️ Aqui está a correção crítica de segurança
+    if (resultado.sucesso === true) {
       try {
         await firebase.auth().createUserWithEmailAndPassword(email, nova_senha);
         alert("Senha alterada e usuário criado com sucesso! Faça login.");
@@ -135,6 +135,7 @@
     alert("Erro ao processar: " + error.message);
   }
 }
+
 
 
   async function fazerLogin() {
