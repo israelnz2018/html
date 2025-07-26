@@ -99,7 +99,7 @@
     document.getElementById("loginSection").style.display = "block";
   }
 
- async function trocarSenha() {
+async function trocarSenha() {
   const email = document.getElementById("email").value.trim();
   const senha_provisoria = document.getElementById("senha_provisoria").value.trim();
   const nova_senha = document.getElementById("nova_senha").value.trim();
@@ -118,8 +118,21 @@
     if (resultado.sucesso === true) {
       try {
         await firebase.auth().createUserWithEmailAndPassword(email, nova_senha);
-        alert("Senha alterada e usuário criado com sucesso! Faça login.");
-        showLogin();
+
+        // ✅ Login automático após criação
+        localStorage.setItem('sessaoAtiva', 'true');
+        localStorage.setItem('usuarioEmail', email);
+        localStorage.setItem('usuarioNome', email.split("@")[0]);
+
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("app").style.display = "block";
+        document.getElementById("app-wrapper").classList.remove("opacity-50", "pointer-events-none");
+
+        document.getElementById("usuario-info").innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="text-sm font-medium">Olá, ${email.split("@")[0]}</span>
+            <button onclick="deslogarAluno()" style="background-color: white; color: #142c54; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">Deslogar</button>
+          </div>`;
       } catch (firebaseError) {
         if (firebaseError.code === 'auth/email-already-in-use') {
           alert("Este e-mail já foi cadastrado. Tente fazer login normalmente ou use 'Esqueci minha senha'.");
@@ -135,6 +148,7 @@
     alert("Erro ao processar: " + error.message);
   }
 }
+
 
 
 
