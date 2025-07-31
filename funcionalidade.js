@@ -97,7 +97,7 @@ async function enviarAnaliseCompleta() {
 
   const GRAFICOS_LIST = [
     "Histograma", "Pareto", "Setores (Pizza)", "Barras", "BoxPlot", "Dispersão",
-    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Dispersão 3D"
+    "Tendência", "Bolhas - 3D", "Superfície - 3D", "Dispersão 3D", "Intervalo"
   ];
 
   if (GRAFICOS_LIST.includes(nomeFerramenta)) {
