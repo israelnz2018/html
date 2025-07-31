@@ -17,7 +17,8 @@ const configuracoesAnalises = {
     { nome: "Tendência" },
     { nome: "Bolhas - 3D" },
     { nome: "Superfície - 3D" },
-    { nome: "Dispersão 3D"}
+    { nome: "Dispersão 3D"},
+    { nome: "Intervalo"}
     
   ],
   "Análise Inferencial": [
