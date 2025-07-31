@@ -20,6 +20,7 @@ const configuracoesFerramentas = {
   "Bolhas - 3D": ["Y", "X", "Z"],
   "Superfície - 3D": ["Y", "X", "Z"],
   "Dispersão 3D": ["Y", "X", "Z"],
+  "Intervalo": ["Ys", "Subgrupo", "Field_conf"],
 
 
   // Análise Inferencial
