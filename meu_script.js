@@ -69,7 +69,7 @@ function atualizarInterface() {
 
   previewDiv.innerHTML = '';
   previewDiv.style.maxHeight = '200px';
-  previewDiv.style.overflowY = 'scroll'; // scroll aparece só se necessário
+  previewDiv.style.overflowY = 'scroll';
   previewDiv.style.overflowX = 'scroll';
   previewDiv.style.border = '1px solid #ccc';
   previewDiv.style.padding = '8px';
@@ -77,7 +77,15 @@ function atualizarInterface() {
   const table = document.createElement('table');
   table.className = 'min-w-full border';
 
+  // 🔹 Cabeçalho com coluna de números
   const trHeader = document.createElement('tr');
+
+  const thNum = document.createElement('th');
+  thNum.className = 'border px-2 py-1 bg-gray-100 text-gray-600';
+  thNum.textContent = '#';
+  thNum.style.minWidth = '40px';
+  trHeader.appendChild(thNum);
+
   colunas.forEach(t => {
     const th = document.createElement('th');
     th.className = 'border px-2 py-1 bg-gray-200';
@@ -87,10 +95,17 @@ function atualizarInterface() {
   });
   table.appendChild(trHeader);
 
-  // 🔧 Mostra apenas as primeiras 100 linhas para evitar travamento
+  // 🔧 Mostra apenas as primeiras 100 linhas para visualização
   const linhasParaMostrar = jsonData.slice(1, 101);
-  linhasParaMostrar.forEach(linha => {
+  linhasParaMostrar.forEach((linha, idx) => {
     const trData = document.createElement('tr');
+
+    // coluna com número da linha
+    const tdNum = document.createElement('td');
+    tdNum.className = 'border px-2 py-1 bg-gray-50 text-gray-600 text-center';
+    tdNum.textContent = idx + 1;
+    trData.appendChild(tdNum);
+
     colunas.forEach((_, i) => {
       const td = document.createElement('td');
       td.className = 'border px-2 py-1';
@@ -103,7 +118,7 @@ function atualizarInterface() {
 
   previewDiv.appendChild(table);
 
-  // ✅ Mostra um resumo de linhas carregadas
+  // ✅ Mostra resumo total
   const totalLinhas = jsonData.length - 1;
   const resumo = document.createElement('p');
   resumo.className = 'text-sm text-gray-500 mt-2';
@@ -112,8 +127,6 @@ function atualizarInterface() {
 
   atualizarBoxAnalise(colunas);
 }
-
-
 
 
 
