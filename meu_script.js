@@ -87,9 +87,9 @@ function atualizarInterface() {
   });
   table.appendChild(trHeader);
 
-  // Mostra todas as linhas disponíveis na planilha
-  for (let r = 1; r < jsonData.length; r++) {
-    const linha = jsonData[r] || [];
+  // 🔧 Mostra apenas as primeiras 100 linhas para evitar travamento
+  const linhasParaMostrar = jsonData.slice(1, 101);
+  linhasParaMostrar.forEach(linha => {
     const trData = document.createElement('tr');
     colunas.forEach((_, i) => {
       const td = document.createElement('td');
@@ -99,12 +99,20 @@ function atualizarInterface() {
       trData.appendChild(td);
     });
     table.appendChild(trData);
-  }
+  });
 
   previewDiv.appendChild(table);
 
+  // ✅ Mostra um resumo de linhas carregadas
+  const totalLinhas = jsonData.length - 1;
+  const resumo = document.createElement('p');
+  resumo.className = 'text-sm text-gray-500 mt-2';
+  resumo.textContent = `Exibindo 100 de ${totalLinhas} linhas (planilha completa carregada em memória)`;
+  previewDiv.appendChild(resumo);
+
   atualizarBoxAnalise(colunas);
 }
+
 
 
 
